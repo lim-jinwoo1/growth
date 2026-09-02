@@ -136,10 +136,10 @@ h1{font-size:27px;font-weight:800;letter-spacing:-.02em}
 .ili[aria-current="true"] .iv{color:var(--acc)}
 .iv{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:13.5px;color:var(--ink);white-space:nowrap}
 .im{font-size:11.5px;color:var(--mute);flex:1}
-.sect{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:12px;letter-spacing:.08em;
+.isect{font-family:"Gothic A1",sans-serif;font-weight:800;font-size:12px;letter-spacing:.08em;
  color:var(--acc);display:flex;align-items:center;gap:9px;margin:22px 0 12px}
-.sect:first-of-type{margin-top:0}
-.sect::after{content:"";flex:1;height:1px;background:var(--line)}
+.isect:first-of-type{margin-top:0}
+.isect::after{content:"";flex:1;height:1px;background:var(--line)}
 .acard{border:1px solid var(--line);border-left:3px solid var(--line);border-radius:9px;
  padding:13px 15px;margin-bottom:10px;background:var(--card2)}
 .acard.hi{border-left-color:var(--acc)}
@@ -429,7 +429,7 @@ table.ov tr.miss td{color:var(--mute)}
 /* 지도 확대 (A안) — 넓은 화면에서만 2열. 좁은 화면 규칙을 덮지 않도록 min-width로 감싼다 */
 @media (min-width:1081px){
   .cols2{grid-template-columns:minmax(0,1.12fr) minmax(0,1fr)}
-  .hero2{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}
+  .hero2{grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)}
   .mapbox svg.kmap{max-height:460px}
 }
 @media (max-width:1080px){
@@ -451,10 +451,17 @@ table.ov tr.miss td{color:var(--mute)}
 .tln{fill:none;stroke:var(--acc);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
 .te{fill:var(--acc);stroke:var(--card2);stroke-width:1.5}
 .tb{stroke:var(--line);stroke-width:1}
-.tl{fill:var(--mute);font-size:9px;font-weight:600;font-variant-numeric:tabular-nums}
-.tl.cur{fill:var(--acc);font-size:10.5px;font-weight:800;
-  paint-order:stroke;stroke:var(--card2);stroke-width:3.2;stroke-linejoin:round}
-.tx{fill:var(--mute);font-size:8.5px;font-variant-numeric:tabular-nums}
+.tar{fill:var(--acc);opacity:.09;stroke:none}
+/* 숫자는 정해진 자리에만 둔다 : 머리(현재값) · 그래프 안 최고점 하나 · 바닥(연월) */
+.tnow{display:flex;align-items:baseline;gap:8px;margin:2px 0 4px}
+.tnow b{font-size:26px;font-weight:800;letter-spacing:-.03em;line-height:1.05;
+  color:var(--ink);font-variant-numeric:tabular-nums}
+.tnow em{font-style:normal;font-size:12px;font-weight:700;color:var(--mute);
+  font-variant-numeric:tabular-nums}
+.tpk{fill:var(--mute);font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;
+  paint-order:stroke;stroke:var(--card2);stroke-width:3.6;stroke-linejoin:round}
+.tfoot{display:flex;justify-content:space-between;margin-top:1px;
+  font-size:11.5px;font-weight:600;color:var(--mute);font-variant-numeric:tabular-nums}
 .hp .ch,.hp .hd{opacity:0;transition:opacity .12s}
 .hp .ch{stroke:var(--acc-2);stroke-width:1;stroke-dasharray:2 2}
 .hp .hd{fill:var(--acc-2);stroke:var(--card2);stroke-width:1.5}
@@ -488,9 +495,9 @@ table.ov tr.miss td{color:var(--mute)}
 /* ══ 소제목 (요청 6) ══════════════════════════ */
 .sect{margin:0;font-family:"Gothic A1",sans-serif;font-size:19px;font-weight:800;
   letter-spacing:-.02em;color:var(--ink)}
-.shead{align-items:baseline;margin:20px 0 10px;flex-wrap:wrap;row-gap:6px}
+.shead{align-items:baseline;margin:15px 0 9px;flex-wrap:wrap;row-gap:6px}
 .sub2{font-size:12.5px;color:var(--mute)}
-.trhead{margin-top:26px}
+.trhead{margin-top:18px}
 .ttog{margin-left:10px;display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);
   background:var(--card);color:var(--body);border-radius:8px;padding:4px 10px;
   font:inherit;font-size:11.5px;font-weight:600;cursor:pointer}
@@ -503,13 +510,11 @@ table.ov tr.miss td{color:var(--mute)}
 @media (min-width:1180px){ .trend{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px} }
 @media (min-width:660px) and (max-width:1179px){ .trend{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px} }
 @media (max-width:659px){ .trend{grid-template-columns:1fr;gap:12px} }
-.tf{padding:12px 13px 7px}
+.tf{padding:10px 12px 5px}
 .tf figcaption{font-size:15px;margin-bottom:3px}
 .tf figcaption span{font-size:12px}
-.tl{font-size:15px;font-weight:700}
-.tl.cur{font-size:17px;stroke-width:4}
-.tx{font-size:12px}
 .tln{stroke-width:2.6}
+@media (min-width:1180px){ .tnow b{font-size:28px} }
 
 /* ══ 지도 확대 · 제주 인셋 (요청 1~4) ════════ */
 .mapbox svg.kmap{max-height:620px}
@@ -529,6 +534,58 @@ table.ov tr.miss td{color:var(--mute)}
 .mkt .ptitle{font-size:19px}
 .mgroup{font-size:14px!important}
 .mkt .dsum{font-size:12.5px!important}
+
+/* ══ 기사 제목 확대 · 요약 축소 (요청 2) ══════ */
+.card{padding:12px 14px 10px}
+.card h3{margin:6px 0 0;font-size:17.5px;line-height:1.34;font-weight:800;letter-spacing:-.02em}
+.bigart h3{font-size:24px}
+.bigart p{font-size:14px;line-height:1.6}
+.subart h3{font-size:19px;line-height:1.34}
+.subart p.one{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;font-size:12.5px}
+.cards{grid-template-columns:repeat(auto-fill,minmax(266px,1fr));gap:10px}
+.ifoot{margin-top:9px;padding-top:7px}
+.ifoot .pr{font-size:12px}
+.mlink{font-size:12px}
+
+/* ══ 선택한 지역 : 2단 · 높이 축소 (요청 3) ═══ */
+.detail{padding:13px 15px}
+.detail .dhead{margin-bottom:9px}
+.detail .dhead h2{font-size:20px}
+.d2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:14px;align-items:start}
+.d2 .kv{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:13px}
+.d2 .kv dt{color:var(--mute);white-space:nowrap}
+.d2 .kv dd{margin:0;font-weight:700;color:var(--ink)}
+.dside{display:flex;flex-direction:column;gap:6px;min-width:0}
+.dside .dsum{margin:0;font-size:12.5px;line-height:1.5;color:var(--body);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dside .dlink{font-size:12.5px}
+.dcov{font-size:11.5px;color:var(--mute)}
+@media (max-width:520px){ .d2{grid-template-columns:1fr} }
+
+/* ══ 연도별 색 범례 (요청 4) ══════════════════ */
+.ylegend{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;margin-top:10px;
+  font-size:13.5px;font-weight:600;color:var(--body)}
+.ylegend:empty{display:none}
+.ylegend span{display:inline-flex;align-items:center;gap:6px}
+.ylegend i{width:13px;height:13px;border-radius:50%;display:inline-block}
+.ylegend i.y1{background:var(--y1)} .ylegend i.y2{background:var(--y2)}
+.ylegend i.y3{background:var(--y3)} .ylegend i.y4{background:var(--y4)}
+.ylegend i.y5{background:var(--y5)}
+.ylegend .ynote2{font-size:11.5px;font-weight:400;color:var(--mute)}
+
+/* ══ 뉴스레터 호 옆 주차 (요청 5) ═════════════ */
+.iv em{font-style:normal;font-size:11px;font-weight:600;color:var(--mute);margin-left:7px}
+
+/* 정리된 안내 문구 (요청 6) */
+.legacy{font-size:12.5px;color:var(--mute);margin:8px 0 0}
+.foot{font-size:11.5px}
+
+/* 상단을 눌러 지도가 한 화면에 더 들어오게 한다 */
+.stats{gap:9px!important}
+.stat{padding:11px 13px!important}
+.stat .num{font-size:23px!important}
+.legacy{margin:7px 0 0}
 </style>
 </head>
 <body>
@@ -541,20 +598,6 @@ table.ov tr.miss td{color:var(--mute)}
  <button class="tbtn" id="tg">화면 밝기 전환</button>
 </header>
 
-<div class="bars shead">
- <h2 class="sect">장학금 전달 현황</h2>
- <span class="spacer"></span>
- <span class="sub2" id="sheadn"></span>
-</div>
-<div class="stats" id="stats"></div>
-<p class="legacy" id="legacy"></p>
-<!-- 상단 시세 띠는 제거했다 (2026-09-02).
-     시세 탭이 12종 + 추이로 커져 같은 숫자가 두 번 나오고, 첫 화면 숫자가 11개로 많아
-     기사에 시선이 닿기 전에 소진됐다. 되돌리려면 아래 두 줄의 주석만 풀면 된다.
-<div class="tick" id="tick"></div>
-<p class="tickfoot" id="tickfoot"></p>
--->
-
 <!-- 원자재·환율 추이 : 탭 바깥에 두어 어느 탭에서도 보인다. 접을 수 있다. -->
 <div class="bars shead trhead">
  <h2 class="sect">원자재 · 환율 12개월 추이</h2>
@@ -566,6 +609,20 @@ table.ov tr.miss td{color:var(--mute)}
 <div id="trwrap">
  <div class="trend" id="trend"></div>
 </div>
+<!-- 상단 시세 띠는 제거했다 (2026-09-02).
+     시세 탭이 12종 + 추이로 커져 같은 숫자가 두 번 나오고, 첫 화면 숫자가 11개로 많아
+     기사에 시선이 닿기 전에 소진됐다. 되돌리려면 아래 두 줄의 주석만 풀면 된다.
+<div class="tick" id="tick"></div>
+<p class="tickfoot" id="tickfoot"></p>
+-->
+
+<div class="bars shead">
+ <h2 class="sect">장학금 전달 현황</h2>
+ <span class="spacer"></span>
+ <span class="sub2" id="sheadn"></span>
+</div>
+<div class="stats" id="stats"></div>
+<p class="legacy" id="legacy"></p>
 
 <div class="tabs" role="tablist">
  <button role="tab" id="t-map"  aria-selected="true"  aria-controls="p-map">동반성장 지도</button>
@@ -600,8 +657,7 @@ table.ov tr.miss td{color:var(--mute)}
    </div>
    <div class="bars mrow">
     <div class="seg mon" id="yr" role="group" aria-label="연도 선택"></div>
-   </div>
-   <div class="bars mrow">
+    <span class="spacer"></span>
     <button class="mtog" id="mtog" aria-expanded="false" aria-controls="monwrap">
       <span class="cv" aria-hidden="true">›</span>월별</button>
    </div>
@@ -609,6 +665,7 @@ table.ov tr.miss td{color:var(--mute)}
     <div class="seg mon" id="mon" role="group" aria-label="월 선택"></div>
    </div>
    <div id="map"></div>
+   <div class="ylegend" id="ylegend"></div>
    <div class="seg" id="mode" role="group" aria-label="지도 보기 모드" hidden>
     <button data-m="s" aria-pressed="true">장학금 전달</button>
     <button data-m="p" aria-pressed="false">협력사 분포</button>
@@ -815,13 +872,8 @@ function stats(){
       + " · " + v.length + "곳"
       + (unk2 ? " · 인원 미확인 " + unk2 + "곳" : "");
   }
-  $("#legacy").textContent = (year === 0
-      ? "2022년~2026년 8월 확인분 전체입니다. 연도별 확인 수준이 달라 합계는 하한선으로 보셔야 합니다. "
-      : year + "년 " + (month ? Number(month)+"월" : "연간") + " 확인분입니다. "
-        + (mm.note ? mm.note + " " : ""))
-    + "누적으로는 1985년 시작한 장학사업이 41년간 약 7만 명을 지원했고, 사회환원 규모는 약 650억 원입니다 "
-    + "(귀뚜라미 공식 보도자료 기준 · 지도에는 표기하지 않습니다). "
-    + "원자재·환율 시세는 [원자재 · 환율 시세] 탭에서 보실 수 있습니다.";
+  $("#legacy").textContent =
+    "1985년 시작한 장학사업 41년 · 누적 장학생 약 7만 명 · 사회환원 약 650억 원";
 }
 
 /* ── 지도 ────────────────────────────────────── */
@@ -988,6 +1040,14 @@ function map(){
   }
   if(mode !== "s") L.push('<span><i class="t"></i>협력사 수 · 색이 진할수록 많음</span>');
   if($("#legend")) $("#legend").innerHTML = L.join("");
+  /* 전체 보기에서만 연도별 색 범례를 보여준다 (요청 4) */
+  if($("#ylegend")){
+    $("#ylegend").innerHTML = (year === 0)
+      ? YEARS.map(function(y){
+          return '<span><i class="y'+(y-2021)+'"></i>'+String(y).slice(2)+'년</span>'; }).join("")
+        + '<span class="ynote2">같은 시·군이 여러 해 겹치면 작은 원으로 흩어 표기</span>'
+      : "";
+  }
 }
 
 /* ── 오른쪽 패널 ─────────────────────────────── */
@@ -1041,22 +1101,24 @@ function detail(){
   }
   var s = SPOTS[cur];
   $("#detail").innerHTML =
-    '<div class="ptitle">선택한 지역</div>'
-    + '<div class="dhead"><h2>'+esc(s.nm)+'</h2>'
+    '<div class="dhead"><h2>'+esc(s.nm)+'</h2>'
     + '<span class="chip">'+esc(s.prov)+'</span>'
     + '<span class="chip">'+esc(s.kind)+'</span>'
     + (s.lvl === "sido" ? '<span class="chip">시 대표 좌표</span>' : '') + '</div>'
-    + '<dl class="kv">'
-    + '<dt>전달일</dt><dd class="num">'+s.date+' ('+wd(s.date)+')</dd>'
-    + '<dt>장학생</dt><dd class="num">'+(s.cnt == null ? '기사에 없음' : s.cnt+'명')+'</dd>'
-    + '<dt>금액</dt><dd class="num">'+(s.amt == null ? '기사에 없음' : won(s.amt))+'</dd>'
-    + (s.cnt && s.amt ? '<dt>1인 평균</dt><dd class="num">'+Math.round(s.amt/s.cnt/10000)+'만 원</dd>' : '')
-    + '<dt>보도</dt><dd class="num">'+s.cov+'건</dd>'
-    + '</dl>'
-    + '<p class="dsum">'+esc(s.title)+'</p>'
-    + (s.note ? '<p class="dnote">'+esc(s.note)+'</p>' : '')
-    + '<a class="dlink" href="'+esc(s.link)+'" target="_blank" rel="noopener">'
-    + esc(s.press)+' 기사 보기 →</a>';
+    + '<div class="d2">'
+    +   '<dl class="kv">'
+    +   '<dt>전달일</dt><dd class="num">'+s.date.slice(2)+' ('+wd(s.date)+')</dd>'
+    +   '<dt>장학생</dt><dd class="num">'+(s.cnt == null ? '기사에 없음' : s.cnt+'명')+'</dd>'
+    +   '<dt>금액</dt><dd class="num">'+(s.amt == null ? '기사에 없음' : won(s.amt))+'</dd>'
+    +   (s.cnt && s.amt ? '<dt>1인 평균</dt><dd class="num">'+Math.round(s.amt/s.cnt/10000)+'만 원</dd>' : '')
+    +   '</dl>'
+    +   '<div class="dside">'
+    +   '<p class="dsum">'+esc(s.title)+'</p>'
+    +   '<a class="dlink" href="'+esc(s.link)+'" target="_blank" rel="noopener">'
+    +   esc(s.press)+' 기사 보기 →</a>'
+    +   '<span class="dcov num">보도 '+s.cov+'건</span>'
+    +   '</div>'
+    + '</div>';
 }
 
 function elist(){
@@ -1119,7 +1181,7 @@ function artCard(a, big){
   return '<article class="'+(big?"bigart":"card")+(a.cat==="사회공헌"?" soc":"")+'">'
     + meta
     + '<h3><a href="'+esc(a.link)+'" target="_blank" rel="noopener">'+esc(a.title)+'</a></h3>'
-    + (a.summary ? '<p>'+esc(a.summary)+'</p>' : '')
+    /* 목록 카드는 제목으로 읽힌다. 요약을 빼고 제목을 키워 한눈에 훑히게 한다 */
     + '<div class="ifoot"><span class="pr">'+esc(a.press)+'</span>'
     + (si >= 0 ? '<button class="mlink" data-s="'+si+'">지도에서 보기 →</button>' : '')
     + '</div></article>';
@@ -1219,7 +1281,7 @@ function heroCard(a, big){
     + (a.cov > 1 ? '<span class="num">보도 ' + a.cov + '건</span>' : '') + '</div>'
     + '<h3><a href="' + esc(a.link) + '" target="_blank" rel="noopener">' + esc(a.title) + '</a></h3>'
     + badges(a)
-    + (a.summary ? '<p>' + esc(a.summary) + '</p>' : '')
+    /* 대문도 요약 없이 제목으로 읽는다 (요청) */
     + '<div class="ifoot"><span class="pr">' + esc(a.press) + '</span>'
     + (si >= 0 ? '<button class="mlink" data-s="' + si + '">지도에서 보기 →</button>' : '')
     + '</div></article>';
@@ -1300,39 +1362,30 @@ function trend(){
   if(!cs.length){ $("#trend").innerHTML = ""; return; }
   if($("#trnote")) $("#trnote").textContent =
     "월평균 기준 · " + (MARKET.chartEnd || "") + " 까지";
-  var W = 330, H = 190, L = 10, R = 10, T = 30, B = 26;
+  var W = 330, H = 132, L = 8, R = 8, T = 14, B = 10;
   $("#trend").innerHTML = cs.map(function(c){
     var s = c.series, n = s.length;
     var vs = s.map(function(p){ return p.v; });
     var mn = Math.min.apply(null, vs), mx = Math.max.apply(null, vs);
-    var pad = (mx - mn) * 0.16 || 1;
+    var pad = (mx - mn) * 0.14 || 1;
     var lo = mn - pad, hi = mx + pad;
     var X = function(i){ return L + i * (W - L - R) / (n - 1); };
     var Y = function(v){ return T + (hi - v) / (hi - lo) * (H - T - B); };
     var d = s.map(function(p, i){ return (i ? "L" : "M") + X(i).toFixed(1) + " " + Y(p.v).toFixed(1); }).join(" ");
+    var ar = "M" + X(0).toFixed(1) + " " + (H - B) + " " + d.slice(1) + " L" + X(n-1).toFixed(1) + " " + (H - B) + " Z";
     var sym = CURSYM(c.unit);
     var f = function(v){ return v.toLocaleString("ko-KR",
       {minimumFractionDigits: c.dec, maximumFractionDigits: c.dec}); };
-    var fc = function(v){ return sym + f(v); };          /* 그래프 위 숫자에는 화폐 표기 */
-    var iMx = vs.indexOf(mx), iMn = vs.indexOf(mn);
-    var mid = (lo + hi) / 2;
-    var lab = function(i, cls){
-      var x = X(i), y = Y(s[i].v);
-      var an = i < 2 ? "start" : (i > n - 3 ? "end" : "middle");
-      /* 점보다 위·아래 중 여유 있는 쪽에 놓는다 (끝점 동그라미와 겹치지 않게) */
-      var dy = (i === iMx) ? -12 : (i === iMn ? 24 : (s[i].v >= mid ? -12 : 24));
-      /* 끝점은 동그라미가 있어 늘 위쪽에 붙인다. 위가 잘리지 않게 최소 높이를 준다 */
-      if(i === n - 1){ dy = -16; x -= 6; }
-      var ty = Math.max(y + dy, 17);
-      return '<text class="tl '+cls+'" x="'+x.toFixed(1)+'" y="'+ty.toFixed(1)
-        + '" text-anchor="'+an+'">'+fc(s[i].v)+'</text>';
-    };
-    var marks = "", done = [];
-    [n-1, 0, iMx, iMn].forEach(function(i){
-      for(var k = 0; k < done.length; k++) if(Math.abs(done[k] - i) <= 1) return;
-      done.push(i);
-      marks += lab(i, i === n-1 ? "cur" : "");
-    });
+    var fc = function(v){ return sym + f(v); };
+    var ym = function(i){ return s[i].ym.slice(2).replace("-", "."); };
+    /* 그래프 위에 뜨는 숫자는 최고점 하나만 남긴다. 나머지는 머리·바닥의 정해진 자리로 */
+    var iMx = vs.indexOf(mx);
+    var peak = "";
+    if(iMx > 0 && iMx < n - 1){
+      var px2 = X(iMx), an2 = iMx < 2 ? "start" : (iMx > n - 3 ? "end" : "middle");
+      peak = '<text class="tpk" x="'+px2.toFixed(1)+'" y="'+(Y(mx) - 7).toFixed(1)
+        + '" text-anchor="'+an2+'">'+fc(mx)+'</text>';
+    }
     var hit = s.map(function(p, i){
       var w = (W - L - R) / (n - 1);
       return '<g class="hp"><rect x="'+(X(i)-w/2).toFixed(1)+'" y="0" width="'+w.toFixed(1)
@@ -1341,17 +1394,19 @@ function trend(){
         + '<circle class="hd" cx="'+X(i).toFixed(1)+'" cy="'+Y(p.v).toFixed(1)+'" r="6"></circle>'
         + '<title>'+p.ym.slice(2).replace("-", ".")+'  '+fc(p.v)+' '+esc(c.unit)+'</title></g>';
     }).join("");
-    return '<figure class="tf"><figcaption>'+esc(c.nm)
-      + '<span>'+esc(c.unit)+'</span></figcaption>'
+    return '<figure class="tf">'
+      + '<figcaption>'+esc(c.nm)+'<span>'+esc(c.unit)+'</span></figcaption>'
+      + '<div class="tnow"><b>'+fc(s[n-1].v)+'</b><em>'+ym(n-1)+'</em></div>'
       + '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(c.nm)
-      + ' 최근 '+n+'개월 추이. '+s[0].ym+' '+f(s[0].v)+' → '+s[n-1].ym+' '+f(s[n-1].v)+'">'
+      + ' 최근 '+n+'개월 추이. '+ym(0)+' '+fc(s[0].v)+' → '+ym(n-1)+' '+fc(s[n-1].v)+'">'
+      + '<path class="tar" d="'+ar+'"></path>'
       + '<line class="tb" x1="'+L+'" y1="'+(H-B)+'" x2="'+(W-R)+'" y2="'+(H-B)+'"></line>'
       + '<path class="tln" d="'+d+'"></path>'
-      + '<circle class="te" cx="'+X(n-1).toFixed(1)+'" cy="'+Y(s[n-1].v).toFixed(1)+'" r="4"></circle>'
-      + marks + hit
-      + '<text class="tx" x="'+L+'" y="'+(H-5)+'">'+s[0].ym.slice(2).replace("-", ".")+'</text>'
-      + '<text class="tx" x="'+(W-R)+'" y="'+(H-5)+'" text-anchor="end">'+s[n-1].ym.slice(2).replace("-", ".")+'</text>'
-      + '</svg></figure>';
+      + '<circle class="te" cx="'+X(n-1).toFixed(1)+'" cy="'+Y(s[n-1].v).toFixed(1)+'" r="5"></circle>'
+      + peak + hit
+      + '</svg>'
+      + '<div class="tfoot"><span>'+ym(0)+'</span><span>'+ym(n-1)+'</span></div>'
+      + '</figure>';
   }).join("");
 }
 
@@ -1464,12 +1519,18 @@ function imark(t){
   if(i < 0) return esc(t);
   return esc(t.slice(0,i))+"<mark>"+esc(t.slice(i,i+q.length))+"</mark>"+esc(t.slice(i+q.length));
 }
+/* 2026-35 만으로는 언제인지 감이 안 온다. 그 주 월요일이 그 달의 몇 번째 월요일인지로 적는다 */
+function wkLabel(d){
+  var t = new Date(d + "T12:00:00Z");
+  var day = t.getUTCDate();
+  return (t.getUTCMonth() + 1) + "월 " + (Math.floor((day - 1) / 7) + 1) + "주차";
+}
 function irail(){
   document.getElementById("arcN").textContent = ISSUES.length + "호";
   document.getElementById("ilist").innerHTML = ISSUES.map(function(i,n){
     var c = i.items.filter(ihit).length;
     return '<button class="ili" aria-current="'+(n===icur)+'" data-n="'+n+'">'
-      + '<span class="iv">Vol. '+i.vol+'</span>'
+      + '<span class="iv">Vol. '+i.vol+'<em>'+wkLabel(i.start)+'</em></span>'
       + '<span class="im num">'+fd(i.start)+' · '
       + (q ? c+"/"+i.items.length : i.items.length+"건")+'</span></button>';
   }).join("");
@@ -1492,13 +1553,14 @@ function ipane(){
   var soc = items.filter(function(x){ return x.cat === SOCIAL; });
   var ind = items.filter(function(x){ return x.cat !== SOCIAL; });
   var h = '<div class="dhead"><h2>Vol. '+i.vol+'</h2>'
+    + '<span class="chip">'+wkLabel(i.start)+'</span>'
     + '<span class="chip num">'+fd(i.start)+' ~ '+fd(i.end)+'</span>'
     + '<span class="chip num">수록 '+i.items.length+'건</span></div>'
     + '<p class="dsum" style="margin:10px 0 16px">'
     + '협력사에 발송한 주간 뉴스레터의 원본입니다. 제목을 누르면 기사로 이동합니다.</p>';
   if(!items.length) h += '<div class="empty">검색어에 해당하는 기사가 이 호에 없습니다.</div>';
-  if(soc.length) h += '<div class="sect">함께 나눈 소식</div>' + soc.map(icard).join("");
-  if(ind.length) h += '<div class="sect">업계 · 시장 동향</div>' + ind.map(icard).join("");
+  if(soc.length) h += '<div class="isect">함께 나눈 소식</div>' + soc.map(icard).join("");
+  if(ind.length) h += '<div class="isect">업계 · 시장 동향</div>' + ind.map(icard).join("");
   document.getElementById("ipane").innerHTML = h;
 }
 
@@ -1516,18 +1578,8 @@ document.getElementById("q").oninput = function(e){
 };
 
 $("#foot").innerHTML =
-  "지도는 <b>2022년 ~ 2026년 8월</b> 122곳입니다. 연도 칩을 누르면 그 해 월별로 볼 수 있습니다. "
-  + "<b>2026-09-01 전수 교차검증을 마쳤습니다.</b> 2026년 38건 중 37건, 2025년 28건 중 23건이 "
-  + "2개 이상 매체에서 일치했고, 어긋난 5건(강서구·고성군·도봉구·순천시 수여일, 보령시 금액)은 바로잡았습니다. "
-  + "<b>연도별 확인 수준은 여전히 다릅니다.</b> 2022~2024년은 기탁식·일정 단신 보도가 많아 인원이 빠진 곳이 있고"
-  + "(속 빈 원 = 협약만 확인 · 점선 원 = 일정만 확인), 공식 발표(2022년 47개 지자체)에 비해 확인 건수가 적습니다. "
-  + "사내 문화재단 집행 내역을 주시면 빈 칸을 채울 수 있습니다. "
-  + "표식 위치는 각 시·군청 좌표를 지도 좌표로 변환한 뒤, 해당 시·도 경계 안에 들어가는지 점-내부판정으로 전수 확인했습니다. "
-  + "금액·인원은 보도된 숫자를 그대로 옮겼고 추정하지 않았습니다. "
-  + "장학금이 아닌 후원 2건(계명대 발전기금 4/10, 아산 온수매트 8/12)은 성격이 달라 지도에서 제외했습니다. "
-  + "2022~2025년치는 같은 방식으로 확장할 수 있습니다. "
-  + "뉴스레터 탭은 협력사에 발송한 주간 호의 원본이며, 부정 기사는 수집 단계에서 제외됩니다. "
-  + "지도 경계는 @svg-maps/south-korea (CC BY 4.0).";
+  "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
+  + "지도 경계 @svg-maps/south-korea (CC BY 4.0)";
 
 render();
 </script>
