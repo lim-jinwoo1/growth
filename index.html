@@ -428,7 +428,7 @@ table.ov tr.miss td{color:var(--mute)}
 
 /* 지도 확대 (A안) — 넓은 화면에서만 2열. 좁은 화면 규칙을 덮지 않도록 min-width로 감싼다 */
 @media (min-width:1081px){
-  .cols2{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+  .cols2{grid-template-columns:minmax(0,1.12fr) minmax(0,1fr)}
   .hero2{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}
   .mapbox svg.kmap{max-height:460px}
 }
@@ -484,6 +484,51 @@ table.ov tr.miss td{color:var(--mute)}
 @media (min-width:700px) and (max-width:1179px){ .mgrid{grid-template-columns:repeat(2,minmax(0,1fr))!important} }
 @media (max-width:699px){ .mgrid{grid-template-columns:1fr!important} }
 .mcard .dt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ══ 소제목 (요청 6) ══════════════════════════ */
+.sect{margin:0;font-family:"Gothic A1",sans-serif;font-size:19px;font-weight:800;
+  letter-spacing:-.02em;color:var(--ink)}
+.shead{align-items:baseline;margin:20px 0 10px;flex-wrap:wrap;row-gap:6px}
+.sub2{font-size:12.5px;color:var(--mute)}
+.trhead{margin-top:26px}
+.ttog{margin-left:10px;display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);
+  background:var(--card);color:var(--body);border-radius:8px;padding:4px 10px;
+  font:inherit;font-size:11.5px;font-weight:600;cursor:pointer}
+.ttog:hover{border-color:var(--acc);color:var(--acc)}
+.ttog .cv{font-size:13px;line-height:1}
+#trwrap[hidden]{display:none}
+
+/* ══ 추이 그래프 확대 (요청 5) ═══════════════ */
+/* 4종이라 한 줄에 4칸으로 고정한다 (auto-fit 은 3+1 로 남는 칸이 생긴다) */
+@media (min-width:1180px){ .trend{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px} }
+@media (min-width:660px) and (max-width:1179px){ .trend{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px} }
+@media (max-width:659px){ .trend{grid-template-columns:1fr;gap:12px} }
+.tf{padding:12px 13px 7px}
+.tf figcaption{font-size:15px;margin-bottom:3px}
+.tf figcaption span{font-size:12px}
+.tl{font-size:15px;font-weight:700}
+.tl.cur{font-size:17px;stroke-width:4}
+.tx{font-size:12px}
+.tln{stroke-width:2.6}
+
+/* ══ 지도 확대 · 제주 인셋 (요청 1~4) ════════ */
+.mapbox svg.kmap{max-height:620px}
+.mk .mlab{font-size:15.5px;font-weight:700;
+  paint-order:stroke;stroke:var(--card2);stroke-width:3;stroke-linejoin:round}
+.jbox{fill:none;stroke:var(--line);stroke-width:1.4;stroke-dasharray:4 3}
+.jlab{fill:var(--mute);font-size:13px;font-weight:700}
+
+/* ══ 시세 카드 글씨 확대 (요청 5·7) ══════════ */
+.mcard{padding:14px 16px}
+.mcard .n{font-size:15px;font-weight:700}
+.mcard .u{font-size:12px}
+.mcard .v{font-size:30px}
+.mcard .ml,.mcard .mr{font-size:13.5px}
+.mcard .chg{font-size:14.5px}
+.mcard .dt{font-size:12px}
+.mkt .ptitle{font-size:19px}
+.mgroup{font-size:14px!important}
+.mkt .dsum{font-size:12.5px!important}
 </style>
 </head>
 <body>
@@ -496,6 +541,11 @@ table.ov tr.miss td{color:var(--mute)}
  <button class="tbtn" id="tg">화면 밝기 전환</button>
 </header>
 
+<div class="bars shead">
+ <h2 class="sect">장학금 전달 현황</h2>
+ <span class="spacer"></span>
+ <span class="sub2" id="sheadn"></span>
+</div>
 <div class="stats" id="stats"></div>
 <p class="legacy" id="legacy"></p>
 <!-- 상단 시세 띠는 제거했다 (2026-09-02).
@@ -504,6 +554,18 @@ table.ov tr.miss td{color:var(--mute)}
 <div class="tick" id="tick"></div>
 <p class="tickfoot" id="tickfoot"></p>
 -->
+
+<!-- 원자재·환율 추이 : 탭 바깥에 두어 어느 탭에서도 보인다. 접을 수 있다. -->
+<div class="bars shead trhead">
+ <h2 class="sect">원자재 · 환율 12개월 추이</h2>
+ <button class="ttog" id="ttog" aria-expanded="true" aria-controls="trwrap">
+   <span class="cv" aria-hidden="true">⌄</span>접기</button>
+ <span class="spacer"></span>
+ <span class="sub2" id="trnote"></span>
+</div>
+<div id="trwrap">
+ <div class="trend" id="trend"></div>
+</div>
 
 <div class="tabs" role="tablist">
  <button role="tab" id="t-map"  aria-selected="true"  aria-controls="p-map">동반성장 지도</button>
@@ -532,7 +594,7 @@ table.ov tr.miss td{color:var(--mute)}
  <div class="sidecol">
   <div class="panel mapbox">
    <div class="bars">
-    <div class="ptitle nt">동반성장 지도</div>
+    <h2 class="sect">동반성장 지도</h2>
     <span class="spacer"></span>
     <button class="zoomb" id="zoomb" aria-label="지도 크게 보기">⤢ 크게</button>
    </div>
@@ -542,14 +604,11 @@ table.ov tr.miss td{color:var(--mute)}
    <div class="bars mrow">
     <button class="mtog" id="mtog" aria-expanded="false" aria-controls="monwrap">
       <span class="cv" aria-hidden="true">›</span>월별</button>
-    <span class="spacer"></span>
-    <span class="ynote" id="ynote"></span>
    </div>
    <div class="monwrap" id="monwrap" hidden>
     <div class="seg mon" id="mon" role="group" aria-label="월 선택"></div>
    </div>
    <div id="map"></div>
-   <div class="legend" id="legend"></div>
    <div class="seg" id="mode" role="group" aria-label="지도 보기 모드" hidden>
     <button data-m="s" aria-pressed="true">장학금 전달</button>
     <button data-m="p" aria-pressed="false">협력사 분포</button>
@@ -578,10 +637,7 @@ table.ov tr.miss td{color:var(--mute)}
 
 <div role="tabpanel" id="p-mkt" aria-labelledby="t-mkt" hidden>
 <div class="panel mkt" style="margin-top:0">
-  <div class="ptitle">최근 12개월 추이</div>
-  <div class="trend" id="trend"></div>
-  <p class="tnote">월평균 기준. 처음·끝·최고·최저만 숫자를 표기했고, 각 지점에 마우스를 올리면 그 달 값이 나옵니다.</p>
-  <div class="ptitle" style="margin-top:22px">원자재 · 환율 시세</div>
+  <div class="ptitle">원자재 · 환율 시세</div>
   <div id="market"></div>
  </div>
 </div>
@@ -710,7 +766,7 @@ function chips(){
   var m = META[String(year)] || {};
   var v = shown();
   var unk = v.filter(function(s){ return s.cnt == null; }).length;
-  $("#ynote").textContent = (year === 0
+  if($("#ynote")) $("#ynote").textContent = (year === 0
       ? "2022~2026년 확인분 " + v.length + "곳"
       : (m.official ? "그 해 공식 발표 " + m.official + "개 지자체 · 확인 " + v.length + "곳"
                     : "확인 " + v.length + "곳"))
@@ -753,6 +809,12 @@ function stats(){
     return '<div class="stat '+r[2]+'"><b class="num">'+r[0]+'</b><span>'+r[1]+'</span></div>';
   }).join("");
   var mm = META[String(year)] || {};
+  if($("#sheadn")){
+    var unk2 = v.filter(function(s){ return s.cnt == null; }).length;
+    $("#sheadn").textContent = (year === 0 ? "2022~2026년 확인분" : year + "년")
+      + " · " + v.length + "곳"
+      + (unk2 ? " · 인원 미확인 " + unk2 + "곳" : "");
+  }
   $("#legacy").textContent = (year === 0
       ? "2022년~2026년 8월 확인분 전체입니다. 연도별 확인 수준이 달라 합계는 하한선으로 보셔야 합니다. "
       : year + "년 " + (month ? Number(month)+"월" : "연간") + " 확인분입니다. "
@@ -768,17 +830,31 @@ function map(){
   var on = {};
   if(mode !== "p") v.forEach(function(s){ on[s.prov] = 1; });
   var pmax = 0; for(var k in PARTNERS) if(PARTNERS[k] > pmax) pmax = PARTNERS[k];
-  var svg = ['<svg class="kmap' + (year === 0 ? ' dense' : '') + '" viewBox="-8 -8 540 647" role="img"'
-    + ' aria-label="장학금 전달 지역과 협력사 분포 지도">'];
+  /* 제주를 본토와 같이 그리면 남쪽 여백 때문에 지도가 작아진다.
+     본토만 -8~532 / -8~535 로 크롭해 크게 그리고, 제주는 우측 하단 인셋으로 옮긴다.
+     (울릉도·독도는 원본 데이터에서 경북 path 안에 이미 들어 있다) */
+  var svg = ['<svg class="kmap' + (year === 0 ? ' dense' : '') + '" viewBox="-8 -10 540 553" role="img"'
+    + ' aria-label="장학금 전달 지역 지도. 제주는 우측 하단에 따로 표기">'];
+  var prov = function(id, style){
+    var kr = MAPD.name[id] || id;
+    return '<path class="prov'+(on[kr]?' on':'')+'" d="'+MAPD.paths[id]+'"'+(style||'')+'>'
+      + '<title>'+kr+(PARTNERS[kr] ? " · 협력사 "+PARTNERS[kr]+"개사" : "")+'</title></path>';
+  };
   Object.keys(MAPD.paths).forEach(function(id){
+    if(id === "jeju") return;                       /* 제주는 아래 인셋에서 그린다 */
     var kr = MAPD.name[id] || id, style = "";
     if(mode !== "s" && hasP && PARTNERS[kr]){
       var t = 0.14 + 0.62 * (PARTNERS[kr] / pmax);
       style = ' style="fill:color-mix(in srgb, var(--teal) '+Math.round(t*100)+'%, var(--map))"';
     }
-    svg.push('<path class="prov'+(on[kr]?' on':'')+'" d="'+MAPD.paths[id]+'"'+style+'>'
-      + '<title>'+kr+(PARTNERS[kr] ? " · 협력사 "+PARTNERS[kr]+"개사" : "")+'</title></path>');
+    svg.push(prov(id, style));
   });
+  /* 제주 인셋 : 원본(x 74~151, y 589~630)을 우측 하단 빈 자리로 옮긴다 */
+  var JX = 432, JY = 452, JD = { x: 74, y: 589 };
+  var jdx = JX - JD.x, jdy = JY - JD.y;
+  svg.push('<g class="jset" transform="translate('+jdx+','+jdy+')">' + prov("jeju") + '</g>');
+  svg.push('<rect class="jbox" x="'+(JX-12)+'" y="'+(JY-12)+'" width="100" height="66" rx="6"></rect>');
+  svg.push('<text class="jlab" x="'+(JX-12)+'" y="'+(JY+68)+'">제주</text>');
   if(mode !== "s" && hasP){
     Object.keys(MAPD.paths).forEach(function(id){
       var kr = MAPD.name[id] || id;
@@ -806,11 +882,16 @@ function map(){
       var s = SPOTS[i], k = Math.round(s.x)+","+Math.round(s.y);
       (grp[k] = grp[k] || []).push(i);
     });
+    /* 표식 크기는 울진군(장학생 50명) 기준으로 전부 통일한다.
+       원 크기로 인원을 나타내면 촘촘한 곳이 뭉개져 읽히지 않는다. 인원은 목록·상세에 있다. */
+    var RU = 3.4 + Math.sqrt(50) * 0.62;             /* = 7.8 */
     order.forEach(function(i){
       var s = SPOTS[i];
-      var base = s.cnt == null ? 5 : (s.kind === "기관" ? 5.5 : (3.4 + Math.sqrt(s.cnt) * 0.62));
-      rad[i] = all ? Math.max(3.2, base * 0.62) : base;
-      px[i] = s.x; py[i] = s.y;
+      rad[i] = all ? RU * 0.72 : RU;
+      /* 제주 표식은 인셋으로 평행이동 */
+      var jj = (s.prov === "제주");
+      px[i] = s.x + (jj ? jdx : 0);
+      py[i] = s.y + (jj ? jdy : 0);
     });
     {
       Object.keys(grp).forEach(function(k){
@@ -841,30 +922,30 @@ function map(){
       /* 광역시의 '구'는 이름만으론 구분이 안 된다 (대구 중구 / 대전 중구). 시·도를 붙인다. */
       var lab = s.nm.replace(" (DGIST)","");
       if(/구$/.test(lab) && lab.indexOf("시") < 0) lab = s.prov + " " + lab;
-      var w = lab.length * 10.2 + 3, h = 12;
+      var w = lab.length * 15.4 + 4, h = 18;
       var cand = [
-        {x:sx,          y:sy-r-6,  a:"middle", x1:sx-w/2,   y1:sy-r-6-h},
-        {x:sx,          y:sy+r+12, a:"middle", x1:sx-w/2,   y1:sy+r+2},
-        {x:sx+r+5,      y:sy+4,    a:"start",  x1:sx+r+5,   y1:sy-h/2+1},
-        {x:sx-r-5,      y:sy+4,    a:"end",    x1:sx-r-5-w, y1:sy-h/2+1},
+        {x:sx,          y:sy-r-8,  a:"middle", x1:sx-w/2,   y1:sy-r-8-h},
+        {x:sx,          y:sy+r+17, a:"middle", x1:sx-w/2,   y1:sy+r+3},
+        {x:sx+r+6,      y:sy+6,    a:"start",  x1:sx+r+6,   y1:sy-h/2+2},
+        {x:sx-r-6,      y:sy+6,    a:"end",    x1:sx-r-6-w, y1:sy-h/2+2},
         /* 촘촘한 곳에서는 조금 더 멀리 밀어 본다 */
-        {x:sx,          y:sy-r-20, a:"middle", x1:sx-w/2,   y1:sy-r-20-h},
-        {x:sx,          y:sy+r+26, a:"middle", x1:sx-w/2,   y1:sy+r+16},
-        {x:sx+r+20,     y:sy+4,    a:"start",  x1:sx+r+20,  y1:sy-h/2+1},
-        {x:sx-r-20,     y:sy+4,    a:"end",    x1:sx-r-20-w,y1:sy-h/2+1}
+        {x:sx,          y:sy-r-26, a:"middle", x1:sx-w/2,   y1:sy-r-26-h},
+        {x:sx,          y:sy+r+34, a:"middle", x1:sx-w/2,   y1:sy+r+20},
+        {x:sx+r+26,     y:sy+6,    a:"start",  x1:sx+r+26,  y1:sy-h/2+2},
+        {x:sx-r-26,     y:sy+6,    a:"end",    x1:sx-r-26-w,y1:sy-h/2+2}
       ];
       var lp = null;
       /* 전체 보기는 표식이 122개라 라벨을 달지 않는다. 선택한 곳만 표기 */
       if(!all || i === cur) for(var c=0;c<cand.length;c++){
         var b = {x1:cand[c].x1-1, y1:cand[c].y1, x2:cand[c].x1+w+1, y2:cand[c].y1+h};
-        if(b.x1 < -6 || b.x2 > 530 || b.y1 < -6 || b.y2 > 645) continue;
+        if(b.x1 < -6 || b.x2 > 530 || b.y1 < -8 || b.y2 > 540) continue;
         if(!hit(b)){ lp = cand[c]; boxes.push(b); break; }
       }
       var lead = "";
       if(i === cur && !lp){                          /* 선택한 곳은 반드시 보인다 */
         lp = cand[4];
         boxes.push({x1:lp.x1-1, y1:lp.y1, x2:lp.x1+w+1, y2:lp.y1+h});
-        lead = '<line class="llead" x1="'+sx+'" y1="'+(sy-r-1)+'" x2="'+sx+'" y2="'+(lp.y+3)+'"></line>';
+        lead = '<line class="llead" x1="'+sx+'" y1="'+(sy-r-1)+'" x2="'+sx+'" y2="'+(lp.y+4)+'"></line>';
       }
       var g = ('<g class="mk'+(i===cur?' sel':'')+'" data-i="'+i+'" role="button" tabindex="0"'
         + ' aria-pressed="'+(i===cur)+'" aria-label="'+esc(s.nm)+' '+s.date+' 장학생 '+s.cnt+'명">'
@@ -906,7 +987,7 @@ function map(){
     }
   }
   if(mode !== "s") L.push('<span><i class="t"></i>협력사 수 · 색이 진할수록 많음</span>');
-  $("#legend").innerHTML = L.join("");
+  if($("#legend")) $("#legend").innerHTML = L.join("");
 }
 
 /* ── 오른쪽 패널 ─────────────────────────────── */
@@ -1208,10 +1289,18 @@ function tick(){
 
 /* 12개월 추이 — 한 칸에 한 계열이라 범례가 필요 없다(제목이 계열명).
    숫자는 처음·끝·최고·최저만 직접 라벨한다. 점마다 숫자를 붙이면 읽을 수 없다. */
+var CURSYM = function(unit){
+  if(/^USD/.test(unit)) return "$";
+  if(/^KRW/.test(unit)) return "\u20A9";
+  if(/^CNY/.test(unit)) return "\u00A5";
+  return "";
+};
 function trend(){
   var cs = MARKET.charts || [];
   if(!cs.length){ $("#trend").innerHTML = ""; return; }
-  var W = 300, H = 118, L = 6, R = 6, T = 16, B = 18;
+  if($("#trnote")) $("#trnote").textContent =
+    "월평균 기준 · " + (MARKET.chartEnd || "") + " 까지";
+  var W = 330, H = 190, L = 10, R = 10, T = 30, B = 26;
   $("#trend").innerHTML = cs.map(function(c){
     var s = c.series, n = s.length;
     var vs = s.map(function(p){ return p.v; });
@@ -1221,20 +1310,22 @@ function trend(){
     var X = function(i){ return L + i * (W - L - R) / (n - 1); };
     var Y = function(v){ return T + (hi - v) / (hi - lo) * (H - T - B); };
     var d = s.map(function(p, i){ return (i ? "L" : "M") + X(i).toFixed(1) + " " + Y(p.v).toFixed(1); }).join(" ");
+    var sym = CURSYM(c.unit);
     var f = function(v){ return v.toLocaleString("ko-KR",
       {minimumFractionDigits: c.dec, maximumFractionDigits: c.dec}); };
+    var fc = function(v){ return sym + f(v); };          /* 그래프 위 숫자에는 화폐 표기 */
     var iMx = vs.indexOf(mx), iMn = vs.indexOf(mn);
     var mid = (lo + hi) / 2;
     var lab = function(i, cls){
       var x = X(i), y = Y(s[i].v);
       var an = i < 2 ? "start" : (i > n - 3 ? "end" : "middle");
       /* 점보다 위·아래 중 여유 있는 쪽에 놓는다 (끝점 동그라미와 겹치지 않게) */
-      var dy = (i === iMx) ? -8 : (i === iMn ? 14 : (s[i].v >= mid ? -8 : 14));
+      var dy = (i === iMx) ? -12 : (i === iMn ? 24 : (s[i].v >= mid ? -12 : 24));
       /* 끝점은 동그라미가 있어 늘 위쪽에 붙인다. 위가 잘리지 않게 최소 높이를 준다 */
-      if(i === n - 1){ dy = -11; x -= 4; }
-      var ty = Math.max(y + dy, 9);
+      if(i === n - 1){ dy = -16; x -= 6; }
+      var ty = Math.max(y + dy, 17);
       return '<text class="tl '+cls+'" x="'+x.toFixed(1)+'" y="'+ty.toFixed(1)
-        + '" text-anchor="'+an+'">'+f(s[i].v)+'</text>';
+        + '" text-anchor="'+an+'">'+fc(s[i].v)+'</text>';
     };
     var marks = "", done = [];
     [n-1, 0, iMx, iMn].forEach(function(i){
@@ -1247,8 +1338,8 @@ function trend(){
       return '<g class="hp"><rect x="'+(X(i)-w/2).toFixed(1)+'" y="0" width="'+w.toFixed(1)
         + '" height="'+H+'" fill="transparent"></rect>'
         + '<line class="ch" x1="'+X(i).toFixed(1)+'" y1="'+T+'" x2="'+X(i).toFixed(1)+'" y2="'+(H-B)+'"></line>'
-        + '<circle class="hd" cx="'+X(i).toFixed(1)+'" cy="'+Y(p.v).toFixed(1)+'" r="4"></circle>'
-        + '<title>'+p.ym.slice(2).replace("-", ".")+'  '+f(p.v)+' '+esc(c.unit)+'</title></g>';
+        + '<circle class="hd" cx="'+X(i).toFixed(1)+'" cy="'+Y(p.v).toFixed(1)+'" r="6"></circle>'
+        + '<title>'+p.ym.slice(2).replace("-", ".")+'  '+fc(p.v)+' '+esc(c.unit)+'</title></g>';
     }).join("");
     return '<figure class="tf"><figcaption>'+esc(c.nm)
       + '<span>'+esc(c.unit)+'</span></figcaption>'
@@ -1305,6 +1396,20 @@ function market(){
     + '이 페이지는 주 1회 갱신되며, 화면의 값은 '+MARKET.asof+' 기준입니다.</p>';
 }
 
+/* ── 추이 접기 ──────────────────────────────── */
+(function(){
+  var t = $("#ttog"), w = $("#trwrap");
+  if(!t || !w) return;
+  var open = true;
+  t.onclick = function(){
+    open = !open;
+    w.hidden = !open;
+    t.setAttribute("aria-expanded", open ? "true" : "false");
+    t.querySelector(".cv").textContent = open ? "⌄" : "›";
+    t.lastChild.textContent = open ? "접기" : "펼치기";
+  };
+})();
+
 /* ── 지도 크게 보기 ─────────────────────────── */
 (function(){
   var md = $("#modal"), open = false;
@@ -1316,7 +1421,8 @@ function market(){
     c.classList.remove("dense");
     c.setAttribute("style","width:100%;height:100%");
     $("#mbody").innerHTML = ""; $("#mbody").appendChild(c);
-    $("#mnote").textContent = $("#ynote").textContent;
+    /* #ynote 는 지도 패널에서 걷어냈으므로 상단 소제목 옆 문구를 쓴다 */
+    $("#mnote").textContent = ($("#sheadn") && $("#sheadn").textContent) || "";
     md.hidden = false; open = true;
     document.body.style.overflow = "hidden";
     $("#mclose").focus();
