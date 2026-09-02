@@ -498,8 +498,12 @@ table.ov tr.miss td{color:var(--mute)}
 
 <div class="stats" id="stats"></div>
 <p class="legacy" id="legacy"></p>
+<!-- 상단 시세 띠는 제거했다 (2026-09-02).
+     시세 탭이 12종 + 추이로 커져 같은 숫자가 두 번 나오고, 첫 화면 숫자가 11개로 많아
+     기사에 시선이 닿기 전에 소진됐다. 되돌리려면 아래 두 줄의 주석만 풀면 된다.
 <div class="tick" id="tick"></div>
 <p class="tickfoot" id="tickfoot"></p>
+-->
 
 <div class="tabs" role="tablist">
  <button role="tab" id="t-map"  aria-selected="true"  aria-controls="p-map">동반성장 지도</button>
@@ -754,7 +758,8 @@ function stats(){
       : year + "년 " + (month ? Number(month)+"월" : "연간") + " 확인분입니다. "
         + (mm.note ? mm.note + " " : ""))
     + "누적으로는 1985년 시작한 장학사업이 41년간 약 7만 명을 지원했고, 사회환원 규모는 약 650억 원입니다 "
-    + "(귀뚜라미 공식 보도자료 기준 · 지도에는 표기하지 않습니다).";
+    + "(귀뚜라미 공식 보도자료 기준 · 지도에는 표기하지 않습니다). "
+    + "원자재·환율 시세는 [원자재 · 환율 시세] 탭에서 보실 수 있습니다.";
 }
 
 /* ── 지도 ────────────────────────────────────── */
@@ -1176,6 +1181,7 @@ function feed(){
 /* 상단 시세 띠 : 협력사 실무와 직접 닿는 6종 */
 var TICK = ["구리 (LME)", "알루미늄 (LME)", "아연 (LME)", "나프타", "미국 달러", "중국 위안"];
 function tick(){
+  if(!$("#tick")) return;                 /* 띠를 걷어낸 상태 — 마크업이 있으면 다시 동작한다 */
   var all = MARKET.mat.concat(MARKET.oil, MARKET.fx);
   var pick = TICK.map(function(nm){
     for(var i = 0; i < all.length; i++) if(all[i].nm === nm) return all[i];
