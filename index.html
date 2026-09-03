@@ -22,37 +22,40 @@ button{font-family:inherit}
 </style>
 <style>
 :root{
- --bg:#E4E9F1; --card:#FFFFFF; --card2:#F4F7FB;
- --ink:#0F1620; --body:#333C4A; --mute:#5F6A7C;
- --line:#CBD4E0; --line2:#E2E8F0;
- --acc:#123C7A; --acc-w:#E4EDFA; --acc-2:#2E6BB8;
- --map:#CFD8E5; --map-line:#FFFFFF; --map-on:#BFCBDC;
+ --bg:#E5EDFA; --card:#FFFFFF; --card2:#F3F7FE;
+ --ink:#0E1826; --body:#313C4E; --mute:#5C6880;
+ --line:#C6D3E6; --line2:#E1E9F6;
+ --acc:#123C7A; --acc-w:#E1ECFC; --acc-2:#2E6BB8;
+ --map:#CBD8EC; --map-line:#FFFFFF; --map-on:#B7C8E4;
+ --hl:#D2E3F9; --hl-ln:#8FB8E8; --tile-ln:#B9C9E0;
  --teal:#1F5E6B; --teal-w:#E6F0F2;
  --gold:#8A6A22; --gold-w:#FBF4E4;
  --up:#C0392B; --down:#1C6EA4;
- --shadow:0 1px 2px rgba(16,22,32,.09),0 8px 24px rgba(16,22,32,.10);
+ --shadow:0 1px 2px rgba(18,60,122,.10),0 8px 24px rgba(18,60,122,.11);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
- --bg:#0A0D12; --card:#1A2029; --card2:#20262F;
- --ink:#EDF0F5; --body:#BCC4CF; --mute:#8A93A1;
- --line:#333C48; --line2:#2A323C;
- --acc:#77ACEE; --acc-w:#14243B; --acc-2:#9AC4F6;
- --map:#242B36; --map-line:#0A0D12; --map-on:#333E4D;
+ --bg:#080C15; --card:#171F2D; --card2:#1D2635;
+ --ink:#EBF0F8; --body:#B7C2D2; --mute:#848FA3;
+ --line:#2F3A4C; --line2:#252F3F;
+ --acc:#77ACEE; --acc-w:#12233C; --acc-2:#9AC4F6;
+ --map:#20293A; --map-line:#080C15; --map-on:#2F3B52;
+ --hl:#152B48; --hl-ln:#2E5688; --tile-ln:#3B4860;
  --teal:#67C2D1; --teal-w:#122B30;
  --gold:#D4B063; --gold-w:#2B2413;
  --up:#E4675A; --down:#5FA8D8;
- --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 28px rgba(0,0,0,.3);
+ --shadow:0 1px 2px rgba(0,0,0,.55),0 10px 28px rgba(4,12,28,.42);
 }}
 :root[data-theme="dark"]{
- --bg:#0A0D12; --card:#1A2029; --card2:#20262F;
- --ink:#EDF0F5; --body:#BCC4CF; --mute:#8A93A1;
- --line:#333C48; --line2:#2A323C;
- --acc:#77ACEE; --acc-w:#14243B; --acc-2:#9AC4F6;
- --map:#242B36; --map-line:#0A0D12; --map-on:#333E4D;
+ --bg:#080C15; --card:#171F2D; --card2:#1D2635;
+ --ink:#EBF0F8; --body:#B7C2D2; --mute:#848FA3;
+ --line:#2F3A4C; --line2:#252F3F;
+ --acc:#77ACEE; --acc-w:#12233C; --acc-2:#9AC4F6;
+ --map:#20293A; --map-line:#080C15; --map-on:#2F3B52;
+ --hl:#152B48; --hl-ln:#2E5688; --tile-ln:#3B4860;
  --teal:#67C2D1; --teal-w:#122B30;
  --gold:#D4B063; --gold-w:#2B2413;
  --up:#E4675A; --down:#5FA8D8;
- --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 28px rgba(0,0,0,.3);
+ --shadow:0 1px 2px rgba(0,0,0,.55),0 10px 28px rgba(4,12,28,.42);
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--body);
@@ -715,6 +718,107 @@ hr.sdiv{border:0;border-top:1px solid var(--line);margin:22px 0 0}
 h1,.intro .ik{font-family:"Noto Serif KR","Nanum Myeongjo","Apple SD Gothic Neo",serif;
   font-weight:700}
 h1{font-size:29px;letter-spacing:-.01em}
+
+/* ══════════════════════════════════════════════════════════════
+   밝은판(채도) 채택 후 보정 — 2026-09-03
+   ① 지표 타일 경계 : 배경이 밝아지며 파란 채움 타일과 대비가 1.01 까지
+      떨어져 경계가 사라졌다. 채움을 한 단 내리고 테두리를 넣어 되살린다
+      (테두리 vs 배경 대비 1.75)
+   ② 지도 요약 카드 : 머리띠 · 구분선 · 그림자를 넣어 다듬는다
+   ③ 인트로 : 문구를 파란 띠 위에 얹어 그 줄만 강조한다
+   ══════════════════════════════════════════════════════════════ */
+
+/* ① 지표 타일 경계 */
+.stat{border:1px solid var(--tile-ln)!important}
+.stat.hl{background:var(--hl)!important;border-color:var(--hl-ln)!important}
+.stat.tl{border-color:var(--teal)!important}
+/* 여백도 밝은판 기준으로 (흰 면적이 늘면 색이 맑게 읽힌다) */
+.panel{padding:22px 24px 24px}
+.card{padding:15px 16px 13px}
+.stat{padding:15px 17px!important}
+.stats{gap:12px!important}
+.cols2{gap:20px!important}
+.hero2{gap:20px!important}
+.trend{gap:16px!important}
+.mgrid{gap:14px!important}
+.mcard{padding:14px 15px 12px}
+.tf{padding:12px 14px 6px}
+.tabs{margin:22px 0 24px}
+.wrap{padding:30px 22px 64px}
+.cards>.card{padding:15px 2px 14px!important}
+.acard{padding:15px 2px 14px!important}
+
+/* ② 지도 요약 카드 */
+.msum{pointer-events:none;filter:drop-shadow(0 2px 3px rgba(18,60,122,.13))
+  drop-shadow(0 8px 14px rgba(18,60,122,.10))}
+.msum .mscard{fill:var(--card);stroke:var(--line);stroke-width:1}
+.msum .mshead{fill:var(--acc-w);stroke:none}
+.msum .msrail{fill:var(--acc)}
+.msum .mst{fill:var(--acc);font-size:12.5px;font-weight:800;
+  font-family:"Gothic A1",sans-serif;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.msum .msl{stroke:var(--line2);stroke-width:1}
+.msum .msk{fill:var(--mute);font-size:11px;font-weight:600;
+  font-family:"IBM Plex Sans KR",sans-serif}
+.msum .msv{fill:var(--ink);font-size:15.5px;font-weight:800;
+  font-family:"Gothic A1",sans-serif;font-variant-numeric:tabular-nums}
+
+/* ③ 인트로 : 문구를 띠 위에 */
+.intro .ib{width:100%;text-align:center;background:linear-gradient(135deg,#0B2650,#123C7A 55%,#1E5AA8);
+  padding:38px 22px 34px;box-shadow:0 10px 40px rgba(18,60,122,.28);
+  animation:iband .8s cubic-bezier(.2,.75,.2,1) both}
+.intro .ib::before,.intro .ib::after{content:"";display:block;height:2px;
+  background:rgba(255,255,255,.26);max-width:520px;margin:0 auto}
+.intro .ib::before{margin-bottom:26px}
+.intro .ib::after{margin-top:24px}
+.intro .ilogo{background:#fff;padding:7px 12px;border-radius:9px;box-sizing:content-box;
+  height:28px;margin:0 auto 20px}
+.intro .ik{color:#fff}
+.intro .ie{color:#A8C6EC;margin-top:12px}
+@keyframes iband{from{opacity:0;transform:scaleY(.5)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){ .intro .ib{animation:none} }
+
+/* ══ 탭 구분 · 글씨 키우기 (요청 2026-09-03) ══════════════════ */
+/* 탭 3개가 글자만 나란히 있어 어디까지가 한 항목인지 모호했다.
+   ① 항목 사이 세로 실선  ② 고른 탭은 연파랑 채움 + 3px 밑줄 */
+.tabs{gap:0!important;border-bottom:1px solid var(--line)}
+.tabs button{position:relative;padding:12px 20px 13px!important;font-size:17.5px!important;
+  border-bottom:3px solid transparent!important;margin-bottom:-1px;border-radius:9px 9px 0 0}
+.tabs button+button::before{content:"";position:absolute;left:0;top:9px;bottom:9px;
+  width:1px;background:var(--line)}
+.tabs button[aria-selected="true"]{background:var(--acc-w);
+  border-bottom-color:var(--acc)!important;color:var(--acc)}
+.tabs button[aria-selected="true"]::before,
+.tabs button[aria-selected="true"]+button::before{background:transparent}
+.tabs button:hover{color:var(--acc)}
+.tabs .cnt{font-size:13px!important;margin-left:6px}
+
+/* 패널 여백이 늘며 기사 카드가 1열로 떨어졌다 (268*2+18 > 544). 2열로 되돌린다 */
+.cards{grid-template-columns:repeat(auto-fill,minmax(246px,1fr))!important}
+
+/* 기사 46건 · 분류 칩 */
+.ptitle.nt{font-size:19px!important}
+.ptitle.nt .pn{font-size:14px!important;margin-left:8px}
+.seg.cat button{font-size:13.5px!important;padding:7px 12px!important}
+.seg.cat button em{font-size:12px!important;margin-left:5px!important;opacity:.6}
+
+/* 지도 아래 부연 설명 (연도 색 범례 · 안내 문구) */
+.ylegend{font-size:15px!important;gap:7px 18px!important}
+.ylegend i{width:14px!important;height:14px!important}
+.ylegend .ynote2{font-size:13px!important}
+.mapbox .ynote{font-size:12.5px!important}
+.legend,.legend .lnote{font-size:13px!important}
+.dnote{font-size:13.5px!important}
+
+/* 전달 기록 — 한 단 더 */
+.erow{padding:10px 11px!important;grid-template-columns:64px 1fr auto auto!important;
+  gap:12px!important}
+.erow .ed{font-size:14px!important}
+.erow .en{font-size:16.5px!important}
+.erow .ec{font-size:14px!important}
+.erow .ea{font-size:16.5px!important;min-width:52px!important}
+.erow .en i{font-size:12px!important}
+.elist{max-height:440px!important}
+.ptitle .pn{font-size:13.5px!important}
 </style>
 </head>
 <body>
@@ -1066,24 +1170,34 @@ function map(){
       svg.push('<text class="pcount" x="'+c[0]+'" y="'+(c[1]+4)+'">'+PARTNERS[kr]+'</text>');
     });
   }
-  /* 연도 요약 — 우측 상단 구석. 이 자리(x 386~530, y -8~110)는 어느 도(道)의
-     path 도 닿지 않는다(y<70 에서 육지 최대 x = 378). 그래서 지도를 가리지 않는다. */
+  /* 연도 요약 — 우측 상단 구석. 이 자리(x 382~532, y -8~120)는 어느 도(道)의
+     path 도 닿지 않는다(y<70 에서 육지 최대 x = 378). 그래서 지도를 가리지 않는다.
+     머리띠 + 행 구분선 + 그림자로 카드처럼 다듬는다 */
   if(mode !== "p"){
     var sc2 = v.reduce(function(a,x){ return a + (x.cnt || 0); }, 0);
     var sa2 = v.reduce(function(a,x){ return a + (x.amt || 0); }, 0);
     var ttl = (year === 0) ? "2022 ~ 2026" : (year + "년" + (month ? " " + (+month) + "월" : ""));
-    var rows = [["지역", v.length + "곳"]];
+    var rows = [["전달 지역", v.length + "곳"]];
     if(sc2) rows.push(["장학생", sc2.toLocaleString() + "명"]);
     if(sa2) rows.push(["장학금", won(sa2)]);
-    var SX = 384, SW = 148, SH = 34 + rows.length * 23;
+    var SX = 382, SW = 150, HD = 27, RH = 25, PAD = 9;
+    var SH = HD + rows.length * RH + PAD, SY = -6, R = 9;
+    /* 머리띠는 위 두 귀퉁이만 둥근 path 로 그린다 (rect 로는 아래도 같이 둥글어진다) */
+    var head = "M" + SX + " " + (SY + HD)
+      + "V" + (SY + R) + "a" + R + " " + R + " 0 0 1 " + R + " " + (-R)
+      + "h" + (SW - 2 * R) + "a" + R + " " + R + " 0 0 1 " + R + " " + R
+      + "V" + (SY + HD) + "Z";
     svg.push('<g class="msum">'
-      + '<rect class="mscard" x="'+SX+'" y="-6" width="'+SW+'" height="'+SH+'" rx="9"></rect>'
-      + '<text class="mst" x="'+(SX+12)+'" y="16">' + esc(ttl) + '</text>'
-      + '<line class="msl" x1="'+(SX+12)+'" y1="25" x2="'+(SX+SW-12)+'" y2="25"></line>'
+      + '<rect class="mscard" x="'+SX+'" y="'+SY+'" width="'+SW+'" height="'+SH+'" rx="'+R+'"></rect>'
+      + '<path class="mshead" d="'+head+'"></path>'
+      + '<rect class="msrail" x="'+SX+'" y="'+(SY+6)+'" width="3" height="'+(HD-12)+'" rx="1.5"></rect>'
+      + '<text class="mst" x="'+(SX+12)+'" y="'+(SY+18)+'">' + esc(ttl) + '</text>'
+      + '<line class="msl" x1="'+SX+'" y1="'+(SY+HD)+'" x2="'+(SX+SW)+'" y2="'+(SY+HD)+'"></line>'
       + rows.map(function(r, i){
-          var yy = 45 + i * 23;
-          return '<text class="msk" x="'+(SX+12)+'" y="'+yy+'">'+r[0]+'</text>'
-               + '<text class="msv" x="'+(SX+SW-12)+'" y="'+yy+'" text-anchor="end">'+esc(r[1])+'</text>';
+          var yy = SY + HD + RH * i + 18;
+          return (i ? '<line class="msl" x1="'+(SX+11)+'" y1="'+(yy-17)+'" x2="'+(SX+SW-11)+'" y2="'+(yy-17)+'"></line>' : "")
+               + '<text class="msk" x="'+(SX+12)+'" y="'+yy+'">'+r[0]+'</text>'
+               + '<text class="msv" x="'+(SX+SW-12)+'" y="'+(yy+1)+'" text-anchor="end">'+esc(r[1])+'</text>';
         }).join("")
       + '</g>');
   }
@@ -1318,14 +1432,31 @@ var REST = SORTED.slice(1);          /* 대표 기사를 뺀 목록 */
 
 
 /* 기사 제목·요약에서 지역을 찾아 지도 표식과 연결한다 */
+/* 기사 ↔ 전달 기록 짝짓기.
+   [지도에서 보기] 와 인원·금액 배지가 여기에 달리므로 세 겹으로 좁혀 둔다.
+   ① 사회공헌 기사만 — '소방안전교육' 같은 기사에 지도 링크가 붙어
+      나눔을 한 것처럼 읽히던 문제가 있었다 (2026-09-03 지적)
+   ② 지역명이 기관명 안에 우연히 들어간 경우를 걷어낸다
+      예) "서울강서소방서" 의 '강서' → 강서구로 잡히던 것
+      규칙 : 지역명 바로 앞 글자가 한글이면 더 긴 낱말의 일부로 보고 버린다
+   ③ 기사 날짜와 전달 날짜가 120일 넘게 떨어지면 다른 건으로 본다 */
+var HAN = /[가-힣]/;
 function spotOf(a){
-  var t = (a.title||"") + " " + (a.summary||"");
+  if(a.cat !== "사회공헌") return -1;                         /* ① */
+  var t = (a.title || "") + " " + (a.summary || "");
+  var ad = new Date(a.date + "T12:00:00Z");
   var best = -1;
-  for(var i=0;i<SPOTS.length;i++){
-    var nm = SPOTS[i].nm.replace(/ \(.*\)$/,"");
-    var key = nm.replace(/(시|군|구)$/,"");
+  for(var i = 0; i < SPOTS.length; i++){
+    var nm = SPOTS[i].nm.replace(/ \(.*\)$/, "");
+    var key = nm.replace(/(시|군|구)$/, "");
     if(key.length < 2) continue;
-    if(t.indexOf(key) < 0) continue;
+    var at = -1, ok = false;
+    while((at = t.indexOf(key, at + 1)) >= 0){                /* ② */
+      if(at === 0 || !HAN.test(t.charAt(at - 1))){ ok = true; break; }
+    }
+    if(!ok) continue;
+    var gap = Math.abs(ad - new Date(SPOTS[i].date + "T12:00:00Z")) / 864e5;
+    if(gap > 120) continue;                                   /* ③ */
     if(best < 0 || SPOTS[i].date > SPOTS[best].date) best = i;
   }
   return best;
