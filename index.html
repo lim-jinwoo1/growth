@@ -573,6 +573,10 @@ table.ov tr.miss td{color:var(--mute)}
 /* 정리된 안내 문구 (요청 6) */
 .legacy{font-size:12.5px;color:var(--mute);margin:8px 0 0}
 .foot{font-size:11.5px}
+/* 판 표시 — 옛 파일을 열었는지 한눈에 알 수 있게 (캐시 확인용) */
+.ver{display:inline-block;margin-left:8px;padding:2px 8px;border:1px solid var(--line);
+  border-radius:999px;font-size:11px;font-weight:700;color:var(--mute);
+  background:var(--card);font-variant-numeric:tabular-nums;white-space:nowrap}
 
 /* 상단을 눌러 지도가 한 화면에 더 들어오게 한다 */
 .stats{gap:9px!important}
@@ -823,8 +827,8 @@ h1{font-size:29px;letter-spacing:-.01em}
 /* ══ 고른 도시 강조 · 지표 타일 표기 (요청 2026-09-03) ══════════ */
 /* ① 고른 곳의 이름 — 원이 커진 만큼 글씨도 키운다. 흰 테두리를 두껍게 둘러
    촘촘한 전체 보기에서도 다른 이름 위로 또렷하게 얹힌다 */
-.mk.sel .mlab{font-size:20px!important;font-weight:800!important;fill:var(--ink)!important;
-  stroke:var(--card)!important;stroke-width:4.6px!important}
+.mk.sel .mlab{font-size:22px!important;font-weight:800!important;fill:var(--acc)!important;
+  stroke:var(--card)!important;stroke-width:5px!important}
 .kmap.dense .mk.sel .mlab{font-size:18px!important;stroke-width:4.2px!important}
 .mk.sel .llead{stroke-width:1.4;opacity:.75}
 
@@ -1253,7 +1257,7 @@ function map(){
     order.forEach(function(i){
       var s = SPOTS[i];
       /* 고른 곳은 원과 이름을 함께 키운다 (깜빡임 효과는 그대로 유지된다) */
-      rad[i] = (all ? RU * 0.72 : RU) * (i === cur ? 1.55 : 1);
+      rad[i] = (all ? RU * 0.72 : RU) * (i === cur ? 1.75 : 1);
       /* 제주 표식은 인셋으로 평행이동 */
       var jj = (s.prov === "제주");
       px[i] = s.x + (jj ? jdx : 0);
@@ -1288,7 +1292,7 @@ function map(){
       /* 광역시의 '구'는 이름만으론 구분이 안 된다 (대구 중구 / 대전 중구). 시·도를 붙인다. */
       var lab = s.nm.replace(" (DGIST)","");
       if(/구$/.test(lab) && lab.indexOf("시") < 0) lab = s.prov + " " + lab;
-      var w = lab.length * (i === cur ? 20 : 15.4) + 4, h = (i === cur ? 23 : 18);
+      var w = lab.length * (i === cur ? 22.5 : 15.4) + 4, h = (i === cur ? 26 : 18);
       var cand = [
         {x:sx,          y:sy-r-8,  a:"middle", x1:sx-w/2,   y1:sy-r-8-h},
         {x:sx,          y:sy+r+17, a:"middle", x1:sx-w/2,   y1:sy+r+3},
@@ -2006,7 +2010,8 @@ document.getElementById("q").oninput = function(e){
 
 $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
-  + "지도 경계 @svg-maps/south-korea (CC BY 4.0)";
+  + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
+  + '<span class="ver">화면 09-03 14:51</span>';
 
 render();
 </script>
