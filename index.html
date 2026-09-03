@@ -266,8 +266,6 @@ table.ov tr.miss td{color:var(--mute)}
 #yr button em{font-style:normal;font-size:10px;font-weight:700;opacity:.6;margin-left:5px}
 #mon button[disabled]{opacity:.32;cursor:default}
 .ynote{font-size:11.5px;color:var(--mute);white-space:nowrap}
-.mk .dot.unk{fill:var(--card);stroke:var(--acc);stroke-width:1.8;stroke-dasharray:2.6 2}
-.legend i.u{background:var(--card);border:1.8px solid var(--acc);border-radius:50%}
 
 /* 월별 접이식 토글 */
 .mtog{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);
@@ -288,16 +286,11 @@ table.ov tr.miss td{color:var(--mute)}
   --y1:#54718F; --y2:#6C90B8; --y3:#87ADDD; --y4:#A2C6F4; --y5:#C8DFFF; }
 .mk .dot.y1{fill:var(--y1)} .mk .dot.y2{fill:var(--y2)} .mk .dot.y3{fill:var(--y3)}
 .mk .dot.y4{fill:var(--y4)} .mk .dot.y5{fill:var(--y5)}
-.mk .dot.unk.y1,.mk .dot.unk.y2,.mk .dot.unk.y3,.mk .dot.unk.y4,.mk .dot.unk.y5{fill:var(--card)}
-.mk .dot.unk.y1{stroke:var(--y1)} .mk .dot.unk.y2{stroke:var(--y2)} .mk .dot.unk.y3{stroke:var(--y3)}
-.mk .dot.unk.y4{stroke:var(--y4)} .mk .dot.unk.y5{stroke:var(--y5)}
 .legend i.y1{background:var(--y1)} .legend i.y2{background:var(--y2)}
 .legend i.y3{background:var(--y3)} .legend i.y4{background:var(--y4)}
 .legend i.y5{background:var(--y5)}
 
 .mtog[hidden]{display:none}
-/* 촘촘한 전체 보기에서 점선이 별 모양으로 깨진다 : 얇은 실선 테두리로 */
-.kmap.dense .mk .dot.unk{stroke-dasharray:none;stroke-width:1.5}
 /* 전체 보기 : 표식이 122개라 후광을 빼고 선택한 것만 남긴다 */
 .kmap.dense .mk .halo{opacity:0}
 /* 촘촘할 때 흰 테두리를 조금 더 줘서 옅은 연도색도 육지에서 떠 보이게 한다 */
@@ -305,19 +298,10 @@ table.ov tr.miss td{color:var(--mute)}
 .kmap.dense .mk.sel .halo,.kmap.dense .mk:hover .halo{opacity:.3}
 /* 선택 강조는 연도 색보다 뒤에 와야 이긴다 */
 .mk.sel .dot,.mk[aria-pressed="true"] .dot{fill:var(--acc-2);stroke:var(--ink);stroke-width:2}
-.mk.sel .dot.unk,.mk[aria-pressed="true"] .dot.unk{fill:var(--card);stroke:var(--ink)}
 
-/* 성격 구분 : 전달 / 협약 / 미확인 */
-.mk .dot.agr{fill:var(--card);stroke:var(--acc);stroke-width:2.2}
-.mk .dot.nocnt{opacity:.85}
 .chip.wr{border-color:var(--gold);color:var(--gold);background:var(--gold-w)}
-.legend i.a{background:var(--card);border:2.2px solid var(--acc);border-radius:50%}
 .erow .en i.ag{font-style:normal;font-size:9.5px;font-weight:700;color:var(--gold);
   border:1px solid var(--gold);border-radius:3px;padding:0 3px;margin-left:5px;vertical-align:1px}
-.kmap.dense .mk .dot.agr{stroke-width:1.6}
-.mk .dot.agr.y1{stroke:var(--y1)} .mk .dot.agr.y2{stroke:var(--y2)}
-.mk .dot.agr.y3{stroke:var(--y3)} .mk .dot.agr.y4{stroke:var(--y4)}
-.mk .dot.agr.y5{stroke:var(--y5)}
 
 /* ══ 기사 우선 레이아웃 ══════════════════════ */
 .cols2{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px;align-items:start}
@@ -1012,8 +996,9 @@ function map(){
         + ' aria-pressed="'+(i===cur)+'" aria-label="'+esc(s.nm)+' '+s.date+' 장학생 '+s.cnt+'명">'
         + '<circle class="halo" cx="'+sx+'" cy="'+sy+'" r="'+(r+4)+'"></circle>'
         /* 기관·지자체 모양 구분은 없앴다 (122곳 중 4곳 · 읽는 사람이 쓸 수 없는 정보) */
+        /* 성격(전달·협약·미확인)에 따른 속 빈 흰 원도 폐지했다.
+           흰 원이 지도에 구멍처럼 보이고, 인원 미확인은 클릭 상세에서 이미 밝힌다 */
         + '<circle class="dot'
-          + (s.mode === "미확인" ? ' unk' : (s.mode === "협약" ? ' agr' : (s.cnt == null ? ' nocnt' : '')))
           + (all?' y'+(s.yr-2021):'') + '" cx="'+sx+'" cy="'+sy+'" r="'+r+'"></circle>'
         + '<title>'+esc(s.nm)+' · '+s.date+' · 장학생 '+s.cnt+'명 · '+won(s.amt)+'</title>'
         + lead
