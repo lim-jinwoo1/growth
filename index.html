@@ -819,6 +819,27 @@ h1{font-size:29px;letter-spacing:-.01em}
 .erow .en i{font-size:12px!important}
 .elist{max-height:440px!important}
 .ptitle .pn{font-size:13.5px!important}
+
+/* ══ 고른 도시 강조 · 지표 타일 표기 (요청 2026-09-03) ══════════ */
+/* ① 고른 곳의 이름 — 원이 커진 만큼 글씨도 키운다. 흰 테두리를 두껍게 둘러
+   촘촘한 전체 보기에서도 다른 이름 위로 또렷하게 얹힌다 */
+.mk.sel .mlab{font-size:20px!important;font-weight:800!important;fill:var(--ink)!important;
+  stroke:var(--card)!important;stroke-width:4.6px!important}
+.kmap.dense .mk.sel .mlab{font-size:18px!important;stroke-width:4.2px!important}
+.mk.sel .llead{stroke-width:1.4;opacity:.75}
+
+/* ② 지표 타일 — 라벨을 위로, 숫자와 단위를 나눈다 */
+.stat{display:flex!important;flex-direction:column;gap:0;justify-content:flex-start}
+.stat .sl{order:1;font-size:12.5px!important;font-weight:600;color:var(--mute);
+  letter-spacing:.02em;line-height:1.3}
+.stat b.num{order:2;margin-top:5px;display:flex!important;align-items:baseline;gap:4px;
+  font-size:31px!important;line-height:1.08;letter-spacing:-.03em}
+.stat b.num em{font-style:normal;font-size:15px;font-weight:700;letter-spacing:0;
+  color:var(--mute)}
+.stat .sn{order:3;margin-top:4px;font-size:11.5px;color:var(--mute);font-weight:500}
+.stat.hl .sl{color:var(--acc);opacity:.85}
+.stat.hl b.num em{color:var(--acc);opacity:.7}
+@media (max-width:520px){ .stat b.num{font-size:26px!important} }
 </style>
 </head>
 <body>
@@ -1103,20 +1124,30 @@ function stats(){
   var bc = both.reduce(function(a,s){ return a+s.cnt; }, 0);
   var ba = both.reduce(function(a,s){ return a+s.amt; }, 0);
   var prov = {}; v.forEach(function(s){ prov[s.prov] = 1; });
-  var cells = [[v.length+"곳","전달 지역","hl"],
-               [(cnt ? cnt.toLocaleString()+"명" : "—"), ncnt ? "장학생 · "+ncnt+"곳 미확인" : "장학생","hl"],
-               [won(amt), namt ? "장학금 · "+namt+"곳 미확인" : "장학금","hl"],
-               [Object.keys(prov).length+"개","광역시·도",""],
-               /* '지자체 / 기관' 은 읽는 사람이 쓸 수 없는 구분이라 뺐다.
-                  대신 1인 평균 장학금 — 협력사가 규모를 체감하는 숫자로 바꾼다 */
-               [(bc && ba ? Math.round(ba/bc/10000).toLocaleString()+"만 원" : "—"),
-                "1인 평균 · "+both.length+"곳 기준",""]];
+  /* [라벨, 숫자, 단위, 덧말, 등급]
+     숫자와 단위를 나눠 둔다. '38곳' 처럼 붙여 쓰면 자릿수가 안 맞아 눈이 걸린다 */
+  var wonSplit = function(x){
+    var t = won(x);                                     /* 예 "23.5억 원" */
+    var m = t.match(/^([\d.,]+)(.*)$/);
+    return m ? [m[1], m[2].replace(/^\s+/, "")] : [t, ""];
+  };
+  var aw = wonSplit(amt), pw = (bc && ba) ? [Math.round(ba/bc/10000).toLocaleString(), "만 원"] : ["—", ""];
+  var cells = [
+    ["전달 지역", v.length, "곳", "", "hl"],
+    ["장학생", (cnt ? cnt.toLocaleString() : "—"), "명", ncnt ? ncnt+"곳 미확인" : "", "hl"],
+    ["장학금", aw[0], aw[1], namt ? namt+"곳 미확인" : "", "hl"],
+    ["광역시·도", Object.keys(prov).length, "개", "", ""],
+    ["1인 평균", pw[0], pw[1], both.length+"곳 기준", ""]];
   if(hasP){
     var tot = 0; for(var k in PARTNERS) tot += PARTNERS[k];
-    cells.push([tot.toLocaleString()+"개사","협력사","tl"]);
+    cells.push(["협력사", tot.toLocaleString(), "개사", "", "tl"]);
   }
   $("#stats").innerHTML = cells.map(function(r){
-    return '<div class="stat '+r[2]+'"><b class="num">'+r[0]+'</b><span>'+r[1]+'</span></div>';
+    return '<div class="stat '+r[4]+'">'
+      + '<span class="sl">'+r[0]+'</span>'
+      + '<b class="num">'+r[1]+(r[2] ? '<em>'+r[2]+'</em>' : '')+'</b>'
+      + (r[3] ? '<span class="sn">'+r[3]+'</span>' : '')
+      + '</div>';
   }).join("");
   if($("#sheadn")){
     var unk2 = v.filter(function(s){ return s.cnt == null; }).length;
@@ -1221,7 +1252,8 @@ function map(){
     var RU = 3.4 + Math.sqrt(50) * 0.62;             /* = 7.8 */
     order.forEach(function(i){
       var s = SPOTS[i];
-      rad[i] = all ? RU * 0.72 : RU;
+      /* 고른 곳은 원과 이름을 함께 키운다 (깜빡임 효과는 그대로 유지된다) */
+      rad[i] = (all ? RU * 0.72 : RU) * (i === cur ? 1.55 : 1);
       /* 제주 표식은 인셋으로 평행이동 */
       var jj = (s.prov === "제주");
       px[i] = s.x + (jj ? jdx : 0);
@@ -1256,7 +1288,7 @@ function map(){
       /* 광역시의 '구'는 이름만으론 구분이 안 된다 (대구 중구 / 대전 중구). 시·도를 붙인다. */
       var lab = s.nm.replace(" (DGIST)","");
       if(/구$/.test(lab) && lab.indexOf("시") < 0) lab = s.prov + " " + lab;
-      var w = lab.length * 15.4 + 4, h = 18;
+      var w = lab.length * (i === cur ? 20 : 15.4) + 4, h = (i === cur ? 23 : 18);
       var cand = [
         {x:sx,          y:sy-r-8,  a:"middle", x1:sx-w/2,   y1:sy-r-8-h},
         {x:sx,          y:sy+r+17, a:"middle", x1:sx-w/2,   y1:sy+r+3},
