@@ -27,7 +27,9 @@ button{font-family:inherit}
  --line:#C6D3E6; --line2:#E1E9F6;
  --acc:#123C7A; --acc-w:#E1ECFC; --acc-2:#2E6BB8;
  --map:#CBD8EC; --map-line:#FFFFFF; --map-on:#B7C8E4;
- --hl:#D2E3F9; --hl-ln:#8FB8E8; --tile-ln:#B9C9E0;
+ --hl:#EAF2FE; --hl-ln:#C6DBF8; --tile-ln:#E1E9F5;
+ --mkt:#8A6A22; --mkt-bg:#FCF8EE; --mkt-ln:#EADFC4;
+ --news:#1F5E6B; --news-bg:#F1F8F7; --news-ln:#CFE4E7;
  --teal:#1F5E6B; --teal-w:#E6F0F2;
  --gold:#8A6A22; --gold-w:#FBF4E4;
  --up:#C0392B; --down:#1C6EA4;
@@ -39,7 +41,9 @@ button{font-family:inherit}
  --line:#2F3A4C; --line2:#252F3F;
  --acc:#77ACEE; --acc-w:#12233C; --acc-2:#9AC4F6;
  --map:#20293A; --map-line:#080C15; --map-on:#2F3B52;
- --hl:#152B48; --hl-ln:#2E5688; --tile-ln:#3B4860;
+ --hl:#16233A; --hl-ln:#2B4468; --tile-ln:#2F3A4C;
+ --mkt:#D4B063; --mkt-bg:#241F16; --mkt-ln:#3A3121;
+ --news:#67C2D1; --news-bg:#11262A; --news-ln:#22434A;
  --teal:#67C2D1; --teal-w:#122B30;
  --gold:#D4B063; --gold-w:#2B2413;
  --up:#E4675A; --down:#5FA8D8;
@@ -51,7 +55,9 @@ button{font-family:inherit}
  --line:#2F3A4C; --line2:#252F3F;
  --acc:#77ACEE; --acc-w:#12233C; --acc-2:#9AC4F6;
  --map:#20293A; --map-line:#080C15; --map-on:#2F3B52;
- --hl:#152B48; --hl-ln:#2E5688; --tile-ln:#3B4860;
+ --hl:#16233A; --hl-ln:#2B4468; --tile-ln:#2F3A4C;
+ --mkt:#D4B063; --mkt-bg:#241F16; --mkt-ln:#3A3121;
+ --news:#67C2D1; --news-bg:#11262A; --news-ln:#22434A;
  --teal:#67C2D1; --teal-w:#122B30;
  --gold:#D4B063; --gold-w:#2B2413;
  --up:#E4675A; --down:#5FA8D8;
@@ -905,6 +911,66 @@ h1{font-size:29px;letter-spacing:-.01em}
 .alist .ai .m{margin-top:4px;display:flex;flex-wrap:wrap;gap:7px;align-items:center;
   font-size:12.5px;color:var(--mute)}
 .alist .ai .m .pr{font-weight:600}
+
+/* ══════════════════════════════════════════════════════════════
+   C2 시안 적용 (2026-09-07) — 흰 종이 위에 뜬 둥근 카드 + 계열색 3개
+     시세 = 골드 · 나눔 = 파랑 · 소식 = 청록
+   색은 장식이 아니라 '어느 종류의 정보인가' 를 말한다.
+   되돌리려면 이 블록만 지우면 된다 (기준본 map_shell_확정_0907.html)
+   ══════════════════════════════════════════════════════════════ */
+:root{ --bg:#FFFFFF; --card2:#F7FAFF; --line:#E1E9F5; --line2:#EFF4FB; }
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#080C15; --card2:#141C29; --line:#2A3444; --line2:#212A38; }}
+:root[data-theme="dark"]{ --bg:#080C15; --card2:#141C29; --line:#2A3444; --line2:#212A38; }
+body{background:var(--bg)}
+
+/* ── 부양형 : 테두리 대신 파란 기운의 그림자 + 둥근 모서리 ──── */
+.panel,.hpanel,.hpanel2,.panel.mapbox{border:0!important;border-radius:18px!important;
+  box-shadow:0 1px 2px rgba(18,60,122,.06),0 10px 30px rgba(18,60,122,.10)!important}
+:root[data-theme="dark"] .panel,:root[data-theme="dark"] .hpanel,
+:root[data-theme="dark"] .hpanel2,:root[data-theme="dark"] .panel.mapbox{
+  box-shadow:0 1px 2px rgba(0,0,0,.55),0 10px 30px rgba(0,0,0,.45)!important}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .panel,
+ :root:not([data-theme="light"]) .hpanel,:root:not([data-theme="light"]) .hpanel2,
+ :root:not([data-theme="light"]) .panel.mapbox{
+  box-shadow:0 1px 2px rgba(0,0,0,.55),0 10px 30px rgba(0,0,0,.45)!important}}
+.card,.stat,.mcard,.tf{border-radius:14px!important}
+.stats{border:0!important;gap:13px!important;padding:0!important}
+.stat{border:0!important;background:var(--card)!important;padding:17px 19px!important;
+  box-shadow:0 1px 2px rgba(18,60,122,.05),0 6px 18px rgba(18,60,122,.08)!important}
+.stat.hl{background:var(--hl)!important}
+.sect::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;
+  background:var(--acc);margin-right:9px;vertical-align:.12em}
+.tabs{border-bottom:0!important;gap:8px!important}
+.tabs button{border-radius:999px!important;border-bottom:0!important;padding:11px 20px!important}
+.tabs button[aria-selected="true"]{background:var(--acc)!important;color:#fff!important}
+:root[data-theme="dark"] .tabs button[aria-selected="true"],
+.tabs button[aria-selected="true"]{color:#fff!important}
+.tabs button[aria-selected="true"] .cnt{color:#CFE1F7!important}
+.tabs button+button::before{background:transparent!important}
+.cards{gap:12px!important}
+.cards>.card{background:var(--card2)!important;border:0!important;border-top:0!important;
+  padding:15px 16px 14px!important}
+
+/* ── 계열색 ① 시세 = 골드 ─────────────────────────────────── */
+.trhead .sect{color:var(--mkt)}
+.trhead .sect::before{background:var(--mkt)}
+.tf,.mcard{background:var(--mkt-bg)!important;border:0!important}
+.mkt .ptitle{color:var(--mkt)}
+.mkt .ptitle::after{background:var(--mkt-ln)}
+
+/* ── 계열색 ② 소식 = 청록 ─────────────────────────────────── */
+/* 왼쪽은 파랑 기운, 오른쪽은 청록 기운 — 두 칸이 계열색으로 갈린다 */
+.hpanel2{background:linear-gradient(158deg,var(--news-bg) 0%,var(--card) 60%)!important}
+.hpanel2 .ptitle,.ptitle.nt{color:var(--news)}
+.hpanel2 .ptitle::after,.ptitle.nt::after{background:var(--news-ln)}
+.hpanel2 .hsum.big b.k{border-color:var(--news)!important;background:var(--news-bg)!important}
+.hpanel2 .hsum.big b.k i,.hpanel2 .hsum.big b.k span{color:var(--news)!important}
+.hpanel2 .hrl .d{color:var(--news)}
+.hpanel2 .hrl:hover .t{color:var(--news)}
+.hpanel2 .hmore{color:var(--news)}
+.hpanel2 .hmore:hover{border-color:var(--news);background:var(--news-bg)}
+.seg.cat button[aria-pressed="true"]{background:var(--news)!important}
 </style>
 </head>
 <body>
@@ -1022,7 +1088,7 @@ h1{font-size:29px;letter-spacing:-.01em}
 <!-- 사회공헌 기사 전체 보기 -->
 <div class="modal" id="amodal" hidden>
  <div class="mhead">
-  <b>사회공헌 기사</b><span class="mnote" id="anote"></span>
+  <b id="atitle">사회공헌 기사</b><span class="mnote" id="anote"></span>
   <span class="spacer"></span>
   <button class="mclose" id="aclose" aria-label="닫기">✕ 닫기</button>
  </div>
@@ -1693,9 +1759,11 @@ var GRWA = (function(){
 
 /* 사회공헌 기사 전체 보기 팝업 */
 var amd = $("#amodal");
-function openArts(){
-  $("#anote").textContent = "최신순 " + SOCLIST.length + "건";
-  $("#alist").innerHTML = SOCLIST.map(function(a){
+function openArts(list, title){
+  list = list || SOCLIST;
+  $("#atitle").textContent = title || "사회공헌 기사";
+  $("#anote").textContent = "최신순 " + list.length + "건";
+  $("#alist").innerHTML = list.map(function(a){
     var si = spotOf(a);
     return '<article class="ai"><span class="d">' + fd(a.date) + '</span><div>'
       + '<h4><a href="'+esc(a.link)+'" target="_blank" rel="noopener">'+esc(a.title)+'</a></h4>'
@@ -1719,6 +1787,8 @@ amd.onclick = function(e){ if(e.target === amd) closeArts(); };
 
 /* 주간 동행 아래 미리보기·전체 보기에 쓰는 사회공헌 기사 목록 (최신순) */
 var SOCLIST = ARTS.filter(isSoc).slice().sort(byNew);
+/* 주간 성장도 같은 구조로 — 비(非)사회공헌 기사 최신순 */
+var GRWLIST = ARTS.filter(function(a){ return !isSoc(a); }).slice().sort(byNew);
 var HERO = GRWA.list.slice();                  /* 아래 기사 목록에서 뺄 것은 성장 1건뿐 */
 
 REST = SORTED.filter(function(a){ return HERO.indexOf(a) < 0; });
@@ -1812,21 +1882,34 @@ function hero(){
   }
   var g = GRWA.list[0];
   if(g){
+    /* 왼쪽 [주간 동행] 과 같은 구조로 맞춘다 :
+       요약 타일 4개 → 안내 문구 → 기사 2건 미리보기 → 전체 보기 */
+    var byCat = {};
+    GRWA.all.forEach(function(a){ byCat[a.cat] = (byCat[a.cat] || 0) + 1; });
+    var top2 = Object.keys(byCat).sort(function(x, y){ return byCat[y] - byCat[x]; }).slice(0, 2);
     h += '<div class="panel hpanel2"><div class="ptitle">주간 성장'
       + ' <span class="hwin">'+GRWA.lbl+'</span></div>'
       + '<div class="hsum big">'
       +   chip("좋은 소식", g2.n+"건", true)
       +   chip("관련 기사", f(g2.cov)+"건", false)
+      +   top2.map(function(c){ return chip(c, byCat[c]+"건", false); }).join("")
       + '</div>'
-      + '<article class="hli one">'
-      + '<div class="hd"><span class="num">'+fd(g.date)+'</span>'
-      + '<span class="chip c">'+esc(g.cat)+'</span>'
-      + (g.official ? '<span class="chip off">공식</span>' : '')
-      + (g.cov > 1 ? '<span class="num" style="color:var(--mute)">보도 '+g.cov+'건</span>' : '')
-      + '</div>'
-      + '<h3><a href="'+esc(g.link)+'" target="_blank" rel="noopener">'+esc(g.title)+'</a></h3>'
-      + '<div class="ifoot"><span class="pr">'+esc(g.press)+'</span></div>'
-      + '</article></div>';
+      + '<p class="hnote">'+GRWA.lbl+' 확인된 수상·실적·수출 소식입니다.'
+      + ' 관련 기사는 같은 소식을 다룬 언론 보도 수입니다.</p>'
+      + (function(){
+          var pv = GRWLIST.slice(0, 2);
+          if(!pv.length) return '';
+          return '<div class="hrel"><div class="hrt"><b>성장 소식 기사</b>'
+            + '<span class="hwin">'+GRWLIST.length+'건</span></div>'
+            + pv.map(function(a){
+                return '<button class="hrl hrg" data-a="'+GRWLIST.indexOf(a)+'">'
+                  + '<span class="d">'+fd(a.date)+'</span>'
+                  + '<span class="t">'+esc(a.title)+'</span></button>';
+              }).join("")
+            + '<button class="hmore" id="gmore">전체 보기 '+GRWLIST.length+'건 →</button>'
+            + '</div>';
+        })()
+      + '</div>';
   }
   $("#hero").innerHTML = h;
   bindMlink($("#hero"));
@@ -1836,7 +1919,14 @@ function hero(){
       if(a && a.link) window.open(a.link, "_blank", "noopener");
     };
   });
-  if($("#hmore")) $("#hmore").onclick = function(){ openArts(); };
+  Array.prototype.forEach.call($("#hero").querySelectorAll(".hrg"), function(b){
+    b.onclick = function(){
+      var a = GRWLIST[+b.dataset.a];
+      if(a && a.link) window.open(a.link, "_blank", "noopener");
+    };
+  });
+  if($("#hmore")) $("#hmore").onclick = function(){ openArts(SOCLIST, "사회공헌 기사"); };
+  if($("#gmore")) $("#gmore").onclick = function(){ openArts(GRWLIST, "성장 소식 기사"); };
 }
 
 function feed(){
@@ -2185,7 +2275,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-07 10:52</span>';
+  + '<span class="ver">화면 09-07 12:37</span>';
 
 render();
 </script>
