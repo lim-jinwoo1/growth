@@ -1363,6 +1363,54 @@ body{background-image:radial-gradient(125% 95% at 6% 0%,
   .sect::before{width:4px!important}
   .shead{margin:22px 0 13px!important;gap:9px!important}
 }
+
+/* ══ 탭 : 누를 수 있는 것으로 보이게 (2026-09-08) ══════════════
+   지금은 고른 탭만 채워져 있고 나머지는 맨 글씨라 '글자'로 읽힌다.
+   → 미선택 탭에도 흰 배경 + 테두리 + 옅은 그림자를 줘 단추로 보이게 한다
+   (세그먼트 트랙 방식은 390px 에서 '원자재 · 환율 시세' 가 세 줄로 무너져 접었다) */
+.tabs{gap:9px!important;flex-wrap:wrap}
+.tabs button{background:var(--card)!important;border:1px solid var(--line)!important;
+  border-radius:999px!important;color:var(--body)!important;
+  box-shadow:0 1px 2px rgba(18,60,122,.06)!important;
+  transition:border-color .15s,color .15s,background .15s,box-shadow .15s}
+.tabs button::before{display:none!important}
+.tabs button:hover{border-color:var(--acc)!important;color:var(--acc)!important;
+  box-shadow:0 2px 8px rgba(18,60,122,.12)!important}
+.tabs button:active{transform:translateY(1px)}
+.tabs button[aria-selected="true"]{background:var(--acc)!important;color:#fff!important;
+  border-color:var(--acc)!important;
+  box-shadow:0 2px 10px rgba(18,60,122,.26)!important}
+.tabs button[aria-selected="true"] .cnt{color:rgba(255,255,255,.82)!important}
+.tabs button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+:root[data-theme="dark"] .tabs button{box-shadow:0 1px 2px rgba(0,0,0,.5)!important}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tabs button{
+  box-shadow:0 1px 2px rgba(0,0,0,.5)!important}}
+
+/* ══ 시세 탭 제목·묶음 이름 : 소제목과 같은 위계로 (2026-09-08) ══
+   '원자재 · 환율 시세' 와 '원자재 / 유가 · 나프타 / 환율' 이 본문보다 작아
+   머리로 읽히지 않았다. 소제목과 같은 규칙(잉크 글자 + 계열색 막대)을 쓴다 */
+.mkt .ptitle{font-size:25px!important;font-weight:800!important;
+  letter-spacing:-.03em!important;color:var(--ink)!important;
+  padding-left:16px;position:relative;margin-bottom:6px!important;gap:14px!important}
+.mkt .ptitle::before{content:"";position:absolute;left:0;top:50%;
+  transform:translateY(-50%);width:5px;height:1.02em;border-radius:3px;
+  background:var(--mkt)}
+.mkt .ptitle::after{background:var(--mkt-ln)!important}
+
+/* 묶음 이름 (원자재 / 유가 · 나프타 / 환율) */
+.mkt .mgroup{font-size:19px!important;font-weight:800!important;
+  font-family:"Gothic A1",sans-serif;color:var(--ink)!important;
+  letter-spacing:-.02em!important;margin:26px 0 11px!important;
+  padding-left:13px;position:relative;display:flex;align-items:center;gap:12px}
+.mkt .mgroup::before{content:"";position:absolute;left:0;top:50%;
+  transform:translateY(-50%);width:4px;height:.95em;border-radius:2px;
+  background:var(--mkt);opacity:.55}
+.mkt .mgroup::after{content:"";flex:1;height:1px;background:var(--mkt-ln)}
+.mkt .mgroup:first-of-type{margin-top:18px!important}
+@media (max-width:560px){
+  .mkt .ptitle{font-size:21px!important;padding-left:13px}
+  .mkt .mgroup{font-size:17px!important;margin:22px 0 10px!important}
+}
 </style>
 </head>
 <body>
@@ -2628,10 +2676,9 @@ function market(){
     + '<p class="dsum" style="margin:14px 0 0;font-size:12px;color:var(--mute)">'
     + '출처 : KOMIS(LME) · 하나은행 최초고시 매매기준율 · 오피넷. '
     + '<b>전월대비</b>는 당월평균 vs 전월평균, <b>전일대비</b>는 당일값 vs 직전 거래일입니다. '
-    + '상승 빨강 / 하락 파랑. 당월평균은 진행 중인 달이라 영업일 수를 함께 적었습니다. '
+    + '상승 빨강 / 하락 파랑. '
     + '당일값은 항목별 최신 고시일 기준이라 날짜가 다를 수 있고, 전일대비의 기준일도 항목마다 다릅니다(카드에 마우스를 올리면 표시). '
-    + '추이 그래프는 완결된 '+(MARKET.chartEnd||"")+' 까지입니다. '
-    + '이 페이지는 주 1회 갱신되며, 화면의 값은 '+MARKET.asof+' 기준입니다.</p>';
+    + '추이 그래프는 완결된 '+(MARKET.chartEnd||"")+' 까지입니다.</p>';
 }
 
 /* ── 추이 접기 ──────────────────────────────── */
@@ -2808,7 +2855,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-08 16:59</span>';
+  + '<span class="ver">화면 09-08 17:12</span>';
 
 /* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
    폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
