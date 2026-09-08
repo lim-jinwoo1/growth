@@ -1192,6 +1192,32 @@ body{background-image:radial-gradient(125% 95% at 6% 0%,
     #0B1220 0%, #080C15 46%, #120E12 100%)!important}}
 :root[data-theme="dark"] body{background-image:radial-gradient(125% 95% at 6% 0%,
   #0B1220 0%, #080C15 46%, #120E12 100%)!important}
+
+/* ══ 뉴스레터 탭 : 왼쪽 목록 한 줄 · 오른쪽 글씨 확대 (2026-09-08) ══ */
+/* 왼쪽 칸이 280px 이라 'Vol. 2026-35 8월 4주차 / 08.24(월) · 3건' 이 두 줄로 꺾였다 */
+.arch{grid-template-columns:372px minmax(0,1fr)!important;gap:24px!important}
+@media (max-width:1100px){ .arch{grid-template-columns:1fr!important} }
+.ili{display:grid!important;grid-template-columns:auto 1fr;align-items:baseline;
+  gap:12px!important;padding:14px 16px!important}
+.ili .iv,.ili .im{white-space:nowrap!important}
+.ili .im{text-align:right;font-size:14px!important}
+.iv{font-size:17.5px!important}
+.iv em{font-size:14px!important;margin-left:8px!important}
+.search{font-size:15px!important;padding:12px 14px!important}
+
+/* 오른쪽 : 호 제목 · 기간 칩 */
+#ipane .dhead h2{font-size:28px!important}
+#ipane .dhead .chip{font-size:14.5px!important;padding:3px 12px!important}
+#ipane .dsum{font-size:15px!important}
+/* 섹션 제목 (함께 나눈 소식 / 업계 · 시장 동향) */
+.isect{font-size:17px!important;letter-spacing:.06em!important;margin:26px 0 14px!important}
+/* 기사 머리줄 (날짜 · 분류 · 보도 건수 · 매체) */
+.imeta{font-size:14px!important;gap:10px!important;margin-bottom:6px!important}
+.imeta .chip{font-size:13.5px!important;padding:2px 10px!important}
+/* 기사 제목(하이퍼링크) 과 요약 */
+.acard h3{font-size:21px!important;line-height:1.4!important}
+.acard p{font-size:14px!important;line-height:1.6!important}
+.acard{padding:17px 2px 15px!important}
 </style>
 </head>
 <body>
@@ -2617,7 +2643,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-08 10:23</span>';
+  + '<span class="ver">화면 09-08 11:11</span>';
 
 render();
 </script>
