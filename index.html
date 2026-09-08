@@ -1320,6 +1320,21 @@ body{background-image:radial-gradient(125% 95% at 6% 0%,
 .mcard .mg{margin-top:12px!important;padding-top:11px!important;
   border-top:1px solid var(--line2)}
 @media (max-width:520px){ .mcard .v{font-size:30px!important} .mcard .n{font-size:20px!important} }
+
+/* ══ 탭 이름이 낱말 중간에서 꺾이던 것 (2026-09-08) ══════════
+   '나눔의 발 / 자취' → '나눔의 / 발자취'.
+   한글은 word-break 기본값이 낱말을 쪼개므로 keep-all 로 띄어쓰기에서만 꺾는다 */
+.tabs button{word-break:keep-all;overflow-wrap:normal;text-wrap:balance}
+.tabs .cnt{word-break:keep-all}
+@media (max-width:700px){
+  .tabs button{padding:10px 13px!important;line-height:1.3}
+}
+
+/* 아주 좁은 폰(360px)에서 탭이 세 줄로 늘어지던 것 */
+@media (max-width:390px){
+  .tabs button{padding:9px 11px!important;font-size:16px!important}
+  .tabs .cnt{font-size:12px!important;margin-left:4px!important}
+}
 </style>
 </head>
 <body>
@@ -1471,7 +1486,7 @@ body{background-image:radial-gradient(125% 95% at 6% 0%,
 
 <div class="tabs" role="tablist">
  <button role="tab" id="t-map"  aria-selected="true"  aria-controls="p-map">나눔의 발자취</button>
- <button role="tab" id="t-mkt"  aria-selected="false" aria-controls="p-mkt">원자재 · 환율 시세</button>
+ <button role="tab" id="t-mkt"  aria-selected="false" aria-controls="p-mkt">원자재 · 환율 시세</button>
  <button role="tab" id="t-arc"  aria-selected="false" aria-controls="p-arc">뉴스레터<span class="cnt" id="arcN"></span></button>
 </div>
 
@@ -2265,7 +2280,9 @@ var SOCLIST = ARTS.filter(isSoc).slice().sort(byNew);
 var GRWLIST = ARTS.filter(function(a){ return !isSoc(a); }).slice().sort(byNew);
 var HERO = GRWA.list.slice();                  /* 아래 기사 목록에서 뺄 것은 성장 1건뿐 */
 
-REST = SORTED.filter(function(a){ return HERO.indexOf(a) < 0; });
+/* 대문에 올린 기사도 목록에 그대로 둔다 — 39+36=75 와 아래 목록 수가 어긋나
+   하나가 사라진 것처럼 읽혔다 (사용자 결정) */
+REST = SORTED.slice();
 /* 분류 칩 순서는 건수가 아니라 이 순서로 고정한다 (요청).
    건수 순으로 두면 주마다 칩 자리가 바뀌어 눈이 매번 다시 찾아야 한다 */
 var CATORD = ["사회공헌", "수상·인증", "산업·업계", "실적·경영", "기타"];
@@ -2763,7 +2780,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-08 16:08</span>';
+  + '<span class="ver">화면 09-08 16:18</span>';
 
 /* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
    폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
