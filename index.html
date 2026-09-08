@@ -1218,6 +1218,49 @@ body{background-image:radial-gradient(125% 95% at 6% 0%,
 .acard h3{font-size:21px!important;line-height:1.4!important}
 .acard p{font-size:14px!important;line-height:1.6!important}
 .acard{padding:17px 2px 15px!important}
+
+/* ══ 2026년 사회공헌 지표 : 기준 문구를 빼고 숫자를 키운다 (2026-09-08) ══ */
+.stat{padding:24px 18px!important}
+.stat .sl{font-size:16px!important}
+.stat b.num{font-size:44px!important;margin-top:9px!important}
+.stat b.num em{font-size:20px!important}
+@media (max-width:520px){ .stat b.num{font-size:34px!important} }
+
+/* ══ 모바일 : 크게 보기가 잘리던 것 (2026-09-08) ══════════════
+   원인 세 가지
+   ① .mleft 가 flex:1 1 auto 라 줄어드는데 안쪽 패널은 min-height:62vh 로 버텨
+      패널이 부모 밖으로 밀려 아래 [선택 지역] 칸을 덮었다
+   ② 연도·월별 단추를 지도 위에 절대배치해 둔 것이 좁은 화면에서 요약 카드와 겹쳤다
+   ③ svg 를 height:100% 로 늘려 잘렸다
+   → 좁은 화면에서는 위에서 아래로 자연스럽게 쌓고, 지도는 원래 비율로 둔다 */
+@media (max-width:1000px){
+  .modal{padding:8px!important}
+  .mbody{flex-direction:column!important;overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch;gap:10px!important;padding:8px!important}
+  .mleft{flex:0 0 auto!important;width:100%!important}
+  .mright{flex:0 0 auto!important;width:100%!important;overflow:visible!important}
+  .mleft>.panel{min-height:0!important;height:auto!important;overflow:visible!important;
+    display:block!important;padding:12px 12px 14px!important;position:static!important}
+  /* 조작 단추를 지도 위에서 내려 제자리로 */
+  .mleft>.panel>.bars.mrow,.mleft>.panel>.monwrap{position:static!important;
+    background:none!important;box-shadow:none!important;padding:0!important;
+    margin:0 0 8px!important;max-width:none!important;grid-column:auto!important}
+  .mleft>.panel>.bars.mrow .spacer{display:block!important}
+  .mleft>.panel>.monwrap .seg.mon{flex-wrap:wrap!important}
+  .mleft>.panel>.monwrap .seg.mon button{font-size:12.5px!important;padding:6px 9px!important}
+  /* 지도는 원래 비율 그대로 (잘림 없음) */
+  .mleft #map{height:auto!important;width:100%!important;display:block!important;padding:0!important}
+  .mleft svg.kmap{width:100%!important;height:auto!important;
+    max-height:none!important;max-width:100%!important}
+  .mleft .ylegend{position:static!important;background:none!important;box-shadow:none!important;
+    padding:0!important;margin:8px 0 0!important;max-width:none!important}
+  .mleft>.panel>.bars:not(.mrow){display:flex!important}
+}
+
+/* ══ 시세 카드 : 당월평균·전월평균을 왼쪽에 붙인다 ══════════════
+   가운데(당월평균) 와 오른쪽(전월대비) 이 섞여 어색했다 */
+.mcard .mg .ml,.mcard .ml{justify-content:flex-start!important;text-align:left!important}
+.mcard .mg .mr,.mcard .mr{justify-content:flex-end!important;text-align:right!important}
 </style>
 </head>
 <body>
@@ -1641,7 +1684,9 @@ function stats(){
     ["장학생", (cnt ? cnt.toLocaleString() : "—"), "명", ncnt ? ncnt+"곳 미확인" : "", "hl"],
     ["장학금", aw[0], aw[1], namt ? namt+"곳 미확인" : "", "hl"],
     ["광역시·도", Object.keys(prov).length, "개", "", ""],
-    ["1인 평균", pw[0], pw[1], both.length+"곳 기준", ""]];
+    /* 지표는 FIXY(2026) 고정이고 2026년 39곳은 인원·금액이 전부 확인돼 있다.
+       "39곳 기준" 은 첫 칸의 "39곳" 과 같은 숫자여서 정보를 더하지 않는다 → 뺀다 */
+    ["1인 평균", pw[0], pw[1], "", ""]];
   if(hasP){
     var tot = 0; for(var k in PARTNERS) tot += PARTNERS[k];
     cells.push(["협력사", tot.toLocaleString(), "개사", "", "tl"]);
@@ -2643,7 +2688,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-08 15:14</span>';
+  + '<span class="ver">화면 09-08 15:35</span>';
 
 render();
 </script>
