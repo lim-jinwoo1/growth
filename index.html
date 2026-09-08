@@ -1261,6 +1261,50 @@ body{background-image:radial-gradient(125% 95% at 6% 0%,
    가운데(당월평균) 와 오른쪽(전월대비) 이 섞여 어색했다 */
 .mcard .mg .ml,.mcard .ml{justify-content:flex-start!important;text-align:left!important}
 .mcard .mg .mr,.mcard .mr{justify-content:flex-end!important;text-align:right!important}
+
+/* ══ 모바일 : 지도 배율 · 전달 기록 이동 (2026-09-08) ══════════
+   폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
+   (390px 화면 : 일반 350px vs 크게 334px — 오히려 작아진다)
+   → 화면폭을 넘겨 그리고 손가락으로 끌어 보게 한다 */
+.mzoom{display:none}
+.jumprec{display:none}
+
+@media (max-width:1000px){
+  /* 배율 단추 — 창 머리 오른쪽, 닫기 앞 */
+  .mzoom{display:inline-flex;gap:0;border:1px solid rgba(255,255,255,.35);
+    border-radius:999px;overflow:hidden;margin-right:8px}
+  .mzoom button{background:transparent;border:0;color:#fff;font:inherit;font-size:13px;
+    font-weight:700;padding:7px 11px;cursor:pointer;
+    border-left:1px solid rgba(255,255,255,.22)}
+  .mzoom button:first-child{border-left:0}
+  .mzoom button[aria-pressed="true"]{background:#fff;color:var(--acc)}
+
+  /* 지도 칸을 스크롤 상자로 — 배율이 1배면 스크롤이 생기지 않는다 */
+  .mleft #map{overflow:auto!important;-webkit-overflow-scrolling:touch;
+    max-height:66vh!important;overscroll-behavior:contain;
+    border-radius:12px;background:var(--card2)}
+  .mleft svg.kmap{width:calc(100% * var(--mz,1))!important;height:auto!important;
+    max-width:none!important;max-height:none!important}
+  /* 2배 이상에서는 요약 카드가 화면 밖으로 나가므로 창 머리 문구로 갈음된다 */
+
+  /* [전달 기록으로] — 일반 화면의 지도 밑 */
+  .jumprec{display:block;width:100%;margin-top:12px;border:1px dashed var(--line);
+    background:transparent;color:var(--acc);border-radius:11px;padding:13px;
+    font:inherit;font-size:15px;font-weight:700;cursor:pointer}
+  .jumprec b{font-weight:800}
+  .jumprec:active{background:var(--acc-w)}
+  .mright .jumprec,.mleft .jumprec{display:none}   /* 크게 보기 창 안에서는 숨긴다 */
+}
+
+/* 좁은 폰에서 창 머리가 과밀해 제목·닫기가 두 줄로 꺾였다 */
+@media (max-width:1000px){
+  .mhead{gap:7px!important;flex-wrap:nowrap!important;align-items:center}
+  .mhead b{font-size:14.5px;white-space:nowrap}
+  .mclose{white-space:nowrap;padding:7px 11px!important;font-size:13px!important}
+  .mzoom button{white-space:nowrap;padding:7px 9px!important;font-size:12.5px!important}
+  .mzoom{margin-right:6px!important}
+}
+@media (max-width:520px){ .mhead .mnote{display:none} }
 </style>
 </head>
 <body>
@@ -1452,6 +1496,7 @@ body{background-image:radial-gradient(125% 95% at 6% 0%,
    </div>
    <div id="map"></div>
    <div class="ylegend" id="ylegend"></div>
+   <button class="jumprec" id="jumprec">전달 기록 <b id="jumpn"></b> 보기 ↓</button>
    <div class="seg" id="mode" role="group" aria-label="지도 보기 모드" hidden>
     <button data-m="s" aria-pressed="true">장학금 전달</button>
     <button data-m="p" aria-pressed="false">협력사 분포</button>
@@ -1471,6 +1516,11 @@ body{background-image:radial-gradient(125% 95% at 6% 0%,
  <div class="mhead">
   <b>나눔의 발자취</b><span class="mnote" id="mnote"></span>
   <span class="spacer"></span>
+  <span class="mzoom" id="mzoom" role="group" aria-label="지도 배율">
+   <button data-z="1" aria-pressed="true">1배</button>
+   <button data-z="2" aria-pressed="false">2배</button>
+   <button data-z="3" aria-pressed="false">3배</button>
+  </span>
   <button class="mclose" id="mclose" aria-label="닫기">✕ 닫기</button>
  </div>
  <div class="mbody" id="mbody">
@@ -2016,6 +2066,7 @@ function detail(){
 function elist(){
   var v = shown().slice().sort(function(a,b){ return a.date < b.date ? 1 : -1; });
   $("#elistn").textContent = v.length + "곳";
+  if($("#jumpn")) $("#jumpn").textContent = v.length + "곳";
   $("#elist").innerHTML = v.map(function(s){
     var i = SPOTS.indexOf(s);
     return '<button class="erow'+(i===cur?' on':'')+'" data-i="'+i+'">'
@@ -2688,7 +2739,50 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-08 15:35</span>';
+  + '<span class="ver">화면 09-08 15:44</span>';
+
+/* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
+   폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
+   그래서 화면폭을 넘겨 그리고 손가락으로 끌어 보게 한다.
+   배율을 바꾸면 고른 곳이 화면 가운데로 오도록 스크롤을 맞춘다 */
+(function(){
+  var host = $("#mleft"), bar = $("#mzoom");
+  if(!host || !bar) return;
+  var z = 1;
+  function center(){
+    var box = host.querySelector("#map");
+    if(!box) return;
+    var g = box.querySelector('.mk.sel .dot') || box.querySelector('.mk .dot');
+    if(!g){ box.scrollLeft = (box.scrollWidth - box.clientWidth) / 2; return; }
+    var r = g.getBoundingClientRect(), b = box.getBoundingClientRect();
+    box.scrollLeft += (r.left + r.width/2) - (b.left + b.width/2);
+    box.scrollTop  += (r.top  + r.height/2) - (b.top  + b.height/2);
+  }
+  function set(n){
+    z = n;
+    host.style.setProperty("--mz", n);
+    Array.prototype.forEach.call(bar.children, function(b){
+      b.setAttribute("aria-pressed", (+b.dataset.z === n) ? "true" : "false"); });
+    setTimeout(center, 30);
+  }
+  Array.prototype.forEach.call(bar.children, function(b){
+    b.onclick = function(){ set(+b.dataset.z); };
+  });
+  set(1);
+  /* 창을 닫으면 배율을 1배로 되돌린다 (다음에 열 때 전체가 보이게) */
+  var close = $("#mclose");
+  if(close) close.addEventListener("click", function(){ set(1); });
+})();
+
+(function(){
+  var b = $("#jumprec");
+  if(!b) return;
+  b.onclick = function(){
+    var el = $("#elist");
+    var p = el && el.closest ? el.closest(".panel") : null;
+    (p || el).scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+})();
 
 render();
 </script>
