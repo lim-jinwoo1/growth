@@ -1549,6 +1549,31 @@ h1{font-size:42px!important;letter-spacing:-.035em!important;line-height:1.12!im
 .brand{align-items:stretch!important}
 .brand .bar{height:auto!important;align-self:stretch!important;min-height:56px}
 @media (max-width:520px){ .brand .bar{min-height:46px} }
+
+/* ══ 분류 칩을 한 줄로 (2026-09-08) ══════════════════════════
+   글씨를 키우자 '기타 2' 가 둘째 줄로 떨어졌다.
+   줄바꿈을 막고 칩이 줄어들지 않게 고정한 뒤, 좁은 화면에서는 옆으로 밀어 본다 */
+.seg.cat{flex-wrap:nowrap!important;overflow-x:auto!important;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;max-width:100%}
+.seg.cat::-webkit-scrollbar{height:0}
+.seg.cat button{flex:0 0 auto!important;white-space:nowrap!important}
+
+/* 칩 줄이 오른쪽 끝에 붙어 있어(스페이서 뒤) 폭이 부족하면 첫 칩('전체')이
+   왼쪽으로 밀려 잘렸다 → 칩 줄을 제 줄 전체로 내려 왼쪽부터 채운다 */
+.bars.nbar{flex-wrap:wrap!important;row-gap:12px!important}
+.bars.nbar .spacer{display:none!important}
+.bars.nbar .ptitle{flex:1 1 100%!important}
+.seg.cat{flex:1 1 100%!important;justify-content:flex-start!important;
+  display:flex!important;width:100%!important;max-width:100%!important}
+
+/* 한 줄에 맞춘 최종 치수 — 1440px 에서 딱 맞고(544), 더 좁으면 옆으로 밀어 본다.
+   밀리는 상황이 보이게 오른쪽 끝을 흐리게 처리한다 */
+.seg.cat{gap:5px!important;padding:5px!important;
+  -webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 22px),transparent 100%);
+  mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 22px),transparent 100%)}
+.seg.cat button{font-size:13.5px!important;padding:5px 9px!important}
+.seg.cat button em{font-size:12px!important;margin-left:5px!important}
+@media (max-width:560px){ .seg.cat button{font-size:13px!important;padding:5px 8px!important} }
 </style>
 </head>
 <body>
@@ -2998,7 +3023,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-08 17:27</span>';
+  + '<span class="ver">화면 09-08 17:35</span>';
 
 /* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
    폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
