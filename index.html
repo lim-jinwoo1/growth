@@ -1305,6 +1305,21 @@ body{background-image:radial-gradient(125% 95% at 6% 0%,
   .mzoom{margin-right:6px!important}
 }
 @media (max-width:520px){ .mhead .mnote{display:none} }
+
+/* ══ 시세 카드 : 밑줄 문구를 걷어낸 자리를 글씨로 (2026-09-08) ══
+   '09.07 종가 · 당월 5영업일 · 전일 09.04' 는 앞부분이 큰 숫자 옆과 중복이고
+   나머지는 카드 툴팁·아래 안내 문구가 맡는다.
+   좌우 두 칸(당월평균|전월대비)은 폭이 266px 이라 15.5px 가 한계 — 그대로 두고
+   품목명과 당일값만 키운다 */
+.mcard{padding:15px 11px 14px!important}
+.mcard .n{font-size:22px!important;letter-spacing:-.01em}
+.mcard .u{font-size:15.5px!important}
+.mcard .t{gap:8px!important;margin-bottom:2px}
+.mcard .v{font-size:35px!important;margin-top:5px!important}
+.mcard .v .vl{font-size:14px!important;font-weight:700}
+.mcard .mg{margin-top:12px!important;padding-top:11px!important;
+  border-top:1px solid var(--line2)}
+@media (max-width:520px){ .mcard .v{font-size:30px!important} .mcard .n{font-size:20px!important} }
 </style>
 </head>
 <body>
@@ -2541,7 +2556,10 @@ function market(){
       + Math.abs(v).toFixed(2)+'%</b>';
   };
   var card = function(r, dlbl){
-    return '<div class="mcard"><div class="t"><span class="n">'+esc(r.nm)+'</span>'
+    var tip = r.nm + ' · ' + r.date.slice(5).replace("-", ".") + ' ' + dlbl
+      + ' · 당월 ' + r.days + '영업일'
+      + (r.pdate ? ' · 전일 ' + r.pdate.slice(5).replace("-", ".") : '');
+    return '<div class="mcard" title="'+esc(tip)+'"><div class="t"><span class="n">'+esc(r.nm)+'</span>'
       + '<span class="u">'+esc(r.unit)+'</span></div>'
       + '<div class="v">'+f(r.daily, r.dec)
       +   '<em class="vl">'+r.date.slice(5).replace("-", ".")+' '+dlbl+'</em></div>'
@@ -2551,10 +2569,10 @@ function market(){
       +   '<div class="ml"><span>전월평균</span><b>'+f(r.prev, r.dec)+'</b></div>'
       +   '<div class="mr"><span>전일대비</span>'+pct(r.vsDay)+'</div>'
       + '</div>'
-      + '<div class="dt">' + r.date.slice(5).replace("-", ".") + ' ' + dlbl
-      +   ' · 당월 ' + r.days + '영업일'
-      +   (r.pdate ? ' · 전일 ' + r.pdate.slice(5).replace("-", ".") : '') + '</div>'
       + '</div>'; };
+  /* 카드 밑에 있던 '09.07 종가 · 당월 5영업일 · 전일 09.04' 줄은 걷어냈다.
+     앞부분은 큰 숫자 옆에 이미 있고(중복), 영업일 수와 전일 기준일은
+     카드 툴팁과 아래 안내 문구가 맡는다. 그 자리를 글씨 크기로 돌린다 */
   var sec = function(lbl, arr, dlbl){
     return '<div class="mgroup">'+lbl+'</div><div class="mgrid">'
       + arr.map(function(r){ return card(r, dlbl); }).join("") + '</div>'; };
@@ -2566,7 +2584,7 @@ function market(){
     + '출처 : KOMIS(LME) · 하나은행 최초고시 매매기준율 · 오피넷. '
     + '<b>전월대비</b>는 당월평균 vs 전월평균, <b>전일대비</b>는 당일값 vs 직전 거래일입니다. '
     + '상승 빨강 / 하락 파랑. 당월평균은 진행 중인 달이라 영업일 수를 함께 적었습니다. '
-    + '당일값은 항목별 최신 고시일 기준이라 날짜가 다를 수 있습니다. '
+    + '당일값은 항목별 최신 고시일 기준이라 날짜가 다를 수 있고, 전일대비의 기준일도 항목마다 다릅니다(카드에 마우스를 올리면 표시). '
     + '추이 그래프는 완결된 '+(MARKET.chartEnd||"")+' 까지입니다. '
     + '이 페이지는 주 1회 갱신되며, 화면의 값은 '+MARKET.asof+' 기준입니다.</p>';
 }
@@ -2745,7 +2763,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-08 15:57</span>';
+  + '<span class="ver">화면 09-08 16:08</span>';
 
 /* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
    폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
