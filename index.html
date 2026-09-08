@@ -1335,6 +1335,34 @@ body{background-image:radial-gradient(125% 95% at 6% 0%,
   .tabs button{padding:9px 11px!important;font-size:16px!important}
   .tabs .cnt{font-size:12px!important;margin-left:4px!important}
 }
+
+/* ══ 소제목 : 위계 정리 (C안 + 색은 막대에만) 2026-09-08 ══════
+   문제는 절대 크기가 아니라 위계가 뒤집혀 있던 것.
+     소제목 19px < 품목명 22px < 지표 숫자 44px  → 라벨로 읽히지 않았다
+   → 제목은 화면에서 가장 진한 잉크로 27px, 계열색은 왼쪽 막대와 아래 선이 맡는다
+     (시세 = 인디고 --mkt · 나눔 = 남색 --acc)
+   오른쪽 부연 문구(월평균 기준 · 확인분 39곳)는 세 곳에 중복이라 감춘다.
+   단 #sheadn 은 크게 보기 창 머리 문구로 쓰이므로 지우지 않고 감추기만 한다 */
+.shead{align-items:center!important;gap:12px!important;
+  margin:28px 0 15px!important;padding-bottom:11px!important;
+  border-bottom:1px solid var(--line)}
+.trhead{margin-top:22px!important;border-bottom-color:var(--mkt-ln)!important}
+.sect{font-size:27px!important;font-weight:800!important;letter-spacing:-.03em!important;
+  color:var(--ink)!important;padding-left:16px;position:relative;line-height:1.2}
+.trhead .sect{color:var(--ink)!important}
+.sect::before{position:absolute!important;left:0;top:50%;
+  transform:translateY(-50%)!important;margin:0!important;
+  width:5px!important;height:1.02em!important;border-radius:3px!important;
+  background:var(--acc)}
+.trhead .sect::before{background:var(--mkt)}
+.shead .ttog{font-size:13.5px!important}
+/* 부연 문구 감추기 */
+.shead .sub2,.shead #sheadn{display:none!important}
+@media (max-width:560px){
+  .sect{font-size:23px!important;padding-left:13px}
+  .sect::before{width:4px!important}
+  .shead{margin:22px 0 13px!important;gap:9px!important}
+}
 </style>
 </head>
 <body>
@@ -2780,7 +2808,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-08 16:18</span>';
+  + '<span class="ver">화면 09-08 16:59</span>';
 
 /* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
    폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
