@@ -1411,6 +1411,144 @@ body{background-image:radial-gradient(125% 95% at 6% 0%,
   .mkt .ptitle{font-size:21px!important;padding-left:13px}
   .mkt .mgroup{font-size:17px!important;margin:22px 0 10px!important}
 }
+
+/* ══ 시세 기준일을 제목 줄 오른쪽 끝으로 (2026-09-08) ══════════
+   제목 → 얇은 선 → 기준일 순서로 놓는다.
+   ::after(선) 는 항상 마지막 항목이므로 order 로 자리를 바꾼다 */
+.mkt .ptitle{flex-wrap:wrap;row-gap:8px}
+.mkt .ptitle::after{order:1;flex:1 1 40px!important}
+.mkt .asof{order:2;flex:0 0 auto;font-family:"Gothic A1",sans-serif;
+  font-size:14px;font-weight:700;letter-spacing:0;color:var(--mkt);
+  background:var(--mkt-bg);border:1px solid var(--mkt-ln);
+  border-radius:999px;padding:5px 13px;white-space:nowrap;
+  font-variant-numeric:tabular-nums}
+@media (max-width:560px){
+  .mkt .asof{font-size:13px;padding:4px 11px}
+}
+
+/* 로마자 이름 보정 (Dubai · Brent · WTI · Naphtha) — 눈에 보이는 크기를 맞춘다 */
+.mcard .n.en{font-size:25px!important;letter-spacing:-.02em}
+@media (max-width:520px){ .mcard .n.en{font-size:22.5px!important} }
+
+/* 시세 제목 줄 : 모바일에서 기준일 알약이 아래로 내려가며 막대가 어긋난 것 */
+.mkt .ptitle::before{top:.1em!important;transform:none!important}
+@media (max-width:560px){
+  .mkt .ptitle::after{display:none!important}
+  .mkt .asof{margin-left:auto}
+}
+
+/* ══ 주간 동행 / 주간 성장 : 글씨 확대 (2026-09-08) ══════════
+   보는 사람의 나이대를 생각하면 이 칸은 무조건 커야 읽힌다.
+   제목은 소제목과 같은 규칙(잉크 글자 + 계열색 막대)으로 맞춘다
+   나눔 = 남색 --acc · 소식 = 청록 --news */
+.hpanel .ptitle,.hpanel2 .ptitle{font-size:24px!important;font-weight:800!important;
+  letter-spacing:-.03em!important;color:var(--ink)!important;
+  padding-left:15px;position:relative;margin-bottom:12px!important;gap:12px!important}
+.hpanel .ptitle::before,.hpanel2 .ptitle::before{content:"";position:absolute;left:0;
+  top:.1em;width:5px;height:1.02em;border-radius:3px;background:var(--acc)}
+.hpanel2 .ptitle::before{background:var(--news)}
+.hpanel .ptitle::after{background:var(--line)}
+.hwin{font-size:15px!important;font-weight:700!important}
+
+/* 숫자 타일 4개 */
+.hsum.big{gap:10px!important;margin-top:6px!important}
+.hsum.big b{padding:14px 14px 12px!important}
+.hsum.big b i{font-size:30px!important}
+.hsum.big b span{font-size:15px!important;margin-top:4px!important}
+
+/* 기사 미리보기 */
+.hrel{margin-top:15px!important;padding-top:12px!important}
+.hrel .hrt{margin-bottom:8px!important}
+.hrel .hrt b{font-size:16px!important}
+.hrl{padding:10px 0!important;gap:11px!important}
+.hrl .d{font-size:15px!important}
+.hrl .t{font-size:17.5px!important}
+
+/* 전체 보기 · 각주 */
+.hmore{font-size:16.5px!important;padding:13px!important;margin-top:11px!important}
+.hnote{font-size:14.5px!important;line-height:1.6!important;margin-top:14px!important}
+@media (max-width:560px){
+  .hpanel .ptitle,.hpanel2 .ptitle{font-size:21px!important;padding-left:13px}
+  .hsum.big b i{font-size:26px!important}
+  .hrl .t{font-size:16.5px!important}
+}
+
+/* 글씨를 키우자 제목이 8~9자에서 잘렸다(목포지역 중·고·...).
+   한 줄을 지키면 읽히는 글자가 너무 줄어드니 두 줄까지 허용하고
+   넘칠 때만 … 로 자른다 (칸 높이는 두 줄에서 고정) */
+.hrl{align-items:start!important}
+.hrl .d{padding-top:2px}
+.hrl .t{white-space:normal!important;overflow:hidden;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  line-height:1.4}
+
+/* ══ 남은 칸 제목들도 같은 규칙으로 (2026-09-08) ══════════════
+   '기사 75건' · '전달 기록 39곳' 처럼 상자 안 소제목이 본문보다 작았다.
+   잉크 글자 + 계열색 막대 (나눔 = 남색 / 소식 = 청록) 로 통일한다.
+   .mkt · .hpanel 쪽은 앞서 각각 지정했고 선택자가 더 좁아 그대로 유지된다 */
+.ptitle{font-size:22px!important;font-weight:800!important;letter-spacing:-.03em!important;
+  color:var(--ink)!important;padding-left:15px;position:relative;
+  margin-bottom:13px!important;gap:12px!important}
+.ptitle::before{content:"";position:absolute;left:0;top:.1em;
+  width:5px;height:1.02em;border-radius:3px;background:var(--acc)}
+.ptitle .pn{font-size:15px!important;font-weight:700!important;margin-left:0!important}
+/* 기사 칸은 '소식' 계열(청록) */
+.nbar .ptitle::before,.ptitle.nt::before{background:var(--news)}
+.ptitle.nt{font-size:23px!important}
+.ptitle.nt .pn{font-size:15.5px!important}
+/* 분류 칩 */
+.seg.cat button{font-size:15px!important;padding:8px 14px!important}
+.seg.cat button em{font-size:13px!important;margin-left:6px!important}
+/* 전달 기록 칸 */
+#elistn{font-size:15px!important}
+@media (max-width:560px){
+  .ptitle{font-size:19.5px!important;padding-left:13px}
+  .ptitle.nt{font-size:20.5px!important}
+  .seg.cat button{font-size:14px!important;padding:7px 12px!important}
+}
+
+/* 더 보기 단추 */
+.moreb{font-size:16.5px!important;padding:13px!important;margin-top:13px!important;
+  border-radius:11px!important}
+
+/* 미리보기 기사 제목은 크게 키우면 잘려서 오히려 안 읽힌다 → 살짝만.
+   두 줄까지 허용해 내용이 최대한 남게 한다 */
+.hrl .t{font-size:15.5px!important;line-height:1.42!important}
+@media (max-width:560px){ .hrl .t{font-size:15.5px!important} }
+
+/* '기사 75건' 의 막대가 글자를 덮고 있었다 — 좁은 화면 규칙이 padding 을 되돌려서 */
+.ptitle{padding-left:15px!important}
+@media (max-width:560px){ .ptitle{padding-left:13px!important} }
+
+/* ══ 머리 제목 : 화면에서 가장 큰 것이어야 한다 (2026-09-08) ══
+   29px 은 소제목 27px 과 거의 같아 '가장 큰 제목' 으로 읽히지 않았다.
+   명조 그대로 두고 크기·자간·막대를 키워 격을 올린다 */
+header{align-items:center!important;padding-bottom:20px!important;
+  border-bottom:2.5px solid var(--ink)!important;gap:20px!important}
+.brand{gap:16px!important;align-items:center!important}
+.brand .bar{width:7px!important;height:62px!important;border-radius:4px!important;
+  background:linear-gradient(180deg,var(--acc),var(--mkt))!important}
+h1{font-size:42px!important;letter-spacing:-.035em!important;line-height:1.12!important;
+  font-weight:700!important}
+.sub{font-size:15px!important;margin-top:7px!important;color:var(--body)!important;
+  letter-spacing:-.01em}
+.logo{height:40px!important}
+@media (max-width:900px){
+  h1{font-size:34px!important}
+  .brand .bar{height:52px!important;width:6px!important}
+  .sub{font-size:14px!important}
+  .logo{height:34px!important}
+}
+@media (max-width:520px){
+  h1{font-size:29px!important}
+  .brand .bar{height:44px!important;width:5px!important}
+  .sub{font-size:13.5px!important}
+}
+
+/* 막대가 제목·부제 블록 전체를 감싸게 (모바일에서 부제가 두 줄이 되면 어긋났다) */
+.brand{align-items:stretch!important}
+.brand .bar{height:auto!important;align-self:stretch!important;min-height:56px}
+@media (max-width:520px){ .brand .bar{min-height:46px} }
 </style>
 </head>
 <body>
@@ -1649,7 +1787,7 @@ body{background-image:radial-gradient(125% 95% at 6% 0%,
 
 <div role="tabpanel" id="p-mkt" aria-labelledby="t-mkt" hidden>
 <div class="panel mkt" style="margin-top:0">
-  <div class="ptitle">원자재 · 환율 시세</div>
+  <div class="ptitle">원자재 · 환율 시세<span class="asof" id="mktasof"></span></div>
   <div id="market"></div>
  </div>
 </div>
@@ -2652,7 +2790,10 @@ function market(){
     var tip = r.nm + ' · ' + r.date.slice(5).replace("-", ".") + ' ' + dlbl
       + ' · 당월 ' + r.days + '영업일'
       + (r.pdate ? ' · 전일 ' + r.pdate.slice(5).replace("-", ".") : '');
-    return '<div class="mcard" title="'+esc(tip)+'"><div class="t"><span class="n">'+esc(r.nm)+'</span>'
+    /* Dubai · Brent · WTI · Naphtha 처럼 로마자만 있는 이름은 x-높이가 낮아
+       같은 22px 인데도 한글(구리·아연)보다 작게 보인다 → 클래스로 보정한다 */
+    var en = /^[\x20-\x7E]+$/.test(r.nm) ? " en" : "";
+    return '<div class="mcard" title="'+esc(tip)+'"><div class="t"><span class="n'+en+'">'+esc(r.nm)+'</span>'
       + '<span class="u">'+esc(r.unit)+'</span></div>'
       + '<div class="v">'+f(r.daily, r.dec)
       +   '<em class="vl">'+r.date.slice(5).replace("-", ".")+' '+dlbl+'</em></div>'
@@ -2669,6 +2810,8 @@ function market(){
   var sec = function(lbl, arr, dlbl){
     return '<div class="mgroup">'+lbl+'</div><div class="mgrid">'
       + arr.map(function(r){ return card(r, dlbl); }).join("") + '</div>'; };
+  /* 기준일은 각주로 밀어 넣으면 아무도 안 읽는다 → 제목 줄 오른쪽 끝에 알약으로 */
+  if($("#mktasof")) $("#mktasof").textContent = MARKET.asof + " 기준";
   $("#market").innerHTML =
       sec("원자재", MARKET.mat, "종가")
     + sec("유가 · 나프타", MARKET.oil, "종가")
@@ -2855,7 +2998,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-08 17:12</span>';
+  + '<span class="ver">화면 09-08 17:27</span>';
 
 /* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
    폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
