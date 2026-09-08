@@ -971,6 +971,192 @@ body{background:var(--bg)}
 .hpanel2 .hmore{color:var(--news)}
 .hpanel2 .hmore:hover{border-color:var(--news);background:var(--news-bg)}
 .seg.cat button[aria-pressed="true"]{background:var(--news)!important}
+
+/* ══════════════════════════════════════════════════════════════
+   요청 11건 (2026-09-07 · 두 번째)
+   되돌릴 때는 이 블록만 지운다. 기준본 map_shell_백업_0907b.html
+   ══════════════════════════════════════════════════════════════ */
+
+/* ① · ⑤ 지도 안 글씨 — 전부 10% 이상 */
+.mk .mlab{font-size:17.5px!important;stroke-width:3.4!important}
+.mk.sel .mlab{font-size:25px!important;stroke-width:5.4px!important}
+.kmap.dense .mk.sel .mlab{font-size:20.5px!important;stroke-width:4.6px!important}
+.jlab{font-size:15px!important}
+.pcount{font-size:14px!important}
+.msum .mst{font-size:14px!important}
+.msum .msk{font-size:12.5px!important}
+.msum .msv{font-size:17.5px!important}
+.msum .msf{font-size:13px!important}
+/* 지도 밑 부연 설명 */
+.ylegend{font-size:16.5px!important}
+.ylegend .ynote2{font-size:14px!important}
+.mapbox .ynote{font-size:14px!important}
+.legend,.legend .lnote{font-size:14.5px!important}
+.mapbox #yr button{font-size:13.5px!important}
+.dnote{font-size:15px!important}
+
+/* ② 크게 보기 : 지도를 화면이 허용하는 최대까지 */
+.modal{padding:8px!important}
+.mhead{padding:0 4px 8px!important}
+.mbody{padding:6px!important;gap:8px!important}
+.mright{flex:0 0 340px!important}
+.mleft>.panel{padding:8px 10px 10px!important;border-radius:12px!important}
+.mleft #map{width:100%}
+.mleft svg.kmap{width:100%!important;height:100%!important;
+  max-height:none!important;max-width:none!important}
+@media (max-width:1000px){ .mleft>.panel{min-height:62vh} }
+
+/* ⑥ 첫 화면 띠 · 글자 25% */
+.intro .ib{padding:48px 28px 43px!important}
+.intro .ib::before,.intro .ib::after{max-width:650px!important;height:2.5px!important}
+.intro .ib::before{margin-bottom:33px!important}
+.intro .ib::after{margin-top:30px!important}
+.intro .ilogo{height:35px!important;margin:0 auto 25px!important}
+.intro .ik{font-size:clamp(37px,8vw,75px)!important}
+.intro .ie{font-size:clamp(15px,2vw,20px)!important}
+
+/* ⑦ 시세 카드 이름 · 추이 제목을 섹션 제목(19px) 수준으로 */
+.mcard .n{font-size:19px!important}
+.tf figcaption{font-size:19px!important}
+.tf figcaption span{font-size:13px!important}
+
+/* ⑧ 최저 · 최고 두 배 */
+.tpk{font-size:29px!important}
+.tpc{font-size:18px!important}
+
+/* ⑨ 박스 안 문구 가운데 정렬 */
+.stat{align-items:center!important;text-align:center!important}
+.stat b.num{justify-content:center!important}
+.mcard{text-align:center!important}
+.mcard .t,.mcard .v{justify-content:center!important}
+.mcard .mg .ml,.mcard .mg .mr{justify-content:center!important}
+.hsum.big b{text-align:center!important}
+.hsum.big b i,.hsum.big b span{text-align:center!important}
+
+/* ⑩ 2026년 사회공헌 5칸 : 글씨 + 여백 */
+.stats{gap:16px!important}
+.stat{padding:21px 18px!important}
+.stat .sl{font-size:14.5px!important}
+.stat b.num{font-size:35px!important;margin-top:8px!important}
+.stat b.num em{font-size:17px!important}
+.stat .sn{font-size:13px!important;margin-top:6px!important}
+@media (max-width:520px){ .stat b.num{font-size:29px!important} }
+
+/* ⑪ 시세 : 당일값 크기는 그대로 두고 나머지 20% */
+.mcard .u{font-size:14.5px!important}
+.mcard .ml,.mcard .mr{font-size:16px!important}
+.mcard .chg{font-size:17.5px!important}
+.mcard .dt{font-size:14.5px!important}
+.mgroup{font-size:16.5px!important}
+
+/* ══ 첫 확인 후 보정 (2026-09-07) ══════════════════════════ */
+/* ⑧ 2배(32px)로는 그래프 밖으로 넘친다 → 26px + 글자폭 보정 */
+.tpk{font-size:26px!important}
+.tpc{font-size:16px!important}
+
+/* ⑪ 두 칸(당월평균 | 전월대비)에 20% 키운 글씨가 안 들어가 잘렸다
+      → 한 줄에 하나씩 · 가운데 정렬 */
+.mcard .mg{grid-template-columns:1fr!important;gap:4px 0!important;margin-top:8px!important}
+.mcard .ml,.mcard .mr{justify-content:center!important;gap:8px!important}
+.mcard .dt{white-space:normal!important;overflow:visible!important;
+  text-overflow:clip!important;line-height:1.45!important}
+
+/* ② 크게 보기 : 패널 제목줄을 걷어내 지도에 높이를 더 준다
+      (창 위쪽에 이미 '나눔의 발자취' 제목이 있다) */
+.mleft>.panel>.bars:not(.mrow){display:none!important}
+.mleft .ylegend{margin-top:6px!important;font-size:14px!important}
+.mleft .bars.mrow{margin-bottom:6px!important}
+
+/* ② 한 걸음 더 — 연도 단추와 범례를 지도 위(빈 바다)로 띄워
+      패널 높이를 전부 지도에 준다. 748 → 800 대(약 +7%) */
+.mleft>.panel{position:relative;padding:6px!important}
+.mleft>.panel>.bars.mrow{position:absolute;top:10px;left:12px;right:12px;z-index:3;
+  margin:0!important}
+.mleft>.panel>.bars.mrow .seg.mon{background:var(--card);
+  box-shadow:0 1px 2px rgba(18,60,122,.10),0 6px 16px rgba(18,60,122,.10)}
+.mleft>.panel>.mtogwrap,.mleft>.panel>.monwrap{position:absolute;top:52px;left:12px;
+  right:12px;z-index:3}
+.mleft .ylegend{position:absolute;bottom:10px;left:14px;z-index:3;margin:0!important;
+  background:var(--card);border-radius:10px;padding:7px 12px;
+  box-shadow:0 1px 2px rgba(18,60,122,.10),0 6px 16px rgba(18,60,122,.10);max-width:52%}
+.mleft #map{flex:1 1 auto;min-height:0;height:100%}
+
+/* ══════════════════════════════════════════════════════════════
+   추가 요청 4건 (2026-09-08)
+   ══════════════════════════════════════════════════════════════ */
+
+/* ① 시세 카드 : 두 줄 형식(당월평균|전월대비)으로 되돌리고 글씨는 최대로.
+   4칸 배치에서 칸 폭이 266px 이라 라벨 12.5 / 값 15.5 가 한계다.
+   (라벨 13·값 16 은 '미국 달러 ₩1,406' 이 1px 넘친다 — 실측) */
+.panel.mkt{padding-left:16px!important;padding-right:16px!important}
+.mgrid{gap:10px!important;grid-template-columns:repeat(4,minmax(0,1fr))!important}
+@media (max-width:1279px){ .mgrid{grid-template-columns:repeat(2,minmax(0,1fr))!important} }
+@media (max-width:699px){ .mgrid{grid-template-columns:1fr!important} }
+.mcard{padding:13px 9px 11px!important}
+.mcard .mg{grid-template-columns:1fr auto!important;gap:5px 4px!important;margin-top:8px!important}
+.mcard .ml,.mcard .mr{gap:6px!important;white-space:nowrap;
+  justify-content:flex-start!important}
+.mcard .mr{justify-content:flex-end!important}
+.mcard .ml span,.mcard .mr span{font-size:12.5px!important}
+.mcard .ml b,.mcard .mr b,.mcard .chg{font-size:15.5px!important}
+
+/* ② 뉴스레터 : 왼쪽 호 목록과 기사 제목(링크)만 키운다. 요약은 그대로 */
+.iv{font-size:16.5px!important}
+.iv em{font-size:13px!important}
+.im{font-size:13.5px!important}
+.ili{padding:13px 15px!important}
+.isect{font-size:14px!important}
+.acard h3{font-size:19.5px!important;line-height:1.4!important;font-weight:700!important}
+/* .acard p (요약) 는 13px 그대로 둔다 */
+
+/* ③ 크게 보기 : 연도·월별을 왼쪽 한 칸에 모으고 지도를 그 오른쪽으로 밀어낸다.
+   월별을 펼쳐도 지도를 덮지 않는다. 지도는 패널 높이를 전부 쓴다 */
+@media (min-width:1001px){
+  .mleft>.panel{display:grid!important;grid-template-columns:238px minmax(0,1fr);
+    grid-template-rows:auto auto 1fr;gap:8px 12px;align-content:start;
+    position:relative;padding:10px!important}
+  .mleft>.panel>.bars.mrow{position:static!important;grid-column:1;grid-row:1;
+    margin:0!important;flex-wrap:wrap;gap:8px}
+  .mleft>.panel>.bars.mrow .spacer{display:none!important}
+  .mleft>.panel>.bars.mrow .seg.mon{flex-wrap:wrap}
+  .mleft>.panel>.monwrap{position:static!important;grid-column:1;grid-row:2;margin:0!important}
+  .mleft>.panel>.monwrap .seg.mon{flex-wrap:wrap}
+  .mleft>.panel>#map{grid-column:2;grid-row:1 / span 3;height:100%;padding:0!important}
+  .mleft .ylegend{position:static!important;grid-column:1;grid-row:3;align-self:end;
+    margin:0!important;max-width:none!important;background:none!important;
+    box-shadow:none!important;padding:0!important}
+}
+
+/* ④ 선택한 지역 상세 : 숫자 위주라 크게 — 일반 화면·크게 화면 모두 */
+.detail .dhead h2,.detail h2{font-size:27px!important}
+.detail .chip{font-size:13px!important;padding:2px 10px!important}
+.kv dt,.d2 .kv dt{font-size:16px!important}
+.kv dd,.d2 .kv dd{font-size:20px!important;line-height:1.35!important}
+.d2 .kv{gap:6px 12px!important}
+.dside .dsum{font-size:15.5px!important;line-height:1.5!important}
+.dside .dlink,.dlink{font-size:16px!important}
+.dcov{font-size:14px!important}
+.mright .kv dt{font-size:16px!important}
+.mright .kv dd{font-size:20px!important}
+
+/* ③ 보정 — 폭이 좁으면 왼쪽 칸을 비워 두는 값이 더 크다(1180px 에서 지도 534px 로 줄었다).
+   1400px 이상에서만 지도를 오른쪽으로 밀고, 그 아래에서는 지도를 폭 전체로 두고
+   연도·월별을 지도 위(왼쪽 바다)에 카드로 얹는다. 자리는 여전히 왼쪽 위 한 곳이다 */
+@media (min-width:1001px) and (max-width:1399px){
+  .mleft>.panel>#map{grid-column:1 / -1!important}
+  .mleft>.panel>.bars.mrow,.mleft>.panel>.monwrap{z-index:3;
+    background:var(--card);border-radius:11px;padding:7px!important;
+    box-shadow:0 1px 2px rgba(18,60,122,.10),0 6px 16px rgba(18,60,122,.12)}
+  /* 월별을 왼쪽 아래로 펼치면 서울·김포 라벨을 덮는다 → 위쪽 한 줄로 길게 펼친다
+     (그 띠는 바다·북쪽 여백이라 지도를 가리지 않는다) */
+  .mleft>.panel>.monwrap{grid-column:1 / -1!important;justify-self:start;
+    max-width:calc(100% - 212px)}
+  .mleft>.panel>.monwrap .seg.mon{flex-wrap:nowrap!important}
+  .mleft>.panel>.monwrap .seg.mon button{font-size:11px!important;padding:4px 6px!important}
+  .mleft .ylegend{z-index:3;background:var(--card)!important;border-radius:11px;
+    padding:7px 11px!important;
+    box-shadow:0 1px 2px rgba(18,60,122,.10),0 6px 16px rgba(18,60,122,.12)!important}
+}
 </style>
 </head>
 <body>
@@ -1375,7 +1561,7 @@ function map(){
     if(sa2) rows.push(["장학금", won(sa2)]);
     rows = rows.slice(0, 4);
     /* 4행이면 카드 바닥이 y 120 — 경북 path 가 y 127 부터라 딱 비켜 간다 */
-    var SX = 382, SW = 150, HD = 26, RH = 23, PAD = 8;
+    var SX = 374, SW = 158, HD = 29, RH = 25, PAD = 8;
     var SH = HD + rows.length * RH + PAD, SY = -8, R = 9;
     /* 머리띠는 위 두 귀퉁이만 둥근 path 로 그린다 (rect 로는 아래도 같이 둥글어진다) */
     var head = "M" + SX + " " + (SY + HD)
@@ -1414,13 +1600,21 @@ function map(){
       var s = SPOTS[i], k = Math.round(s.x)+","+Math.round(s.y);
       (grp[k] = grp[k] || []).push(i);
     });
+    /* 고른 곳이 속한 무리 — 이 무리는 더 넓게 벌리고, 형제 표식을 위에 얹는다 */
+    var curGrp = {}, curN = 1;
+    if(SPOTS[cur]){
+      var ck = Math.round(SPOTS[cur].x)+","+Math.round(SPOTS[cur].y);
+      (grp[ck] || []).forEach(function(i){ curGrp[i] = 1; });
+      curN = (grp[ck] || [cur]).length;
+    }
     /* 표식 크기는 울진군(장학생 50명) 기준으로 전부 통일한다.
        원 크기로 인원을 나타내면 촘촘한 곳이 뭉개져 읽히지 않는다. 인원은 목록·상세에 있다. */
     var RU = 3.4 + Math.sqrt(50) * 0.62;             /* = 7.8 */
     order.forEach(function(i){
       var s = SPOTS[i];
       /* 고른 곳은 원과 이름을 함께 키운다 (깜빡임 효과는 그대로 유지된다) */
-      rad[i] = (all ? RU * 0.72 : RU) * (i === cur ? 1.75 : 1);
+      /* 무리 안에서 크게 키우면 옆 표식을 덮어 누를 수 없게 된다 → 1.5 로 줄인다 */
+      rad[i] = (all ? RU * 0.72 : RU) * (i === cur ? (curN > 1 ? 1.5 : 1.75) : 1);
       /* 제주 표식은 인셋으로 평행이동 */
       var jj = (s.prov === "제주");
       px[i] = s.x + (jj ? jdx : 0);
@@ -1430,6 +1624,7 @@ function map(){
       Object.keys(grp).forEach(function(k){
         var g = grp[k]; if(g.length < 2) return;
         var R = all ? (3.4 + g.length * 0.9) : (5.5 + g.length * 1.4);
+        if(g.indexOf(cur) >= 0) R *= 2.1;      /* 고른 무리는 넉넉히 벌린다 */
         g.sort(function(a,b){ return SPOTS[a].date < SPOTS[b].date ? -1 : 1; });
         g.forEach(function(i, n){
           var t = -Math.PI/2 + n * 2*Math.PI/g.length;
@@ -1447,7 +1642,7 @@ function map(){
       return false;
     };
     /* 선택한 곳의 라벨을 먼저 배치해 자리를 확보한다 */
-    var top = [];
+    var top = [], sib = [];
     var lorder = order.slice().sort(function(a,b){
       return (b === cur ? 1 : 0) - (a === cur ? 1 : 0); });
     lorder.forEach(function(i){
@@ -1494,9 +1689,14 @@ function map(){
         + lead
         + (lp ? '<text class="mlab" x="'+lp.x+'" y="'+lp.y+'" text-anchor="'+lp.a+'">'+esc(lab)+'</text>' : '')
         + '</g>');
-      if(i === cur) top.push(g); else svg.push(g);   /* 선택한 곳은 맨 위에 */
+      /* 고른 곳 → 그 다음 같은 무리의 형제 → 나머지 순으로 위에 얹는다.
+         형제를 고른 표식 위에 두면 큰 원에 덮이지 않아 바로 누를 수 있다 */
+      if(i === cur) top.push(g);
+      else if(curGrp[i]) sib.push(g);
+      else svg.push(g);
     });
     top.forEach(function(g){ svg.push(g); });
+    sib.forEach(function(g){ svg.push(g); });
   }
   svg.push('</svg>');
   $("#map").innerHTML = svg.join("");
@@ -1746,15 +1946,13 @@ var byNew = function(a, b){ return a.date < b.date ? 1 : -1; };
 /* 보여 주는 건 1건이지만, 요약 숫자는 그 창(窓) 안의 전부를 센다.
    이번 주 → 4주 → 8주 → 12주 순으로 넓히고, 실제 창을 화면에 적는다 */
 var GRWA = (function(){
-  var w = GRWL.filter(thisWeek);
-  if(w.length) return { lbl: "이번 주", all: w, list: w.slice().sort(byNew).slice(0, 1) };
-  for(var i = 0; i < 3; i++){
-    var n = [4, 8, 12][i];
-    var p = GRWL.filter(function(a){ return weeksAgo(a.date) <= n; });
-    if(p.length) return { lbl: "최근 " + n + "주", all: p, list: p.slice().sort(byNew).slice(0, 1) };
-  }
-  var last = GRWL.slice().sort(byNew).slice(0, 1);
-  return { lbl: "최근 소식", all: last, list: last };
+  /* 창을 넓혀 가던 사다리(이번주→4→8→12)를 없애고 최근 4주로 고정한다.
+     4주에 아무것도 없으면 8주까지만 되돌아보고, 그래도 없으면 가장 최신 1건.
+     표기는 언제나 '최근 4주' 로 둔다 (사용자 확정) */
+  var use = GRWL.filter(function(a){ return weeksAgo(a.date) <= 4; });
+  if(!use.length) use = GRWL.filter(function(a){ return weeksAgo(a.date) <= 8; });
+  if(!use.length) use = GRWL.slice().sort(byNew).slice(0, 1);
+  return { lbl: "최근 4주", all: use, list: use.slice().sort(byNew).slice(0, 1) };
 })();
 
 /* 사회공헌 기사 전체 보기 팝업 */
@@ -1860,11 +2058,8 @@ function hero(){
       +   (t.amt ? chip("전달 금액", won(t.amt), false) : "")
       +   chip("관련 기사", f(t.cov)+"건", false)
       + '</div>'
-      + '<p class="hnote">'+(SOCA.wk ? "이번 주" : "최근 4주")+' 확인된 사회공헌 소식입니다.'
-      + ' 관련 기사는 같은 소식을 다룬 언론 보도 수입니다.'
-      + (t.ev < t.n ? ' 금액·인원은 지도 기록과 확인된 '+t.ev+'건 기준입니다.' : '')
-      + '</p>'
-      /* 기사 미리보기 2건 — 제목은 한 줄만, 넘치면 … 으로 자른다 */
+      /* 기사 미리보기 2건 — 제목은 한 줄만, 넘치면 … 으로 자른다.
+         안내 문구(각주)는 전체 보기 버튼 아래로 내렸다 */
       + (function(){
           var pv = SOCLIST.slice(0, 2);
           if(!pv.length) return '';
@@ -1878,6 +2073,8 @@ function hero(){
             + '<button class="hmore" id="hmore">전체 보기 '+SOCLIST.length+'건 →</button>'
             + '</div>';
         })()
+      + '<p class="hnote">'+(SOCA.wk ? "이번 주" : "최근 4주")+' 확인된 사회공헌 소식입니다.'
+      + ' 관련 기사는 같은 소식을 다룬 언론 보도 수입니다.</p>'
       + '</div>';
   }
   var g = GRWA.list[0];
@@ -1894,8 +2091,6 @@ function hero(){
       +   chip("관련 기사", f(g2.cov)+"건", false)
       +   top2.map(function(c){ return chip(c, byCat[c]+"건", false); }).join("")
       + '</div>'
-      + '<p class="hnote">'+GRWA.lbl+' 확인된 수상·실적·수출 소식입니다.'
-      + ' 관련 기사는 같은 소식을 다룬 언론 보도 수입니다.</p>'
       + (function(){
           var pv = GRWLIST.slice(0, 2);
           if(!pv.length) return '';
@@ -1909,6 +2104,8 @@ function hero(){
             + '<button class="hmore" id="gmore">전체 보기 '+GRWLIST.length+'건 →</button>'
             + '</div>';
         })()
+      + '<p class="hnote">'+GRWA.lbl+' 확인된 수상·실적·수출 소식입니다.'
+      + ' 관련 기사는 같은 소식을 다룬 언론 보도 수입니다.</p>'
       + '</div>';
   }
   $("#hero").innerHTML = h;
@@ -1994,7 +2191,7 @@ function trend(){
   if(!cs.length){ $("#trend").innerHTML = ""; return; }
   if($("#trnote")) $("#trnote").textContent =
     "월평균 기준 · " + (MARKET.chartEnd || "") + " 까지";
-  var W = 330, H = 158, L = 10, R = 10, T = 26, B = 30;
+  var W = 330, H = 176, L = 10, R = 10, T = 40, B = 34;
   /* 큰 숫자는 시세 카드와 같은 '당일값'을 쓴다. 그래프 선은 월평균이므로
      끝점의 월평균은 바로 아래에 작게 남겨 두 숫자가 왜 다른지 화면에서 바로 읽히게 한다 */
   var findIt = function(nm){
@@ -2023,8 +2220,14 @@ function trend(){
     var mark = function(v, i, up){
       var an = i < 2 ? "start" : (i > n - 3 ? "end" : "middle");
       var xx = X(i) + (an === "start" ? -3 : (an === "end" ? 3 : 0));
+      /* 라벨을 키웠더니 오른쪽이 잘렸다(₩1,52…). 대략의 글자폭을 재서 안으로 당긴다.
+         '최고'/'최저' 2글자 = 16px 급 · 숫자는 26px 급 */
+      var tw = 2 * 17 + 8 + fc(v).length * 26 * 0.62;
+      if(an === "middle") xx = Math.min(Math.max(xx, L + tw / 2), W - R - tw / 2);
+      else if(an === "start") xx = Math.min(xx, W - R - tw);
+      else xx = Math.max(xx, L + tw);
       return '<text class="tpk'+(up ? " up" : " dn")+'" x="'+xx.toFixed(1)
-        + '" y="'+(Y(v) + (up ? -11 : 20)).toFixed(1)+'" text-anchor="'+an+'">'
+        + '" y="'+(Y(v) + (up ? -14 : 29)).toFixed(1)+'" text-anchor="'+an+'">'
         + '<tspan class="tpc">'+(up ? "최고" : "최저")+'</tspan> '+fc(v)+'</text>';
     };
     var peak = mark(mx, vs.indexOf(mx), true) + mark(mn, vs.lastIndexOf(mn), false);
@@ -2275,7 +2478,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-07 12:43</span>';
+  + '<span class="ver">화면 09-08 09:23</span>';
 
 render();
 </script>
