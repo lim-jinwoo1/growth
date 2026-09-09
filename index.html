@@ -2143,12 +2143,20 @@ body.mopen #mleft svg.kmap{max-height:none!important}
 .mapbox svg.kmap{max-height:672px!important}
 .mapbox #map{margin-top:4px!important}
 
-@media (min-width:701px){
+@media (min-width:1220px){
   .mapbox #mon{flex-wrap:nowrap!important;gap:2px!important;overflow:visible!important}
   .mapbox #mon button{white-space:nowrap!important;font-size:12.5px!important;
     padding:6px 7px!important;flex:0 0 auto!important}
-  .mapbox #monwrap{margin-top:6px!important}
 }
+/* 701~1219px : 칸이 463~512px 뿐이다. 13칸(연간+12달)을 담으려면
+   칸당 33.7px 이하여야 해서 글씨·여백을 한 단 더 조인다.
+   그래도 모자라면 줄을 접게 두어(wrap) 페이지가 가로로 밀리지 않게 한다 */
+@media (min-width:701px) and (max-width:1219px){
+  .mapbox #mon{flex-wrap:wrap!important;gap:2px!important;overflow:visible!important}
+  .mapbox #mon button{white-space:nowrap!important;font-size:11.5px!important;
+    padding:5px 5px!important;flex:0 0 auto!important}
+}
+@media (min-width:701px){ .mapbox #monwrap{margin-top:6px!important} }
 
 /* ── 월별 토글을 제목줄 오른쪽으로 ──────────  2026-09-09
    토글이 제 줄을 하나 다 잡아먹고 있었다. 원인은 폭이다 —
@@ -2158,14 +2166,39 @@ body.mopen #mleft svg.kmap{max-height:none!important}
    → 토글을 제목줄 오른쪽(⤢ 크게 왼쪽)으로 띄워 붙인다.
      세로 한 줄(38px + 사이 10px = 48px)이 그대로 지도로 간다.
    크게 보기(body.mopen)와 모바일(≤700px)은 지금 그대로 둔다 */
+/* ── 월별 토글 자리 : 폭에 따라 둘로 나눈다 ──  2026-09-09
+   실측한 '칸이 주는 폭' 과 '연도줄 + 사이 10 + 토글 52' :
+     1280px 이상 → 쓸 폭 542px
+     1220px      → 532px
+     1180px      → 512px
+     1081px      → 463px   ← 가장 좁다
+   연도 15px/여백 7px 이면 연도줄 자연폭이 440px → 필요 502px.
+     ≥1220px : 들어간다        → 연도줄 오른쪽 끝에 붙인다 (요청안)
+     ≤1219px : 39~63px 부족    → 제목줄 오른쪽으로 올린다
+   어느 쪽이든 세로 한 줄(48px)은 지도가 가져간다.
+   글씨는 16 → 15px (−6%) 만 줄였다 (13px 로 내리면 다 들어가지만
+   '글씨가 작다' 던 지적을 되돌리는 셈이라 택하지 않았다) */
 @media (min-width:701px){
-  body:not(.mopen) .panel.mapbox{position:relative}
+  body:not(.mopen) .mapbox #yr button{font-size:15px!important;padding:7px 7px!important;
+    flex:0 0 auto!important}
+  body:not(.mopen) .mapbox #yr button em{font-size:11.5px!important;margin-left:4px!important}
   body:not(.mopen) .mapbox>.bars.mrow{margin-bottom:0!important}
+}
+/* 넓은 화면 : 연도줄 오른쪽 끝 */
+@media (min-width:1220px){
+  body:not(.mopen) .mapbox>.bars.mrow{flex-wrap:nowrap!important;align-items:center!important}
+  body:not(.mopen) .mapbox>.bars.mrow .spacer{display:inline-block!important;flex:1 1 auto}
+  body:not(.mopen) .mapbox #yr{flex:0 0 auto!important}
+  body:not(.mopen) .mapbox>.bars.mrow .mtog{position:static!important;margin:0!important;
+    flex:0 0 auto!important;white-space:nowrap!important}
+}
+/* 좁은 화면 : 자리가 없어 제목줄 오른쪽('⤢ 크게' 왼쪽)으로 */
+@media (min-width:701px) and (max-width:1219px){
+  body:not(.mopen) .panel.mapbox{position:relative}
   body:not(.mopen) .mapbox>.bars.mrow .spacer{display:none!important}
-  /* '⤢ 크게' 는 우측 최상단 제자리에 두고, 토글을 그 왼쪽에 붙인다
-     (크게 단추 폭 ~70px + 사이 14px = 104px) */
   body:not(.mopen) .mapbox>.bars.mrow .mtog{position:absolute!important;
-    top:21px;right:104px;z-index:3;margin:0!important}
+    top:21px;right:104px;z-index:3;margin:0!important;white-space:nowrap!important}
+}
 }
 </style>
 </head>
@@ -3737,7 +3770,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-09 11:14</span>';
+  + '<span class="ver">화면 09-09 11:23</span>';
 
 /* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
    폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
