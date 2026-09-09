@@ -2097,6 +2097,29 @@ header{align-items:center!important}
  :root[data-theme="dark"] body.mopen #modal .mclose,
  :root[data-theme="dark"] body.mopen .msumh{box-shadow:0 2px 10px rgba(0,0,0,.5)!important}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   지도 틀 · 독도                                       2026-09-09
+   ══════════════════════════════════════════════════════════════ */
+
+/* 칸 좌우 여백 8px → 3px : 지도가 쓸 폭이 566 → 576px 로 늘어난다 */
+.panel.mapbox{padding-left:3px!important;padding-right:3px!important}
+
+/* 틀 높이가 553 → 579 (+4.7%) 로 늘었으므로 높이 상한도 같이 올린다.
+   그대로 두면 상한이 걸리는 폭(≤1100px 등)에서 지도가 되레 작아진다
+   — 실측 : 1024px 에서 그림 644 → 600px 로 줄었다 */
+/* 원래 규칙은 폭에 상관없이 660px 단일값이었다(뒤에 온 무조건 규칙이 이김).
+   같은 방식으로 660 × 579/553 = 692px 하나만 둔다 */
+.mapbox svg.kmap{max-height:692px!important}
+/* 크게 보기 안에서는 상한을 두지 않는다 */
+body.mopen #mleft svg.kmap{max-height:none!important}
+
+/* 독도 인셋 — 제주 인셋과 같은 문법(점선 상자 + 이름) */
+.dset .dbox{fill:none;stroke:var(--line);stroke-width:1.4;stroke-dasharray:4 3}
+.dset .dlink{stroke:var(--line);stroke-width:1.1;stroke-dasharray:2 2.5}
+.dset .drock{stroke:var(--map-line);stroke-width:.9}
+.dset .dlab{fill:var(--mute);font-size:13px;font-weight:700;text-anchor:middle}
+@media (min-width:1400px){ .dset .dlab{font-size:15px} }
 </style>
 </head>
 <body>
@@ -2577,8 +2600,16 @@ function map(){
   /* 제주를 본토와 같이 그리면 남쪽 여백 때문에 지도가 작아진다.
      본토만 -8~532 / -8~535 로 크롭해 크게 그리고, 제주는 우측 하단 인셋으로 옮긴다.
      (울릉도·독도는 원본 데이터에서 경북 path 안에 이미 들어 있다) */
-  var svg = ['<svg class="kmap' + (year === 0 ? ' dense' : '') + '" viewBox="-8 -10 540 553" role="img"'
-    + ' aria-label="장학금 전달 지역 지도. 제주는 우측 하단에 따로 표기">'];
+  /* 틀 : 왼쪽 빈 여백을 걷고(x 0 부터), 오른쪽은 땅 끝(524) 까지만 */
+  var VX = 0, VW = 530;   /* 울릉도 오른쪽 끝이 524 — 6단위 숨을 남긴다 */
+  /* 일반 화면에서는 땅을 26 단위 내려 요약 카드가 울릉도를 덮지 않게 한다.
+     크게 보기는 카드를 바깥 HTML 로 쓰므로 내릴 이유가 없다 */
+  var VSH = document.body.classList.contains("mopen") ? 0 : 26;
+  var svg = ['<svg class="kmap' + (year === 0 ? ' dense' : '') + '" viewBox="'
+    + VX + ' -10 ' + VW + ' ' + (553 + VSH) + '" role="img"'
+    + ' aria-label="장학금 전달 지역 지도. 제주와 독도는 따로 표기">'];
+  svg.push('<g class="mshift" transform="translate(0,' + VSH + ')">');
+  var sumArr = [];                     /* 연도 요약은 내리지 않는다 → 따로 담는다 */
   var prov = function(id, style){
     var kr = MAPD.name[id] || id;
     return '<path class="prov'+(on[kr]?' on':'')+'" d="'+MAPD.paths[id]+'"'+(style||'')+'>'
@@ -2599,6 +2630,21 @@ function map(){
   svg.push('<g class="jset" transform="translate('+jdx+','+jdy+')">' + prov("jeju") + '</g>');
   svg.push('<rect class="jbox" x="'+(JX-12)+'" y="'+(JY-12)+'" width="100" height="66" rx="6"></rect>');
   svg.push('<text class="jlab" x="'+(JX-12)+'" y="'+(JY+68)+'">제주</text>');
+  /* 독도 인셋 — 울릉도(x 512~522, y 128~136) 남동쪽 빈 바다에 놓는다.
+     실제 좌표는 x 608 · y 167 로 틀(526) 밖 82 단위 지점이다.
+     점선 상자와 이음선으로 '따로 표기' 임을 밝힌다. 서도(큰 섬)·동도 두 개 */
+  var DX = 456, DY = 162, DW = 60, DH = 46;
+  svg.push('<g class="dset">'
+    + '<rect class="dbox" x="'+DX+'" y="'+DY+'" width="'+DW+'" height="'+DH+'" rx="6"></rect>'
+    + '<path class="prov drock" d="M'+(DX+17)+' '+(DY+16)
+      + 'c3.4-3.6 8.4-3.2 10.6.6 2.1 3.6.4 8.2-3.4 9.6-4.2 1.5-8.6-1-9.4-4.6'
+      + '-.5-2.2 0-4.2 2.2-5.6Z"></path>'
+    + '<path class="prov drock" d="M'+(DX+35)+' '+(DY+22)
+      + 'c2.4-2.6 6.2-2.2 7.8.6 1.5 2.7.1 6-2.8 6.9-3.1 1-6.3-.9-6.8-3.5'
+      + '-.3-1.5.1-2.9 1.8-4Z"></path>'
+    + '<circle class="prov drock" cx="'+(DX+47)+'" cy="'+(DY+15)+'" r="1.5"></circle>'
+    + '<text class="dlab" x="'+(DX+DW/2)+'" y="'+(DY+DH+11)+'">독도</text>'
+    + '<title>독도 · 경상북도 울릉군 · 울릉도 동남동 87.4km. 제주와 같이 따로 표기</title></g>');
   if(mode !== "s" && hasP){
     Object.keys(MAPD.paths).forEach(function(id){
       var kr = MAPD.name[id] || id;
@@ -2633,14 +2679,14 @@ function map(){
     rows = rows.slice(0, 4);
     MSUMD = { ttl: ttl, rows: rows };            /* 크게 보기 HTML 카드가 쓴다 */
     /* 4행이면 카드 바닥이 y 120 — 경북 path 가 y 127 부터라 딱 비켜 간다 */
-    var SX = 374, SW = 158, HD = 29, RH = 25, PAD = 8;
+    var SW = 158, SX = VX + VW - SW, HD = 29, RH = 25, PAD = 8;
     var SH = HD + rows.length * RH + PAD, SY = -8, R = 9;
     /* 머리띠는 위 두 귀퉁이만 둥근 path 로 그린다 (rect 로는 아래도 같이 둥글어진다) */
     var head = "M" + SX + " " + (SY + HD)
       + "V" + (SY + R) + "a" + R + " " + R + " 0 0 1 " + R + " " + (-R)
       + "h" + (SW - 2 * R) + "a" + R + " " + R + " 0 0 1 " + R + " " + R
       + "V" + (SY + HD) + "Z";
-    svg.push('<g class="msum">'
+    sumArr.push('<g class="msum">'
       + '<rect class="mscard" x="'+SX+'" y="'+SY+'" width="'+SW+'" height="'+SH+'" rx="'+R+'"></rect>'
       + '<path class="mshead" d="'+head+'"></path>'
       + '<rect class="msrail" x="'+SX+'" y="'+(SY+6)+'" width="3" height="'+(HD-12)+'" rx="1.5"></rect>'
@@ -2770,6 +2816,8 @@ function map(){
     top.forEach(function(g){ svg.push(g); });
     sib.forEach(function(g){ svg.push(g); });
   }
+  svg.push('</g>');                    /* 내려간 땅 묶음 닫기 */
+  sumArr.forEach(function(s){ svg.push(s); });   /* 요약 카드는 제자리(맨 위) */
   svg.push('</svg>');
   $("#map").innerHTML = svg.join("");
   msumHtml();                                   /* 크게 보기용 바깥 카드 갱신 */
@@ -3497,7 +3545,7 @@ function market(){
     md.hidden = false; open = true;
     document.body.style.overflow = "hidden";
     document.body.classList.add("mopen");
-    msumHtml();                                 /* 옮겨 온 뒤 자리를 다시 잡는다 */
+    render();                                   /* 틀(VSH)과 카드 자리를 다시 잡는다 */
     $("#mclose").focus();
   }
   function hide(){
@@ -3509,7 +3557,7 @@ function market(){
     back = null;
     md.hidden = true; open = false; document.body.style.overflow = "";
     document.body.classList.remove("mopen");
-    msumHtml();
+    render();
     $("#zoomb").focus();
   }
   $("#zoomb").onclick = show;
@@ -3634,7 +3682,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-09 10:38</span>';
+  + '<span class="ver">화면 09-09 10:52</span>';
 
 /* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
    폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
