@@ -2199,7 +2199,68 @@ body.mopen #mleft svg.kmap{max-height:none!important}
   body:not(.mopen) .mapbox>.bars.mrow .mtog{position:absolute!important;
     top:21px;right:104px;z-index:3;margin:0!important;white-space:nowrap!important}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   모바일 지도 머리를 웹과 같은 규격으로            2026-09-09
+   재어 보니 이랬다 (칸 여백 20px 기준) :
+     연도 칸이 display:block 이어서 옆 숫자(15, 27 …)가 아랫줄로
+     떨어져 칸 높이가 48px(360px 화면은 70px) 이 됐다.
+     여기에 '월별' 이 제 줄을 하나 더 쓰니 지도가 y 176px(360px 화면
+     198px) 에서야 시작했다. 웹은 y 119px 이다.
+   한 줄 알약으로 바꿀 때 폭 계산 (360px 화면 · 쓸 폭 292px) :
+     13px/여백7px → 380px · 12px/5px → 333px · 11px/4px → 303px
+     → 어떤 크기로도 6칸이 한 줄에 안 들어간다.
+   그래서 글씨를 줄이는 대신 웹과 같은 크기의 한 줄 알약을 두고,
+   줄 자체를 좌우로 미는 띠로 만든다. 고른 칸은 자동으로 가운데로
+   굴러 오고, 넘침은 띠 안에서 끝나 페이지는 밀리지 않는다.
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width:700px){
+  /* 칸 여백 20 → 12px : 쓸 폭이 16px 늘어난다 */
+  .panel.mapbox{padding-left:12px!important;padding-right:12px!important}
+  .mapbox #map{margin-left:-9px!important;margin-right:-9px!important}
+
+  /* ① 연도 · 월 : 웹과 같은 한 줄 알약 + 좌우로 미는 띠 */
+  .mapbox #yr, .mapbox #mon{flex-wrap:nowrap!important;gap:2px!important;
+    overflow-x:auto!important;overflow-y:hidden!important;
+    -webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;
+    scrollbar-width:none;-ms-overflow-style:none;
+    }
+  /* 흐림은 그쪽에 더 남았을 때만 (JS 가 .sl/.sr 을 붙인다) */
+  .mapbox #yr.sl:not(.sr), .mapbox #mon.sl:not(.sr){
+    mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 100%);
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 100%)}
+  .mapbox #yr.sr:not(.sl), .mapbox #mon.sr:not(.sl){
+    mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 20px),transparent 100%);
+    -webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 20px),transparent 100%)}
+  .mapbox #yr.sl.sr, .mapbox #mon.sl.sr{
+    mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 calc(100% - 20px),transparent 100%);
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 calc(100% - 20px),transparent 100%)}
+  .mapbox #yr::-webkit-scrollbar, .mapbox #mon::-webkit-scrollbar{display:none}
+  /* 띠 자체가 칸 폭을 넘어 늘어나면 감싼 칸에 잘려 뒤쪽 달(10~12월)에
+     손이 닿지 않는다 (실측 : #mon 643px 가 #monwrap 322px 에 잘림).
+     → 띠를 칸 폭에 묶고 넘침은 띠 안에서 굴리게 한다 */
+  .mapbox #yr, .mapbox #mon{max-width:100%!important;width:100%!important}
+  .mapbox #monwrap{max-width:100%!important;overflow:visible!important}
+  .mapbox #yr button, .mapbox #mon button{
+    display:inline-flex!important;align-items:baseline!important;gap:4px!important;
+    white-space:nowrap!important;flex:0 0 auto!important;
+    font-size:14px!important;padding:8px 10px!important}
+  .mapbox #yr button em{font-size:11px!important;margin-left:0!important;opacity:.72}
+  .mapbox #mon button{font-size:13.5px!important;padding:8px 11px!important}
+
+  /* ② '월별' 토글을 제목줄 오른쪽('⤢ 크게' 왼쪽)으로 → 한 줄 회수 */
+  .panel.mapbox{position:relative}
+  .mapbox>.bars.mrow{margin-bottom:0!important}
+  .mapbox>.bars.mrow .spacer{display:none!important}
+  .mapbox>.bars.mrow .mtog{position:absolute!important;top:16px;z-index:3;
+    margin:0!important;white-space:nowrap!important;
+    font-size:12.5px!important;padding:6px 10px!important}
+  .mapbox>.bars:not(.mrow){align-items:center!important}
+  .mapbox #monwrap{margin-top:6px!important}
 }
+/* '⤢ 크게' 단추 폭이 화면에 따라 달라 토글 위치를 두 단으로 잡는다 */
+@media (max-width:700px){ .mapbox>.bars.mrow .mtog{right:84px} }
+@media (max-width:400px){ .mapbox>.bars.mrow .mtog{right:78px} }
 </style>
 </head>
 <body>
@@ -2656,6 +2717,32 @@ var MSUMD = null;                              /* 연도 요약 내용 (제목 �
 
 /* 크게 보기 : 칸의 오른쪽 끝에 붙는 HTML 연도 요약.
    SVG 안에 그리면 그림 끝(=울릉도 위)에 걸린다 */
+/* 좁은 화면에서 연도·월 줄은 좌우로 미는 띠가 된다.
+   고른 칸이 띠 밖에 있으면 보이지 않으므로 가운데로 굴려 준다 */
+function segScroll(){
+  ["#yr", "#mon"].forEach(function(sel){
+    var seg = document.querySelector(".mapbox " + sel);
+    if(!seg) return;
+    /* 흐림은 '그쪽에 더 있을 때' 만 준다. 늘 주면 끝에 닿았는데도
+       고른 칸이 흐려져 고장처럼 보인다 */
+    var edge = function(){
+      var l = seg.scrollLeft > 2;
+      var r = seg.scrollLeft + seg.clientWidth < seg.scrollWidth - 2;
+      seg.classList.toggle("sl", l);
+      seg.classList.toggle("sr", r);
+    };
+    if(seg.scrollWidth > seg.clientWidth + 1){
+      var on = seg.querySelector('button[aria-pressed="true"]');
+      if(on){
+        var r0 = on.getBoundingClientRect(), s0 = seg.getBoundingClientRect();
+        seg.scrollLeft += (r0.left + r0.width / 2) - (s0.left + s0.width / 2);
+      }
+    }
+    edge();
+    if(!seg.dataset.edge){ seg.dataset.edge = "1"; seg.addEventListener("scroll", edge); }
+  });
+}
+
 function msumHtml(){
   var host = $("#map") && $("#map").closest(".panel");
   if(!host) return;
@@ -2909,6 +2996,7 @@ function map(){
   svg.push('</svg>');
   $("#map").innerHTML = svg.join("");
   msumHtml();                                   /* 크게 보기용 바깥 카드 갱신 */
+  segScroll();                                  /* 좁은 화면 : 고른 칸을 띠 안으로 */
   Array.prototype.forEach.call(document.querySelectorAll(".mk"), function(g){
     var pick = function(){ cur = +g.dataset.i; render(); };
     g.onclick = pick;
@@ -3770,7 +3858,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-09 11:23</span>';
+  + '<span class="ver">화면 09-09 12:45</span>';
 
 /* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
    폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
