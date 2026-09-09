@@ -2133,6 +2133,40 @@ body.mopen #mleft svg.kmap{max-height:none!important}
 @media (min-width:1400px){ .iset .ilab{font-size:14px} }
 .iset .ihit{fill:rgba(0,0,0,0);cursor:default}
 .dset .drock{stroke:var(--map-line);stroke-width:.9}
+
+/* ── 위쪽 여백 조이기 · 월별 단추 한 줄 ──────  2026-09-09
+   ① 지도를 26 → 10 단위만 내리고 요약 카드를 납작하게 해
+      위쪽에 뜨던 빈 바다를 걷어냈다.
+   ② 틀 높이 553+10=563 → 상한 660×563/553 = 672px
+   ③ 월별 단추가 '연/간', '1/월' 처럼 두 줄로 꺾였다
+      → 꺾임 금지 + 글씨·여백을 줄여 13칸을 한 줄에 담는다 */
+.mapbox svg.kmap{max-height:672px!important}
+.mapbox #map{margin-top:4px!important}
+
+@media (min-width:701px){
+  .mapbox #mon{flex-wrap:nowrap!important;gap:2px!important;overflow:visible!important}
+  .mapbox #mon button{white-space:nowrap!important;font-size:12.5px!important;
+    padding:6px 7px!important;flex:0 0 auto!important}
+  .mapbox #monwrap{margin-top:6px!important}
+}
+
+/* ── 월별 토글을 제목줄 오른쪽으로 ──────────  2026-09-09
+   토글이 제 줄을 하나 다 잡아먹고 있었다. 원인은 폭이다 —
+   연도줄 509px + 토글 72px + 사이 8px = 589px 인데 칸은 542px.
+   연도 글씨를 줄이면(16 → 14.5px) 들어가지만 그건 지난번에
+   키워 달라고 한 것을 되돌리는 셈이다.
+   → 토글을 제목줄 오른쪽(⤢ 크게 왼쪽)으로 띄워 붙인다.
+     세로 한 줄(38px + 사이 10px = 48px)이 그대로 지도로 간다.
+   크게 보기(body.mopen)와 모바일(≤700px)은 지금 그대로 둔다 */
+@media (min-width:701px){
+  body:not(.mopen) .panel.mapbox{position:relative}
+  body:not(.mopen) .mapbox>.bars.mrow{margin-bottom:0!important}
+  body:not(.mopen) .mapbox>.bars.mrow .spacer{display:none!important}
+  /* '⤢ 크게' 는 우측 최상단 제자리에 두고, 토글을 그 왼쪽에 붙인다
+     (크게 단추 폭 ~70px + 사이 14px = 104px) */
+  body:not(.mopen) .mapbox>.bars.mrow .mtog{position:absolute!important;
+    top:21px;right:104px;z-index:3;margin:0!important}
+}
 </style>
 </head>
 <body>
@@ -2617,7 +2651,7 @@ function map(){
   var VX = 0, VW = 541;   /* 울릉도(~524) 오른쪽에 독도 자리만 둔다 (이름표 없음) */
   /* 일반 화면에서는 땅을 26 단위 내려 요약 카드가 울릉도를 덮지 않게 한다.
      크게 보기는 카드를 바깥 HTML 로 쓰므로 내릴 이유가 없다 */
-  var VSH = document.body.classList.contains("mopen") ? 0 : 26;
+  var VSH = document.body.classList.contains("mopen") ? 0 : 10;
   var svg = ['<svg class="kmap' + (year === 0 ? ' dense' : '') + '" viewBox="'
     + VX + ' -10 ' + VW + ' ' + (553 + VSH) + '" role="img"'
     + ' aria-label="장학금 전달 지역 지도. 제주와 독도는 따로 표기">'];
@@ -2700,7 +2734,7 @@ function map(){
     rows = rows.slice(0, 4);
     MSUMD = { ttl: ttl, rows: rows };            /* 크게 보기 HTML 카드가 쓴다 */
     /* 4행이면 카드 바닥이 y 120 — 경북 path 가 y 127 부터라 딱 비켜 간다 */
-    var SW = 158, SX = VX + VW - SW, HD = 29, RH = 25, PAD = 8;
+    var SW = 158, SX = VX + VW - SW, HD = 27, RH = 22, PAD = 7;
     var SH = HD + rows.length * RH + PAD, SY = -8, R = 9;
     /* 머리띠는 위 두 귀퉁이만 둥근 path 로 그린다 (rect 로는 아래도 같이 둥글어진다) */
     var head = "M" + SX + " " + (SY + HD)
@@ -3703,7 +3737,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-09 11:02</span>';
+  + '<span class="ver">화면 09-09 11:14</span>';
 
 /* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
    폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
