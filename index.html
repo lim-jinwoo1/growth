@@ -2037,6 +2037,66 @@ header{align-items:center!important}
   .mapbox .mtog{font-size:13.5px!important;padding:7px 12px!important}
   .mapbox .mtog .cv{font-size:15px!important}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   크게 보기 손질                                       2026-09-09
+   ① 연도 요약을 칸의 오른쪽 끝으로 (울릉도를 덮지 않게)
+   ② 머리줄('나눔의 발자취 / ✕ 닫기')을 걷어 지도에 높이를 준다
+   ③ 닫기 단추는 오른쪽 상세 칸의 우측 상단으로
+   ══════════════════════════════════════════════════════════════ */
+
+/* 기본값 — 일반 화면에서는 HTML 카드를 쓰지 않는다 (SVG 카드가 있다) */
+.msumh{display:none}
+
+@media (min-width:1001px){
+ /* ── ② 머리줄을 흐름에서 빼낸다 → .mbody 가 그만큼 커진다 ── */
+ body.mopen #modal .mhead{position:absolute!important;top:16px;right:18px;
+   z-index:8;padding:0!important;gap:0!important;width:auto}
+ body.mopen #modal .mhead b,
+ body.mopen #modal .mhead .mnote,
+ body.mopen #modal .mhead .spacer{display:none!important}
+
+ /* ── ③ 닫기 : 어두운 덮개 위 흰 글씨 → 밝은 카드 위 단추 ── */
+ body.mopen #modal .mclose{background:var(--card2)!important;color:var(--ink)!important;
+   border:1px solid var(--line)!important;border-radius:9px!important;
+   padding:7px 12px!important;font-size:13.5px!important;font-weight:700!important;
+   box-shadow:0 1px 3px rgba(18,60,122,.10)!important}
+ body.mopen #modal .mclose:hover{background:var(--acc-w)!important;
+   border-color:var(--acc-2)!important;color:var(--acc)!important}
+
+ /* ── ① 칸의 오른쪽 끝에 붙는 연도 요약 ───────────────── */
+ body.mopen #mleft>.panel{position:relative}
+ body.mopen .msumh{display:block;position:absolute;top:10px;right:10px;z-index:6;
+   width:186px;background:var(--card);border:1px solid var(--tile-ln);
+   border-radius:11px;overflow:hidden;
+   box-shadow:0 1px 2px rgba(18,60,122,.06),0 8px 22px rgba(18,60,122,.10)}
+ body.mopen .msumh .mshd{background:var(--hl);color:var(--acc);font-weight:800;
+   font-size:15px;padding:8px 12px 8px 15px;position:relative;
+   border-bottom:1px solid var(--hl-ln)}
+ body.mopen .msumh .mshd::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;
+   width:3px;border-radius:2px;background:var(--acc)}
+ body.mopen .msumh .msrw{display:flex;align-items:baseline;justify-content:space-between;
+   gap:10px;padding:7px 12px;border-top:1px solid var(--line2)}
+ body.mopen .msumh .msrw:first-of-type{border-top:0}
+ body.mopen .msumh .msrw span{font-size:13px;color:var(--mute);font-weight:600}
+ body.mopen .msumh .msrw b{font-size:17px;color:var(--ink);font-weight:800;
+   font-variant-numeric:tabular-nums;white-space:nowrap}
+ body.mopen .msumh .msrf{padding:6px 12px;font-size:12.5px;color:var(--mute);
+   border-top:1px solid var(--line2);font-weight:600}
+ /* SVG 안 카드는 감춘다 (같은 내용이 두 번 나오지 않게) */
+ body.mopen #mleft svg.kmap .msum{display:none!important}
+
+ /* 머리줄이 빠진 만큼 지도를 넓게 쓴다.
+    (여백을 키우면 되레 지도가 줄어든다 — 실측 후 6/5px 로 낮췄다) */
+ body.mopen #modal{padding:6px!important}
+ body.mopen #modal .mbody{padding:5px!important;gap:7px!important}
+}
+
+/* 어두운 화면 : 단추와 카드 그림자를 낮춘다 */
+@media (min-width:1001px){
+ :root[data-theme="dark"] body.mopen #modal .mclose,
+ :root[data-theme="dark"] body.mopen .msumh{box-shadow:0 2px 10px rgba(0,0,0,.5)!important}
+}
 </style>
 </head>
 <body>
@@ -2489,6 +2549,26 @@ function stats(){
 }
 
 /* ── 지도 ────────────────────────────────────── */
+var MSUMD = null;                              /* 연도 요약 내용 (제목 · 행) */
+
+/* 크게 보기 : 칸의 오른쪽 끝에 붙는 HTML 연도 요약.
+   SVG 안에 그리면 그림 끝(=울릉도 위)에 걸린다 */
+function msumHtml(){
+  var host = $("#map") && $("#map").closest(".panel");
+  if(!host) return;
+  var old = host.querySelector(".msumh");
+  if(old) old.parentNode.removeChild(old);
+  if(!MSUMD) return;
+  var d = document.createElement("div");
+  d.className = "msumh";
+  d.innerHTML = '<div class="mshd">' + esc(MSUMD.ttl) + '</div>'
+    + MSUMD.rows.map(function(r){
+        if(r[1] == null) return '<div class="msrf">' + esc(r[0]) + '</div>';
+        return '<div class="msrw"><span>' + esc(r[0]) + '</span><b>' + esc(r[1]) + '</b></div>';
+      }).join("");
+  host.appendChild(d);
+}
+
 function map(){
   var v = shown();
   var on = {};
@@ -2551,6 +2631,7 @@ function map(){
     if(sc2) rows.push(["장학생", sc2.toLocaleString() + "명"]);
     if(sa2) rows.push(["장학금", won(sa2)]);
     rows = rows.slice(0, 4);
+    MSUMD = { ttl: ttl, rows: rows };            /* 크게 보기 HTML 카드가 쓴다 */
     /* 4행이면 카드 바닥이 y 120 — 경북 path 가 y 127 부터라 딱 비켜 간다 */
     var SX = 374, SW = 158, HD = 29, RH = 25, PAD = 8;
     var SH = HD + rows.length * RH + PAD, SY = -8, R = 9;
@@ -2691,6 +2772,7 @@ function map(){
   }
   svg.push('</svg>');
   $("#map").innerHTML = svg.join("");
+  msumHtml();                                   /* 크게 보기용 바깥 카드 갱신 */
   Array.prototype.forEach.call(document.querySelectorAll(".mk"), function(g){
     var pick = function(){ cur = +g.dataset.i; render(); };
     g.onclick = pick;
@@ -3414,6 +3496,8 @@ function market(){
     $("#mnote").textContent = ($("#sheadn") && $("#sheadn").textContent) || "";
     md.hidden = false; open = true;
     document.body.style.overflow = "hidden";
+    document.body.classList.add("mopen");
+    msumHtml();                                 /* 옮겨 온 뒤 자리를 다시 잡는다 */
     $("#mclose").focus();
   }
   function hide(){
@@ -3424,6 +3508,8 @@ function market(){
     });
     back = null;
     md.hidden = true; open = false; document.body.style.overflow = "";
+    document.body.classList.remove("mopen");
+    msumHtml();
     $("#zoomb").focus();
   }
   $("#zoomb").onclick = show;
@@ -3548,7 +3634,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-09 10:30</span>';
+  + '<span class="ver">화면 09-09 10:38</span>';
 
 /* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
    폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
