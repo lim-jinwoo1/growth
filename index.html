@@ -1672,6 +1672,83 @@ body{background-image:radial-gradient(125% 95% at 6% 0%,
 @media (min-width:1001px) and (max-width:1399px){
   .mleft #mon button{font-size:13px!important;padding:6px 9px!important}
 }
+
+/* ══ 기사 카드 : 매체명·[지도에서 보기] 줄을 카드 맨 아래로 (2026-09-09) ══
+   제목 길이가 달라 이 줄의 높이가 카드마다 달랐다. 상자 높이는 격자가 이미
+   같게 맞춰 주므로, 이 줄만 아래로 밀면 한 줄에 나란히 정렬된다 */
+.cards{align-items:stretch!important}
+.cards>.card{display:flex!important;flex-direction:column!important;height:100%}
+.cards>.card .ifoot{margin-top:auto!important;padding-top:11px!important}
+/* 요약이 없는 카드도 아래로 밀리게 — 제목 아래 여백이 늘어난다 */
+.cards>.card h3{margin-bottom:0!important}
+.cards>.card p{flex:0 0 auto!important;margin-top:7px!important}
+/* 대문 기사(큰 카드)는 격자 밖이라 그대로 둔다 */
+.bigart .ifoot{margin-top:12px!important}
+
+/* [지도에서 보기] 단추의 위아래 여백(2px+2px) 때문에 그 줄만 4px 높아
+   같은 행에서 글자 높이가 어긋났다 → 여백을 없애고 줄 높이를 고정한다 */
+.ifoot{min-height:22px}
+.ifoot .mlink{padding:0!important;line-height:1.4!important}
+.ifoot .pr{line-height:1.4!important}
+
+/* ══ 크게 보기 좌측 조작 칸을 제대로 짜기 (2026-09-09) ══════════
+   238px 칸에 알약 단추가 2개씩 접히며 흩어져 성의 없이 보였다.
+   → 세로 목록으로 바꾼다. 한 줄에 하나, 연도는 왼쪽 · 건수는 오른쪽 끝.
+     머리에 '기간' 라벨을 달고, 월별은 칸 폭 전체를 쓰는 단추로 만든다 */
+/* 1400px 미만에서는 조작 칸이 지도 위에 얹히므로 세로 목록이 지도를 가린다
+   (1180px 실측 : 김포·금천·평택·공주·군산이 목록 밑으로 들어갔다)
+   → 세로 목록은 왼쪽 칸이 따로 있는 1400px 이상에서만 쓴다 */
+@media (min-width:1400px){
+  .mleft>.panel>.bars.mrow{display:block!important}
+  .mleft>.panel>.bars.mrow::before{content:"기간";display:block;
+    font-family:"Gothic A1",sans-serif;font-size:12.5px;font-weight:800;
+    letter-spacing:.14em;color:var(--mute);margin:2px 0 8px 4px}
+
+  /* 연도 목록 */
+  .mleft #yr{display:grid!important;grid-template-columns:1fr!important;
+    gap:3px!important;background:var(--card)!important;border:1px solid var(--line)!important;
+    border-radius:14px!important;padding:7px!important;width:100%!important;
+    box-shadow:0 1px 2px rgba(18,60,122,.07),0 8px 20px rgba(18,60,122,.09)!important}
+  .mleft #yr button{display:flex!important;align-items:center!important;
+    justify-content:space-between!important;width:100%!important;
+    border-radius:9px!important;padding:11px 13px!important;
+    font-size:16.5px!important;font-weight:700!important;text-align:left!important;
+    border:0!important;background:transparent!important;color:var(--body)!important}
+  .mleft #yr button::before{display:none!important}
+  .mleft #yr button em{font-style:normal;font-size:13.5px!important;font-weight:700!important;
+    opacity:1!important;margin:0!important;color:var(--mute)!important;
+    font-variant-numeric:tabular-nums}
+  .mleft #yr button:hover{background:var(--acc-w)!important;color:var(--acc)!important}
+  .mleft #yr button[aria-pressed="true"]{background:var(--acc)!important;color:#fff!important}
+  .mleft #yr button[aria-pressed="true"] em{color:rgba(255,255,255,.8)!important}
+
+  /* 월별 여닫이 — 칸 폭 전체 */
+  .mleft #mtog{display:flex!important;width:100%!important;justify-content:center!important;
+    margin-top:8px!important;border-radius:11px!important;padding:11px!important;
+    font-size:15.5px!important;font-weight:700!important;background:var(--card)!important;
+    border:1px solid var(--line)!important;
+    box-shadow:0 1px 2px rgba(18,60,122,.07),0 8px 20px rgba(18,60,122,.09)!important}
+  .mleft #mtog:hover{border-color:var(--acc)!important;color:var(--acc)!important}
+
+  /* 월 선택 — 4칸 격자 */
+  .mleft #mon{display:grid!important;grid-template-columns:repeat(4,1fr)!important;
+    gap:4px!important;background:var(--card)!important;border:1px solid var(--line)!important;
+    border-radius:14px!important;padding:7px!important;width:100%!important;
+    box-shadow:0 1px 2px rgba(18,60,122,.07),0 8px 20px rgba(18,60,122,.09)!important}
+  .mleft #mon button{border:0!important;background:transparent!important;
+    border-radius:8px!important;padding:9px 4px!important;font-size:14px!important;
+    font-weight:700!important;color:var(--body)!important;text-align:center!important}
+  .mleft #mon button::before{display:none!important}
+  .mleft #mon button:hover:not(:disabled){background:var(--acc-w)!important;color:var(--acc)!important}
+  .mleft #mon button[aria-pressed="true"]{background:var(--acc)!important;color:#fff!important}
+  .mleft>.panel>.monwrap{margin-top:8px!important;max-width:none!important}
+}
+
+/* 1400px 미만 : 월 단추가 '1 / 월' 로 꺾였다 → 한 줄로 고정 */
+@media (min-width:1001px) and (max-width:1399px){
+  .mleft #mon button{white-space:nowrap!important;font-size:12.5px!important;
+    padding:6px 8px!important}
+}
 </style>
 </head>
 <body>
@@ -3184,7 +3261,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-09 09:02</span>';
+  + '<span class="ver">화면 09-09 09:14</span>';
 
 /* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
    폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
