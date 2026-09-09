@@ -2003,6 +2003,40 @@ header{align-items:center!important}
 @media (max-width:430px){ h1{font-size:25px!important} }
 @media (max-width:390px){ h1{font-size:23px!important} }
 @media (max-width:365px){ h1{font-size:21px!important} }
+
+/* ── 지도 땅빛을 CI 파랑 계열로 ──────────────  2026-09-09
+   현행 #CBD8EC 는 강조 남색(#123C7A)에서 파생된 임시 색으로
+   색상각이 216°(남보라 기운) 였다. 이 12° 가 '차갑다' 는
+   느낌의 실제 원인이었고, 바탕에 깐 온기 광채(주황)와도
+   서로 어긋났다.
+   → 색상만 CI 파랑의 204° 로 옮기고 밝기(86%)는 그대로 둔다.
+      밝기를 지키니 흰 경계선 대비(1.44:1)와 시·도 경계의
+      또렷함이 지금과 같고, 남색 표식 대비는 7.46 → 7.86:1 로
+      오히려 나아진다.
+   CI 파랑 22% 농도 · #C7E0F1 (204° / S60% / L86%)          */
+:root{ --map:#C7E0F1!important; --map-on:#ADD2EA!important;
+       --map-line:#FFFFFF!important; }
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --map:#21313B!important; --map-on:#2F4351!important;
+  --map-line:#080C15!important; }}
+:root[data-theme="dark"]{ --map:#21313B!important; --map-on:#2F4351!important;
+  --map-line:#080C15!important; }
+
+/* ── 연도·월별 단추 글씨 키우기 (웹만) ──────  2026-09-09
+   실측 : 연도 13.5px · 옆 숫자(em) 10px · 월별 13px · '월별' 단추 12px.
+   1440px 에서 연도줄이 408px 인데 칸은 566px — 여백 90px 이 남아 있었다.
+   '크게 보기' 쪽만 16.5px 로 키우고 일반 화면을 그대로 둔 탓이다.
+   → 연도 16px · 숫자 12.5px · 월별 14.5px · 토글 13.5px.
+   모바일(≤700px)은 손대지 않는다 — 여백이 0 이어서 키우면 줄이 접힌다.
+   선택자 주의 : '.mapbox #yr button' (ID 포함) 이 더 세므로 같은 꼴로 쓴다 */
+@media (min-width:701px){
+  .mapbox #yr button{font-size:16px!important;padding:7px 11px!important}
+  .mapbox #yr button em{font-size:12.5px!important;margin-left:5px!important;
+    opacity:.72!important}
+  .mapbox #mon button{font-size:14.5px!important;padding:6px 10px!important}
+  .mapbox .mtog{font-size:13.5px!important;padding:7px 12px!important}
+  .mapbox .mtog .cv{font-size:15px!important}
+}
 </style>
 </head>
 <body>
@@ -3514,7 +3548,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-09 10:19</span>';
+  + '<span class="ver">화면 09-09 10:30</span>';
 
 /* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
    폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
