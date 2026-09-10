@@ -2627,7 +2627,12 @@ body.mopen #mleft svg.kmap{max-height:none!important}
    원자재 · 환율 그래프 전체보기                          2026-09-10
    인라인 칸은 대표 4종 그대로. [전체보기] 를 누르면 12개 지표를
    같은 양식(trendInto)으로 겹침창에 격자로 펼친다. */
-.ttog.tall{margin-left:6px}
+/* 자리 맞바꿈 : [전체보기] 를 먼저, [접기] 를 뒤에 둔다 (2026-09-10) */
+.ttog.tall{margin-left:10px!important}
+#ttog{margin-left:6px!important}
+/* 두 단추의 크기를 같게 : 글자수(4자 vs 2·3자)가 달라도 폭·높이가 같아 보이게 한다 */
+.shead .ttog{min-width:104px!important;justify-content:center!important;
+  padding:5px 12px!important;font-weight:700!important}
 .ttog.tall .cv{font-size:12.5px}
 .shead .ttog.tall{font-size:13.5px!important}
 @media (min-width:701px){
@@ -2802,10 +2807,10 @@ body.mopen #mleft svg.kmap{max-height:none!important}
 <!-- 원자재·환율 추이 : 탭 바깥에 두어 어느 탭에서도 보인다. 접을 수 있다. -->
 <div class="bars shead trhead">
  <h2 class="sect">원자재 · 환율 변동 (12개월)</h2>
- <button class="ttog" id="ttog" aria-expanded="true" aria-controls="trwrap">
-   <span class="cv" aria-hidden="true">⌄</span>접기</button>
  <button class="ttog tall" id="tall" aria-label="12개 지표 그래프 전체보기">
    <span class="cv" aria-hidden="true">⤢</span>전체보기</button>
+ <button class="ttog" id="ttog" aria-expanded="true" aria-controls="trwrap">
+   <span class="cv" aria-hidden="true">⌄</span>접기</button>
  <span class="spacer"></span>
  <span class="sub2" id="trnote"></span>
 </div>
@@ -4064,9 +4069,10 @@ function trendInto(cs, host){
           if(!hit2 || hit2[0].daily == null)
             return '<div class="tnow"><b>'+fc(s[n-1].v)+'</b><em>'+ym(n-1)+' 월평균</em></div>';
           var r2 = hit2[0];
-          /* 네 자리 넘는 값은 소수점을 버린다. 큰 글씨로 넣으면 칸을 넘겨 줄이 꺾인다.
-             (달러 1,369.40 → ₩1,369 · 그래프 축 라벨과도 같은 자릿수가 된다) */
-          var dd = Math.abs(r2.daily) >= 1000 ? 0 : r2.dec;
+          /* 네 자리 넘는 값은 소수점을 한 자리로 줄인다. 두 자리를 큰 글씨로 넣으면
+             칸을 넘겨 줄이 꺾이고, 아예 버리면 고시값(1,337.90)과 달라 보인다.
+             → 달러 1,337.90 → ₩1,337.9 (고시 자릿수 유지) */
+          var dd = Math.abs(r2.daily) >= 1000 ? Math.min(r2.dec, 1) : r2.dec;
           var dv = sym + r2.daily.toLocaleString("ko-KR",
             {minimumFractionDigits: dd, maximumFractionDigits: dd});
           return '<div class="tnow"><b>'+dv+'</b><em>'
@@ -4432,7 +4438,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-10 13:57</span>';
+  + '<span class="ver">화면 09-10 14:20</span>';
 
 /* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
    폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
