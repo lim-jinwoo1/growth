@@ -2312,28 +2312,8 @@ body.mopen #mleft svg.kmap{max-height:none!important}
     box-shadow:0 0 0 3px rgba(23,31,45,.92), 0 3px 12px rgba(0,0,0,.55)!important}
 }
 
-/* ── ③ 기간 · 월별 글씨 확대 ──────────────────────────────── */
-/* 일반 화면 : 연도 15 → 16.5px · 옆 숫자 11.5 → 13px · 월별 14.5 → 16px */
-@media (min-width:701px){
-  body:not(.mopen) .mapbox #yr button{font-size:16.5px!important;
-    padding:8px 9px!important}
-  body:not(.mopen) .mapbox #yr button em{font-size:13px!important;
-    margin-left:5px!important}
-  body:not(.mopen) .mapbox #mon button{font-size:16px!important;
-    padding:10px 12px!important}
-  body:not(.mopen) .mapbox .mtog{font-size:15px!important;padding:8px 13px!important}
-  body:not(.mopen) .mapbox .mtog .cv{font-size:16.5px!important}
-}
-/* 글씨를 키우면 연도줄 + 월별이 한 줄에 못 들어간다 (실측 기반) →
-   월별 토글은 폭에 상관없이 제목줄 오른쪽('⤢ 전체화면' 왼쪽)에 둔다.
-   세로 한 줄은 그대로 지도가 가져간다. */
-@media (min-width:701px){
-  body:not(.mopen) .panel.mapbox{position:relative}
-  body:not(.mopen) .mapbox>.bars.mrow .spacer{display:none!important}
-  body:not(.mopen) .mapbox>.bars.mrow .mtog{position:absolute!important;
-    top:19px;right:142px;z-index:3;margin:0!important;white-space:nowrap!important}
-  body:not(.mopen) .mapbox #yr{flex-wrap:wrap!important}
-}
+
+
 
 /* 전체화면 : 세로 목록(1400px 이상)
    선택자 주의 — '.mapbox #mon button' (ID 포함) 이 더 세서
@@ -2373,16 +2353,7 @@ body.mopen #mleft svg.kmap{max-height:none!important}
   body.mopen .msumh .msrf{font-size:13px!important;padding:4px 13px!important}
 }
 
-/* 월 단추를 키우면 13칸이 한 줄에 안 들어간다 (1440px 실측 : 칸 542px 에
-   필요 폭 617px). 사용자가 '세로로 더 길어져도 된다'고 했으므로
-   한 줄 고정을 풀고 두 줄로 접히게 둔다 — 페이지가 가로로 밀리지 않는다. */
-@media (min-width:701px){
-  body:not(.mopen) .mapbox #monwrap{max-width:100%!important;overflow:visible!important}
-  body:not(.mopen) .mapbox #mon{flex-wrap:wrap!important;gap:4px!important;
-    max-width:100%!important;width:100%!important;overflow:visible!important}
-  body:not(.mopen) .mapbox #mon button{flex:0 0 auto!important;
-    white-space:nowrap!important}
-}
+
 
 /* 연도 요약 카드가 앉을 네 귀퉁이 (자리는 placeSum() 이 고른다) */
 @media (min-width:1001px){
@@ -2590,6 +2561,57 @@ body.mopen #mleft svg.kmap{max-height:none!important}
   :root:not([data-theme="light"]) #amodal .mclose,
   :root:not([data-theme="light"]) #amodal .mclose:hover{color:#0A1422!important;
     box-shadow:0 0 0 3px rgba(23,31,45,.92),0 3px 12px rgba(0,0,0,.55)!important}
+}
+
+/* ══════════════════════════════════════════════════════════════
+   요청 3건                                              2026-09-10
+   ② 1440~1599px 전체화면 : 지도를 왼쪽으로 조금 밀고
+      그만큼 생긴 오른쪽 자리에 요약 카드를 키운다
+      (1600px 이상은 가로 여백이 이미 남아 지도를 밀 필요가 없다)
+   ③ 좌측 '기간' 목록의 건수 숫자를 확 키운다
+   ══════════════════════════════════════════════════════════════ */
+
+/* ② 지도를 왼쪽으로 — 지도 칸 오른쪽에 여백을 준다 */
+/* 카드를 키우면 울릉도와 부딪힌다. 지도를 왼쪽으로 밀어 자리를 만든다.
+   여백 값은 실측으로 정했다 (그림폭 ↓ → 울릉도가 왼쪽·아래로 이동).
+   창 높이 880px 미만에서는 울릉도가 위로 올라와 자리가 나오지 않으므로
+   그 경우에는 카드를 키우지 않고 지도도 밀지 않는다 (실측 : 1440x800 에서
+   28px, 1440x760 에서 48px 부족). */
+@media (min-width:1400px) and (min-height:880px){
+  body.mopen #mleft #map{padding-right:124px!important}
+}
+@media (min-width:1900px) and (min-height:880px){
+  body.mopen #mleft #map{padding-right:60px!important}
+}
+
+/* ② 요약 카드 확대 (1400px 이상 · 높이 880px 이상) */
+@media (min-width:1400px) and (min-height:880px){
+  body.mopen .msumh{width:272px!important}
+  body.mopen .msumh .mshd{font-size:24px!important;
+    padding:6px 16px 6px 20px!important}
+  body.mopen .msumh .mshd::before{width:5px!important;left:9px!important}
+  body.mopen .msumh .msrw{padding:4px 16px!important;gap:12px!important}
+  body.mopen .msumh .msrw span{font-size:16.5px!important}
+  body.mopen .msumh .msrw b{font-size:23px!important}
+  body.mopen .msumh .msrf{font-size:15px!important;padding:4px 16px!important}
+}
+
+/* ③ 기간 건수 숫자 — 연도 글씨와 비슷한 크기로 */
+@media (min-width:1400px) and (min-height:880px){
+  body.mopen #yr button em{font-size:19.5px!important;color:var(--acc-2)!important}
+  body.mopen #yr button[aria-pressed="true"] em{color:rgba(255,255,255,.92)!important}
+}
+@media (min-width:1400px) and (min-height:800px) and (max-height:879px){
+  body.mopen #yr button em{font-size:18px!important;color:var(--acc-2)!important}
+  body.mopen #yr button[aria-pressed="true"] em{color:rgba(255,255,255,.92)!important}
+}
+@media (min-width:1400px) and (max-height:799px){
+  body.mopen #yr button em{font-size:16px!important;color:var(--acc-2)!important}
+  body.mopen #yr button[aria-pressed="true"] em{color:rgba(255,255,255,.92)!important}
+}
+@media (min-width:1001px) and (max-width:1399px){
+  body.mopen #yr button em{font-size:16px!important;color:var(--acc-2)!important}
+  body.mopen #yr button[aria-pressed="true"] em{color:rgba(255,255,255,.92)!important}
 }
 </style>
 </head>
@@ -4297,7 +4319,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-10 11:01</span>';
+  + '<span class="ver">화면 09-10 11:11</span>';
 
 /* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
    폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
