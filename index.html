@@ -4038,11 +4038,13 @@ function trendInto(cs, host){
     var peak = mark(mx, vs.indexOf(mx), true) + mark(mn, vs.lastIndexOf(mn), false);
     var hit = s.map(function(p, i){
       var w = (W - L - R) / (n - 1);
-      return '<g class="hp"><rect x="'+(X(i)-w/2).toFixed(1)+'" y="0" width="'+w.toFixed(1)
+      var lbl = p.ym.slice(2).replace("-", ".") + "  " + fc(p.v) + " " + c.unit;
+      return '<g class="hp" role="img" aria-label="'+esc(lbl)+'" data-t="'+esc(lbl)+'">'
+        + '<rect x="'+(X(i)-w/2).toFixed(1)+'" y="0" width="'+w.toFixed(1)
         + '" height="'+H+'" fill="transparent"></rect>'
         + '<line class="ch" x1="'+X(i).toFixed(1)+'" y1="'+T+'" x2="'+X(i).toFixed(1)+'" y2="'+(H-B)+'"></line>'
         + '<circle class="hd" cx="'+X(i).toFixed(1)+'" cy="'+Y(p.v).toFixed(1)+'" r="6"></circle>'
-        + '<title>'+p.ym.slice(2).replace("-", ".")+'  '+fc(p.v)+' '+esc(c.unit)+'</title></g>';
+        + '</g>';
     }).join("");
     return '<figure class="tf">'
       + '<figcaption>'+esc(c.nm)+'<span>'+esc(c.unit)+' · 월평균</span></figcaption>'
@@ -4105,8 +4107,7 @@ function trendTouch(root){
       Array.prototype.forEach.call(hps, function(g){ g.classList.remove("on"); });
       best.classList.add("on");
       if(!pick) return;
-      var t = best.querySelector("title");
-      txt.textContent = t ? t.textContent.replace(/\s+/g, " ").trim() : "";
+      txt.textContent = (best.getAttribute("data-t") || "").replace(/\s+/g, " ").trim();
       var d = best.querySelector(".hd");
       var x = +d.getAttribute("cx"), y = +d.getAttribute("cy");
       pick.removeAttribute("hidden");
@@ -4118,18 +4119,24 @@ function trendTouch(root){
       box.setAttribute("width", bw); box.setAttribute("height", bh);
       txt.setAttribute("x", bx + bw / 2); txt.setAttribute("y", by + 16.5);
     }
+    /* 마우스 : 갖다 대면 바로 뜨고 벗어나면 사라진다 (2026-09-10)
+       전에는 마우스를 제외해 브라우저 기본 풍선만 보였다 — 느리고 꾸밈이 없었다.
+       손가락 : 누르거나 끌 때만 뜨고, 떼면 잠깐 남겨 두고 지운다 (기존 그대로) */
     sv.addEventListener("pointerdown", function(e){
-      if(e.pointerType === "mouse") return;             /* 마우스는 hover 로 충분 */
+      if(e.pointerType === "mouse"){ at(e.clientX); return; }
       at(e.clientX);
       if(sv.setPointerCapture) try{ sv.setPointerCapture(e.pointerId); }catch(x){}
     });
     sv.addEventListener("pointermove", function(e){
-      if(e.pointerType === "mouse") return;
+      if(e.pointerType === "mouse"){ at(e.clientX); return; }
       if(e.buttons === 0 && e.pressure === 0) return;
       at(e.clientX);
     });
+    sv.addEventListener("pointerleave", function(e){
+      if(e.pointerType === "mouse") clear();
+    });
     sv.addEventListener("pointerup", function(e){
-      if(e.pointerType === "mouse") return;
+      if(e.pointerType === "mouse") return;             /* 마우스는 벗어날 때 지운다 */
       setTimeout(clear, 2600);                          /* 잠깐 남겨 두고 지운다 */
     });
     sv.addEventListener("pointercancel", clear);
@@ -4414,7 +4421,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-10 12:43</span>';
+  + '<span class="ver">화면 09-10 13:25</span>';
 
 /* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
    폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
