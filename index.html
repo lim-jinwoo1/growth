@@ -2534,6 +2534,63 @@ body.mopen #mleft svg.kmap{max-height:none!important}
   body.mopen #mon{padding:6px!important;gap:3px!important}
   body.mopen #mon button{padding:9px 3px!important;font-size:15.5px!important}
 }
+
+/* ══════════════════════════════════════════════════════════════
+   기사 전체 보기 : 글씨 확대 + 분류 표기            2026-09-10
+   보는 분들 연령대가 높아 작은 글씨가 피로하다는 지적.
+   팝업에 여백이 많아 글씨를 키워도 줄 수가 늘지 않는다. */
+.abody{padding:8px 24px 24px!important}
+.alist .ai{gap:18px!important;padding:19px 0!important}
+.alist .ai .d{font-size:16px!important}
+.alist .ai h4{font-size:21px!important;line-height:1.45!important}
+.alist .ai .m{margin-top:8px!important;font-size:15px!important;gap:9px!important}
+.alist .ai .m .chip{font-size:13.5px!important;padding:3px 10px!important}
+.alist .ai .m .mlink{font-size:15px!important}
+#amodal .mhead b{font-size:21px!important}
+#amodal .mhead .mnote{font-size:15px!important}
+#amodal .mclose{font-size:15px!important;padding:9px 15px!important;font-weight:800!important}
+
+/* 분류 칩 — 어느 종류의 소식인가를 색으로 말한다 */
+.alist .ai .m .acat{font-family:"Gothic A1",sans-serif;font-size:13.5px;font-weight:800;
+  letter-spacing:-.01em;padding:3px 11px;border-radius:999px;white-space:nowrap;
+  border:1px solid currentColor}
+.alist .ai .m .acat.so{color:var(--ci-or);
+  background:color-mix(in srgb, var(--ci-or) 10%, var(--card))}
+.alist .ai .m .acat.gr{color:var(--ci-bl);
+  background:color-mix(in srgb, var(--ci-bl) 10%, var(--card))}
+.alist .ai .m .acat.nt{color:var(--mute);
+  background:color-mix(in srgb, var(--mute) 8%, var(--card))}
+
+@media (max-width:560px){
+  .abody{padding:8px 15px 18px!important}
+  .alist .ai{grid-template-columns:1fr!important;gap:5px!important;padding:15px 0!important}
+  .alist .ai h4{font-size:19px!important}
+  .alist .ai .d{font-size:15px!important}
+  .alist .ai .m{font-size:14px!important}
+}
+
+/* 시세 기준일이 오늘보다 오래면 눈에 보이게 (오늘 값으로 오해 방지) */
+.mkt .asof.old{color:var(--ci-or)!important;background:#FDF1E7!important;
+  border-color:var(--ci-or)!important}
+:root[data-theme="dark"] .mkt .asof.old{background:#2A1B10!important}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .mkt .asof.old{background:#2A1B10!important}
+}
+
+/* 기사 팝업 닫기도 지도 전체화면과 같은 채운 파랑으로 (잘 보이게) */
+#amodal .mclose{background:var(--acc)!important;color:#fff!important;border:0!important;
+  border-radius:11px!important;font-weight:800!important;
+  box-shadow:0 0 0 3px rgba(255,255,255,.92),0 3px 12px rgba(18,60,122,.30)!important}
+#amodal .mclose:hover{background:var(--acc-2)!important;color:#fff!important}
+#amodal .mclose:focus-visible{outline:3px solid var(--ci-or)!important;outline-offset:3px!important}
+:root[data-theme="dark"] #amodal .mclose,
+:root[data-theme="dark"] #amodal .mclose:hover{color:#0A1422!important;
+  box-shadow:0 0 0 3px rgba(23,31,45,.92),0 3px 12px rgba(0,0,0,.55)!important}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) #amodal .mclose,
+  :root:not([data-theme="light"]) #amodal .mclose:hover{color:#0A1422!important;
+    box-shadow:0 0 0 3px rgba(23,31,45,.92),0 3px 12px rgba(0,0,0,.55)!important}
+}
 </style>
 </head>
 <body>
@@ -3585,8 +3642,29 @@ var GRWA = (function(){
   return { lbl: "최근 4주", all: use, list: use.slice().sort(byNew).slice(0, 1) };
 })();
 
+/* 기준일이 오늘보다 몇 영업일 뒤인가 (주말 제외 · 공휴일은 알 수 없어 세지 않는다).
+   서울 기준 날짜로 비교한다. 스냅샷이 늦게 반영되면 눈에 보이게 하려는 것이다. */
+function bizLag(ymd){
+  if(!ymd) return 0;
+  var now = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"}));
+  var t = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var p = ymd.split("-");
+  var d = new Date(+p[0], +p[1] - 1, +p[2]);
+  var n = 0, cur = new Date(d.getTime());
+  while(cur < t && n < 60){
+    cur.setDate(cur.getDate() + 1);
+    var w = cur.getDay();
+    if(w !== 0 && w !== 6) n++;
+  }
+  return n;
+}
+
 /* 사회공헌 기사 전체 보기 팝업 */
 var amd = $("#amodal");
+/* 분류 칩 색 — 대문·뉴스레터 탭과 같은 기준으로 나눈다
+     사회공헌 = CI 주황 · 주간 성장(수상·실적·수출·기술) = CI 파랑 · 그 외 = 회색 */
+function catCls(a){ return isSoc(a) ? "so" : (eligible(a) ? "gr" : "nt"); }
+
 function openArts(list, title){
   list = list || SOCLIST;
   $("#atitle").textContent = title || "사회공헌 기사";
@@ -3595,7 +3673,8 @@ function openArts(list, title){
     var si = spotOf(a);
     return '<article class="ai"><span class="d">' + fd(a.date) + '</span><div>'
       + '<h4><a href="'+esc(a.link)+'" target="_blank" rel="noopener">'+esc(a.title)+'</a></h4>'
-      + '<div class="m"><span class="pr">'+esc(a.press)+'</span>'
+      + '<div class="m"><span class="acat ' + catCls(a) + '">' + esc(a.cat) + '</span>'
+      + '<span class="pr">'+esc(a.press)+'</span>'
       + (a.official ? '<span class="chip off">공식</span>' : '')
       + (a.cov > 1 ? '<span class="num">보도 '+a.cov+'건</span>' : '')
       + (si >= 0 ? '<button class="mlink" data-s="'+si+'">지도에서 보기 →</button>' : '')
@@ -3999,7 +4078,19 @@ function market(){
     return '<div class="mgroup">'+lbl+'</div><div class="mgrid">'
       + arr.map(function(r){ return card(r, dlbl); }).join("") + '</div>'; };
   /* 기준일은 각주로 밀어 넣으면 아무도 안 읽는다 → 제목 줄 오른쪽 끝에 알약으로 */
-  if($("#mktasof")) $("#mktasof").textContent = MARKET.asof + " 기준";
+  /* 기준일이 오늘보다 오래면 그대로 알린다 — '오늘 값' 으로 오해하는 것을 막는다
+     (2026-09-10 : 사이트가 09-09 값을 보여주는데 09-10 값과 비교해 오류로 보였다) */
+  if($("#mktasof")){
+    var el = $("#mktasof");
+    el.textContent = MARKET.asof + " 기준";
+    el.classList.remove("old");
+    var lag = bizLag(MARKET.asof);
+    if(lag >= 1){
+      el.textContent = MARKET.asof + " 기준 · " + lag + "영업일 전";
+      el.classList.add("old");
+      el.title = "오늘 값이 아닙니다. 최신 스냅샷이 아직 반영되지 않았습니다.";
+    }
+  }
   $("#market").innerHTML =
       sec("원자재", MARKET.mat, "종가")
     + sec("유가 · 나프타", MARKET.oil, "종가")
@@ -4206,7 +4297,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-10 09:44</span>';
+  + '<span class="ver">화면 09-10 09:51</span>';
 
 /* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
    폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
