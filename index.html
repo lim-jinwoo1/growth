@@ -1857,6 +1857,11 @@ body{background-image:radial-gradient(125% 95% at 6% 0%,
 /* 안쪽 강조 타일도 같은 계열로 (지금은 주황 타일만 CI 색이었다) */
 .hpanel .hsum.big b.k{background:#FDF1E7!important;border-color:var(--ci-or)!important}
 .hpanel2 .hsum.big b.k{background:#EAF4FC!important;border-color:var(--ci-bl)!important}
+/* 뉴스레터 탭 섹션 제목 = 대문 두 칸과 같은 색 (2026-09-09) */
+.isect.so{color:var(--ci-or)!important}
+.isect.so::after{background:color-mix(in srgb, var(--ci-or) 32%, var(--line))!important}
+.isect.gr{color:var(--ci-bl)!important}
+.isect.gr::after{background:color-mix(in srgb, var(--ci-bl) 32%, var(--line))!important}
 .hpanel .ptitle::after{background:#F5DFCB!important}
 .hpanel2 .ptitle::after{background:#CFE4F5!important}
 
@@ -2261,6 +2266,274 @@ body.mopen #mleft svg.kmap{max-height:none!important}
 /* '⤢ 크게' 단추 폭이 화면에 따라 달라 토글 위치를 두 단으로 잡는다 */
 @media (max-width:700px){ .mapbox>.bars.mrow .mtog{right:84px} }
 @media (max-width:400px){ .mapbox>.bars.mrow .mtog{right:78px} }
+
+/* ══════════════════════════════════════════════════════════════
+   지도 조작 칸 손질                                    2026-09-10
+   ① '⤢ 크게' → '⤢ 전체화면' (글씨는 '월별' 단추와 같은 13.5px)
+   ② 전체화면 닫기 : 칸 안쪽으로 넣고 채운 파랑으로 또렷하게
+   ③ 기간 · 월별 글씨 확대 (일반 화면 · 전체화면 모두)
+   ④ 전체화면 연도 요약 카드 확대
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── ① 전체화면 단추 : '월별' 과 같은 13.5px ───────────────── */
+@media (min-width:701px){
+  .mapbox .zoomb{font-size:13.5px!important;padding:7px 12px!important;
+    font-weight:700!important}
+}
+
+/* ── ② 닫기 : 안쪽으로 + 채운 파랑 ─────────────────────────
+   전에는 어두운 덮개용 '투명 + 흰 테두리' 를 밝은 카드 위에 얹어
+   테두리만 겨우 보였고, 카드 모서리에 붙어 밖으로 밀린 듯 보였다.
+   → 여백을 26/28px 로 넣어 카드 안쪽에 앉히고,
+     채운 파랑 + 흰 테 3px 로 어느 배경에서도 먼저 눈에 들어오게 한다. */
+@media (min-width:1001px){
+  body.mopen #modal .mhead{top:26px!important;right:28px!important}
+  body.mopen #modal .mclose{background:var(--acc)!important;color:#fff!important;
+    border:0!important;border-radius:11px!important;
+    padding:10px 17px!important;font-size:15px!important;font-weight:800!important;
+    box-shadow:0 0 0 3px rgba(255,255,255,.92),
+               0 3px 12px rgba(18,60,122,.30)!important}
+  body.mopen #modal .mclose:hover{background:var(--acc-2)!important;color:#fff!important;
+    box-shadow:0 0 0 3px rgba(255,255,255,.92),
+               0 4px 16px rgba(18,60,122,.38)!important}
+  body.mopen #modal .mclose:focus-visible{outline:3px solid var(--ci-or)!important;
+    outline-offset:3px!important}
+}
+/* 어두운 화면 : --acc 가 밝은 파랑(#77ACEE)이라 흰 글씨는 대비가 모자란다
+   (실측 2.0:1) → 글씨를 짙게 바꾼다 (대비 9.5:1) */
+:root[data-theme="dark"] body.mopen #modal .mclose,
+:root[data-theme="dark"] body.mopen #modal .mclose:hover{
+  color:#0A1422!important;
+  box-shadow:0 0 0 3px rgba(23,31,45,.92), 0 3px 12px rgba(0,0,0,.55)!important}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) body.mopen #modal .mclose,
+  :root:not([data-theme="light"]) body.mopen #modal .mclose:hover{
+    color:#0A1422!important;
+    box-shadow:0 0 0 3px rgba(23,31,45,.92), 0 3px 12px rgba(0,0,0,.55)!important}
+}
+
+/* ── ③ 기간 · 월별 글씨 확대 ──────────────────────────────── */
+/* 일반 화면 : 연도 15 → 16.5px · 옆 숫자 11.5 → 13px · 월별 14.5 → 16px */
+@media (min-width:701px){
+  body:not(.mopen) .mapbox #yr button{font-size:16.5px!important;
+    padding:8px 9px!important}
+  body:not(.mopen) .mapbox #yr button em{font-size:13px!important;
+    margin-left:5px!important}
+  body:not(.mopen) .mapbox #mon button{font-size:16px!important;
+    padding:10px 12px!important}
+  body:not(.mopen) .mapbox .mtog{font-size:15px!important;padding:8px 13px!important}
+  body:not(.mopen) .mapbox .mtog .cv{font-size:16.5px!important}
+}
+/* 글씨를 키우면 연도줄 + 월별이 한 줄에 못 들어간다 (실측 기반) →
+   월별 토글은 폭에 상관없이 제목줄 오른쪽('⤢ 전체화면' 왼쪽)에 둔다.
+   세로 한 줄은 그대로 지도가 가져간다. */
+@media (min-width:701px){
+  body:not(.mopen) .panel.mapbox{position:relative}
+  body:not(.mopen) .mapbox>.bars.mrow .spacer{display:none!important}
+  body:not(.mopen) .mapbox>.bars.mrow .mtog{position:absolute!important;
+    top:19px;right:142px;z-index:3;margin:0!important;white-space:nowrap!important}
+  body:not(.mopen) .mapbox #yr{flex-wrap:wrap!important}
+}
+
+/* 전체화면 : 세로 목록(1400px 이상)
+   선택자 주의 — '.mapbox #mon button' (ID 포함) 이 더 세서
+   클래스만 쓴 규칙이 밀린다. 그래서 body.mopen + ID 로 쓴다. */
+@media (min-width:1400px){
+  .mleft>.panel>.bars.mrow::before{font-size:14px!important;margin-bottom:10px!important}
+  body.mopen #yr button{font-size:18.5px!important;padding:12px 14px!important}
+  body.mopen #yr button em{font-size:15px!important}
+  body.mopen #mtog{font-size:17px!important;padding:12px!important}
+  body.mopen #mon button{font-size:16.5px!important;padding:12px 4px!important}
+}
+/* 전체화면 : 알약 한 줄(1001~1399px) — 여기서는 13칸을 담아야 하므로
+   글씨를 올리는 대신 줄을 접게 둔다 (세로로 길어지는 것은 허용) */
+@media (min-width:1001px) and (max-width:1399px){
+  body.mopen #yr button{font-size:17px!important;padding:9px 12px!important}
+  body.mopen #yr button em{font-size:14px!important}
+  body.mopen #mtog{font-size:16px!important;padding:9px 14px!important}
+  body.mopen #monwrap{max-width:none!important}
+  body.mopen #mon{flex-wrap:wrap!important;gap:4px!important}
+  body.mopen #mon button{font-size:15px!important;padding:9px 11px!important;
+    flex:0 0 auto!important}
+}
+
+/* ── ④ 전체화면 연도 요약 카드 확대 ───────────────────────── */
+/* 카드가 커지면 울릉도를 덮는다 (1280px 실측 : 카드 바닥 260px vs
+   울릉도 이름표 위 234px). 그래서 글씨는 키우되 여백을 조여
+   카드 높이를 205px 이하로 묶는다 — 검증 루틴에서 겹침 0 을 확인한다. */
+@media (min-width:1001px){
+  body.mopen .msumh{width:214px!important}
+  body.mopen .msumh .mshd{font-size:19px!important;font-weight:900!important;
+    padding:7px 13px 7px 17px!important;letter-spacing:-.01em!important}
+  body.mopen .msumh .mshd::before{width:4px!important;left:8px!important;
+    top:6px!important;bottom:6px!important}
+  body.mopen .msumh .msrw{padding:5px 13px!important}
+  body.mopen .msumh .msrw span{font-size:14px!important}
+  body.mopen .msumh .msrw b{font-size:18.5px!important}
+  body.mopen .msumh .msrf{font-size:13px!important;padding:4px 13px!important}
+}
+
+/* 월 단추를 키우면 13칸이 한 줄에 안 들어간다 (1440px 실측 : 칸 542px 에
+   필요 폭 617px). 사용자가 '세로로 더 길어져도 된다'고 했으므로
+   한 줄 고정을 풀고 두 줄로 접히게 둔다 — 페이지가 가로로 밀리지 않는다. */
+@media (min-width:701px){
+  body:not(.mopen) .mapbox #monwrap{max-width:100%!important;overflow:visible!important}
+  body:not(.mopen) .mapbox #mon{flex-wrap:wrap!important;gap:4px!important;
+    max-width:100%!important;width:100%!important;overflow:visible!important}
+  body:not(.mopen) .mapbox #mon button{flex:0 0 auto!important;
+    white-space:nowrap!important}
+}
+
+/* 연도 요약 카드가 앉을 네 귀퉁이 (자리는 placeSum() 이 고른다) */
+@media (min-width:1001px){
+  body.mopen .msumh[data-at="tr"]{top:6px!important;right:10px!important;
+    left:auto!important;bottom:auto!important}
+  body.mopen .msumh[data-at="br"]{bottom:10px!important;right:10px!important;
+    top:auto!important;left:auto!important}
+  body.mopen .msumh[data-at="tl"]{top:6px!important;left:10px!important;
+    right:auto!important;bottom:auto!important}
+  body.mopen .msumh[data-at="bl"]{bottom:10px!important;left:10px!important;
+    top:auto!important;right:auto!important}
+}
+
+@media (min-width:1001px){
+  body.mopen .msumh[data-at="ur"]{right:10px!important;left:auto!important;
+    bottom:auto!important}
+}
+
+/* ══════════════════════════════════════════════════════════════
+   전체화면 1001~1399px : 조작 칸을 지도 위에서 걷어낸다  2026-09-10
+   그동안 이 폭에서는 '기간 · 월별' 을 지도 위(왼쪽 바다)에 카드로
+   얹어 두었는데, 김포시 · 서울 금천구 표식을 덮었다.
+   → 1400px 이상과 같은 두 칸 구조로 바꿔 겹침을 없앤다.
+     칸 폭은 238 → 206px 로 좁혀 지도가 잃는 폭을 줄인다.
+   (지도는 그만큼 좁아진다 — 덮는 것보다 좁아지는 편을 택했다) */
+@media (min-width:1001px) and (max-width:1399px){
+  .mleft>.panel{grid-template-columns:206px minmax(0,1fr)!important}
+  .mleft>.panel>#map{grid-column:2!important}
+  .mleft>.panel>.bars.mrow{grid-column:1!important;grid-row:1!important;
+    background:none!important;box-shadow:none!important;padding:0!important;
+    z-index:auto!important;display:block!important}
+  .mleft>.panel>.monwrap{grid-column:1!important;grid-row:2!important;
+    justify-self:stretch!important;max-width:none!important;
+    background:none!important;box-shadow:none!important;padding:0!important;
+    z-index:auto!important}
+  .mleft .ylegend{grid-column:1!important;grid-row:3!important;
+    background:none!important;box-shadow:none!important;padding:0!important;
+    z-index:auto!important}
+
+  /* 1400px 이상과 같은 세로 목록 꼴 */
+  .mleft>.panel>.bars.mrow::before{content:"기간";display:block;
+    font-family:"Gothic A1",sans-serif;font-size:13px;font-weight:800;
+    letter-spacing:.14em;color:var(--mute);margin:2px 0 8px 4px}
+  .mleft #yr{display:grid!important;grid-template-columns:1fr!important;
+    gap:3px!important;background:var(--card)!important;
+    border:1px solid var(--line)!important;border-radius:14px!important;
+    padding:6px!important;width:100%!important;
+    box-shadow:0 1px 2px rgba(18,60,122,.07),0 8px 20px rgba(18,60,122,.09)!important}
+  .mleft #yr button{display:flex!important;align-items:center!important;
+    justify-content:space-between!important;width:100%!important;
+    border-radius:9px!important;padding:10px 12px!important;
+    font-size:17px!important;font-weight:700!important;text-align:left!important;
+    border:0!important;background:transparent!important;color:var(--body)!important}
+  .mleft #yr button::before{display:none!important}
+  .mleft #yr button em{font-style:normal;font-size:14px!important;font-weight:700!important;
+    opacity:1!important;margin:0!important;color:var(--mute)!important;
+    font-variant-numeric:tabular-nums}
+  .mleft #yr button:hover{background:var(--acc-w)!important;color:var(--acc)!important}
+  .mleft #yr button[aria-pressed="true"]{background:var(--acc)!important;color:#fff!important}
+  .mleft #yr button[aria-pressed="true"] em{color:rgba(255,255,255,.8)!important}
+
+  body.mopen #mtog{display:flex!important;width:100%!important;
+    justify-content:center!important;margin-top:8px!important;
+    border-radius:11px!important;padding:10px!important;
+    font-size:16px!important;font-weight:700!important;background:var(--card)!important;
+    border:1px solid var(--line)!important;
+    box-shadow:0 1px 2px rgba(18,60,122,.07),0 8px 20px rgba(18,60,122,.09)!important}
+  body.mopen #mtog:hover{border-color:var(--acc)!important;color:var(--acc)!important}
+
+  body.mopen #monwrap{margin-top:8px!important}
+  body.mopen #mon{display:grid!important;grid-template-columns:repeat(4,1fr)!important;
+    gap:4px!important;background:var(--card)!important;
+    border:1px solid var(--line)!important;border-radius:14px!important;
+    padding:6px!important;width:100%!important;
+    box-shadow:0 1px 2px rgba(18,60,122,.07),0 8px 20px rgba(18,60,122,.09)!important}
+  body.mopen #mon button{border:0!important;background:transparent!important;
+    border-radius:8px!important;padding:10px 3px!important;font-size:15px!important;
+    font-weight:700!important;color:var(--body)!important;text-align:center!important}
+  body.mopen #mon button::before{display:none!important}
+  body.mopen #mon button:hover:not(:disabled){background:var(--acc-w)!important;
+    color:var(--acc)!important}
+  body.mopen #mon button[aria-pressed="true"]{background:var(--acc)!important;color:#fff!important}
+}
+
+/* 1001~1149px : 칸이 잃는 폭이 지도에 크게 들어간다 (1100px 실측 :
+   그림 708 → 491px). 칸을 176px 로 더 좁혀 손실을 줄인다. */
+@media (min-width:1001px) and (max-width:1149px){
+  .mleft>.panel{grid-template-columns:176px minmax(0,1fr)!important;gap:8px 10px!important}
+  .mleft>.panel>.bars.mrow::before{font-size:12px!important;margin-bottom:6px!important}
+  .mleft #yr button{font-size:15.5px!important;padding:9px 10px!important}
+  .mleft #yr button em{font-size:13px!important}
+  body.mopen #mtog{font-size:15px!important;padding:9px!important}
+  body.mopen #mon{grid-template-columns:repeat(3,1fr)!important}
+  body.mopen #mon button{font-size:14px!important;padding:9px 2px!important}
+}
+
+/* ══════════════════════════════════════════════════════════════
+   전체화면 조작 칸 : 남는 여백만큼만 키운다            2026-09-10
+   실측한 여백 (지도 칸 폭 − 실제 그림 폭) :
+     1024 2px · 1100 2px · 1280 3px · 1366 52px
+     1400 3px · 1440 4px · 1600 125px · 1920 270px · 2560 560px
+   → 1440px 이하는 가로 여백이 없다 (칸을 넓히면 지도가 줄어든다).
+     대신 조작 칸 아래로 세로 여백이 450px 가량 남으니
+     '높이' 를 써서 글씨와 단추를 키운다 — 지도 폭은 건드리지 않는다.
+   → 1600px 이상은 가로 여백이 실제로 남으므로 칸도 넓힌다.
+   창 높이가 낮으면 목록이 넘치므로 min-height 로 나눈다. */
+
+/* ① 1400px 이상 · 높이 860px 이상 : 세로 여백을 써서 크게 */
+@media (min-width:1400px) and (min-height:880px){
+  body.mopen .mleft>.panel>.bars.mrow::before{font-size:15px!important;
+    margin:2px 0 12px 4px!important}
+  body.mopen #yr{gap:5px!important;padding:9px!important}
+  body.mopen #yr button{padding:17px 16px!important;font-size:21px!important}
+  body.mopen #yr button em{font-size:16.5px!important}
+  body.mopen #mtog{padding:15px!important;font-size:18px!important;margin-top:10px!important}
+  body.mopen #monwrap{margin-top:10px!important}
+  body.mopen #mon{padding:9px!important;gap:5px!important}
+  body.mopen #mon button{padding:12px 4px!important;font-size:18px!important}
+}
+/* ② 1400px 이상 · 높이 760~859px : 한 단만 키운다 */
+@media (min-width:1400px) and (min-height:800px) and (max-height:879px){
+  body.mopen .mleft>.panel>.bars.mrow::before{font-size:14.5px!important;
+    margin-bottom:10px!important}
+  body.mopen #yr{gap:4px!important;padding:8px!important}
+  body.mopen #yr button{padding:14px 15px!important;font-size:19.5px!important}
+  body.mopen #yr button em{font-size:15.5px!important}
+  body.mopen #mtog{padding:13px!important;font-size:17.5px!important}
+  body.mopen #mon button{padding:13px 4px!important;font-size:17px!important}
+}
+
+/* ③ 1600px 이상 : 가로 여백이 남으므로 칸도 넓힌다 (지도 그림은 그대로) */
+@media (min-width:1600px){
+  .mleft>.panel{grid-template-columns:288px minmax(0,1fr)!important}
+}
+@media (min-width:1900px){
+  .mleft>.panel{grid-template-columns:320px minmax(0,1fr)!important}
+}
+
+/* ④ 1400px 이상 · 높이 789px 이하 : 목록이 칸을 넘쳤다 (1440x720 실측 20px)
+   → 기본값보다 한 단 낮춰 넘침을 없앤다 (지도 크기는 그대로) */
+@media (min-width:1400px) and (max-height:799px){
+  body.mopen .mleft>.panel>.bars.mrow::before{font-size:13px!important;
+    margin-bottom:6px!important}
+  body.mopen #yr{gap:3px!important;padding:6px!important}
+  body.mopen #yr button{padding:10px 12px!important;font-size:17.5px!important}
+  body.mopen #yr button em{font-size:14px!important}
+  body.mopen #mtog{padding:9px!important;font-size:16px!important;margin-top:7px!important}
+  body.mopen #monwrap{margin-top:7px!important}
+  body.mopen #mon{padding:6px!important;gap:3px!important}
+  body.mopen #mon button{padding:9px 3px!important;font-size:15.5px!important}
+}
 </style>
 </head>
 <body>
@@ -2438,7 +2711,7 @@ body.mopen #mleft svg.kmap{max-height:none!important}
    <div class="bars">
     <h2 class="sect">나눔의 발자취</h2>
     <span class="spacer"></span>
-    <button class="zoomb" id="zoomb" aria-label="지도 크게 보기">⤢ 크게</button>
+    <button class="zoomb" id="zoomb" aria-label="지도 전체화면으로 보기">⤢ 전체화면</button>
    </div>
    <div class="bars mrow">
     <div class="seg mon" id="yr" role="group" aria-label="연도 선택"></div>
@@ -2757,6 +3030,63 @@ function msumHtml(){
         return '<div class="msrw"><span>' + esc(r[0]) + '</span><b>' + esc(r[1]) + '</b></div>';
       }).join("");
   host.appendChild(d);
+  placeSum();
+}
+
+/* 연도 요약 카드는 지도 위에 얹혀 있어, 화면 폭에 따라 울릉도·독도나
+   표식을 덮는 일이 있었다 (1100 · 1280 · 1366px 실측 — 2026-09-10).
+   네 귀퉁이를 차례로 시험해 아무것도 덮지 않는 첫 자리를 쓴다.
+   덮는 것으로 보는 것 : 울릉도·독도(.iset) · 표식(.mk) · 지명(.mlab)
+                        · 왼쪽 조작 칸(기간 · 월별) */
+function placeSum(){
+  var card = document.querySelector(".msumh");
+  if(!card) return;
+  card.style.top = card.style.bottom = card.style.left = card.style.right = "";
+  if(!document.body.classList.contains("mopen")){ card.removeAttribute("data-at"); return; }
+  var panel = card.parentNode, pr = panel.getBoundingClientRect();
+  var isl = [].slice.call(panel.querySelectorAll("svg.kmap .iset"));
+  var ink = [].slice.call(panel.querySelectorAll(
+    "svg.kmap .iset, svg.kmap .jset, svg.kmap .mk, svg.kmap .mlab, svg.kmap .ilab,"
+    + " .bars.mrow, .monwrap:not([hidden])"));
+
+  /* 울릉도·독도 밑으로 내려 앉는 자리를 후보에 더한다 */
+  var islB = 0;
+  isl.forEach(function(g){ var r = g.getBoundingClientRect(); if(r.bottom > islB) islB = r.bottom; });
+  var under = islB ? Math.round(islB - pr.top + 10) : null;
+
+  function cost(){
+    var c = card.getBoundingClientRect(), n = 0, k, r;
+    for(k = 0; k < ink.length; k++){
+      r = ink[k].getBoundingClientRect();
+      if(!r.width && !r.height) continue;
+      if(r.left < c.right && r.right > c.left && r.top < c.bottom && r.bottom > c.top){
+        /* 울릉도·독도를 덮는 것이 가장 큰 흠 · 제주가 그다음 (사용자 요청) */
+        var cl = ink[k].getAttribute("class") || "";
+        n += cl.indexOf("bars") >= 0 || cl.indexOf("monwrap") >= 0 ? 300
+           : cl.indexOf("iset") >= 0 || cl.indexOf("ilab") >= 0 ? 100
+           : cl.indexOf("jset") >= 0 ? 40 : 12;
+      }
+    }
+    return n;
+  }
+  function tryAt(at, topPx){
+    card.setAttribute("data-at", at);
+    card.style.top = topPx == null ? "" : topPx + "px";
+    if(topPx != null){ card.style.bottom = "auto"; }
+    return cost();
+  }
+
+  var plans = [["tr", null]];
+  if(under != null) plans.push(["ur", under]);
+  plans.push(["br", null], ["tl", null], ["bl", null]);
+
+  var best = null, bestC = 1e9, i, c;
+  for(i = 0; i < plans.length; i++){
+    c = tryAt(plans[i][0], plans[i][1]);
+    if(c === 0) return;                       /* 아무것도 덮지 않는다 */
+    if(c < bestC){ bestC = c; best = plans[i]; }
+  }
+  tryAt(best[0], best[1]);                    /* 가장 덜 덮는 자리 */
 }
 
 function map(){
@@ -3193,7 +3523,9 @@ function bindMlink(root){
 /* ── 대문 선정 ─────────────────────────────────
    "가장 최신"이 아니라 "귀뚜라미가 주인공인 긍정 뉴스"가 대문에 와야 한다.
    업계 동향에 한 줄 언급된 기사가 대문에 걸리는 것을 막는 점수식. */
-var CATW = {"사회공헌":3, "수상·인증":3, "실적·경영":2, "수출·해외":2, "기타":1, "산업·업계":0};
+/* 뉴스레터 PDF(letter1p.py) 와 같은 표를 쓴다 — 한쪽만 고치면 갈라진다 */
+var CATW = {"사회공헌":3, "수상·인증":3, "실적·경영":2, "수출·해외":2,
+            "기술·신제품":2, "기타":1, "산업·업계":0};
 var KRB = /귀뚜라미|최진민|센추리|범양냉방|신성엔지니어링/;
 var ASOF = (MARKET && MARKET.asof) || "2026-09-02";
 var NOW = new Date(ASOF + "T12:00:00Z");
@@ -3824,8 +4156,14 @@ function icard(it){
 }
 function ipane(){
   var i = ISSUES[icur], items = i.items.filter(ihit);
-  var soc = items.filter(function(x){ return x.cat === SOCIAL; });
-  var ind = items.filter(function(x){ return x.cat !== SOCIAL; });
+  /* 대문 두 칸과 같은 기준으로 나눈다 (2026-09-09)
+       주간 동행         = 사회공헌
+       주간 성장         = 귀뚜라미가 주체(2점 이상) + 수상·실적·수출·기술 (대문 eligible 과 동일)
+       업계 · 시장 동향  = 나머지 (업계 동향 · 기타 · 귀뚜라미가 주체가 아닌 기사)
+     PDF 뉴스레터(letter1p.py)도 같은 두 이름을 쓴다. */
+  var soc = items.filter(isSoc);
+  var grw = items.filter(function(x){ return !isSoc(x) && eligible(x); });
+  var ind = items.filter(function(x){ return !isSoc(x) && !eligible(x); });
   var h = '<div class="dhead"><h2>Vol. '+i.vol+'</h2>'
     + '<span class="chip">'+wkLabel(i.start)+'</span>'
     + '<span class="chip num">'+fd(i.start)+' ~ '+fd(i.end)+'</span>'
@@ -3836,12 +4174,22 @@ function ipane(){
     + '2026년 주간 소식 아카이브입니다. 매주(월~일) 확인된 기사를 모아 정리했고, '
     + '협력사 발송본은 이 가운데서 만듭니다. 제목을 누르면 기사로 이동합니다.</p>';
   if(!items.length) h += '<div class="empty">검색어에 해당하는 기사가 이 호에 없습니다.</div>';
-  if(soc.length) h += '<div class="isect">함께 나눈 소식</div>' + soc.map(icard).join("");
+  if(soc.length) h += '<div class="isect so">주간 동행</div>' + soc.map(icard).join("");
+  if(grw.length) h += '<div class="isect gr">주간 성장</div>' + grw.map(icard).join("");
   if(ind.length) h += '<div class="isect">업계 · 시장 동향</div>' + ind.map(icard).join("");
   document.getElementById("ipane").innerHTML = h;
 }
 
 function render(){ chips(); stats(); tick(); trend(); trendTouch(); map(); detail(); elist(); hero(); feed(); market(); irail(); ipane(); }
+
+/* 창 폭이 바뀌면 요약 카드가 앉을 자리를 다시 고른다 */
+(function(){
+  var t = null;
+  window.addEventListener("resize", function(){
+    clearTimeout(t);
+    t = setTimeout(function(){ try{ placeSum(); }catch(e){} }, 120);
+  });
+})();
 
 document.getElementById("q").oninput = function(e){
   q = e.target.value.trim().toLowerCase();
@@ -3858,7 +4206,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-09 12:45</span>';
+  + '<span class="ver">화면 09-10 09:44</span>';
 
 /* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
    폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
