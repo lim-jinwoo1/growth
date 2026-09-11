@@ -2842,6 +2842,25 @@ header{padding-bottom:12px!important}
 .pdfb:hover{background:#C2560E;color:#fff}
 .pdfb:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .pdfb .pi{font-size:15px;line-height:1}
+/* ══ 시세 갱신 주기 각주 (요청 2026-09-11) ═══════════════════
+   추이 카드 바로 아래. #trwrap 안에 있어 [접기] 를 누르면 함께 사라진다.
+   41년 각주와 같은 어법이지만 색은 온기가 아니라 시세의 파랑 계열로 둔다
+   (사회공헌 = 온기 · 시세 = 파랑 이라는 화면 규칙을 깨지 않는다). */
+.trfoot{margin:12px 0 0;padding:8px 13px;border-radius:9px;font-size:13px;line-height:1.5;
+  background:#F1F8FE;border:1px solid #D9E9F8;border-left:3px solid var(--acc);
+  color:#2A4A68}
+.trfoot b{font-weight:800;color:var(--acc);margin-right:2px}
+.trfoot .tfd{color:#6A8299}
+:root[data-theme="dark"] .trfoot{background:#0F1E2E;border-color:#22405C;color:#AFC9DF}
+:root[data-theme="dark"] .trfoot .tfd{color:#7E97AD}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .trfoot{background:#0F1E2E;border-color:#22405C;color:#AFC9DF}
+  :root:not([data-theme="light"]) .trfoot .tfd{color:#7E97AD}
+}
+@media (max-width:520px){
+  .trfoot{font-size:12px;padding:7px 11px}
+  .trfoot .tfd{display:block;margin-top:2px}
+}
 </style>
 </head>
 <body>
@@ -2978,6 +2997,7 @@ header{padding-bottom:12px!important}
 </div>
 <div id="trwrap">
  <div class="trend" id="trend"></div>
+ <p class="trfoot" id="trfoot"></p>
 </div>
 <!-- 상단 시세 띠는 제거했다 (2026-09-02).
      시세 탭이 12종 + 추이로 커져 같은 숫자가 두 번 나오고, 첫 화면 숫자가 11개로 많아
@@ -4200,6 +4220,13 @@ var CURSYM = function(unit){
   return "";
 };
 function trend(){
+  /* 갱신 주기 안내 (요청 2026-09-11)
+     읽는 사람이 "이 숫자가 언제 것인가" 를 묻기 전에 먼저 답해 둔다.
+     기준일은 카드마다 이미 적혀 있으므로 여기서는 '주기' 만 말한다. */
+  if($("#trfoot")) $("#trfoot").innerHTML =
+    /* 모바일(346px)에서 '않습니다' 가 두 줄로 꺾였다 → 문구를 짧게 (실측) */
+    '<b>업데이트</b> 평일 오전 10시 · 주말·공휴일 제외'
+    + (MARKET.asof ? ' <span class="tfd">(현재 자료 ' + esc(MARKET.asof) + ' 기준)</span>' : '');
   if($("#trnote")) $("#trnote").textContent =
     "월평균 기준 · " + (MARKET.chartEnd || "") + " 까지";
   trendInto(MARKET.charts || [], $("#trend"));
@@ -4444,7 +4471,9 @@ function market(){
     if($("#tanote")) $("#tanote").textContent = yr
       ? cs.length + "개 지표 · 연평균 기준 · " + cs[0].series[0].ym + "년 ~ "
         + (MARKET.yearEnd || "").replace(/(\d+)년 (1~\d+월)/, "$1년 ($2)")
-      : cs.length + "개 지표 · 월평균 기준 · " + (MARKET.chartEnd || "") + " 까지";
+          + "   (업데이트 평일 오전 10시)"
+      : cs.length + "개 지표 · 월평균 기준 · " + (MARKET.chartEnd || "") + " 까지"
+          + "   (업데이트 평일 오전 10시)";
     var sg = $("#tspan");
     if(sg) Array.prototype.forEach.call(sg.querySelectorAll("button"), function(b){
       b.setAttribute("aria-pressed", b.getAttribute("data-s") === span ? "true" : "false"); });
@@ -4810,7 +4839,7 @@ $("#foot").innerHTML =
   "장학금 전달 기록은 언론 보도로 확인된 건만 담았고, 금액·인원은 보도된 숫자를 그대로 옮겼습니다. "
   + "협약(MOU)만 체결된 곳의 기금은 전달 금액 합계에 넣지 않았습니다. "
   + "지도 경계 @svg-maps/south-korea (CC BY 4.0) "
-  + '<span class="ver">화면 09-11 12:30</span>';
+  + '<span class="ver">화면 09-11 12:50</span>';
 
 /* ── 모바일 : 지도 배율(1·2·3배) + 전달 기록으로 이동 ─────────────
    폰에서는 지도의 가로폭이 화면폭에 묶여 '크게'를 눌러도 커지지 않는다.
